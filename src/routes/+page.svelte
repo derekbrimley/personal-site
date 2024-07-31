@@ -1,10 +1,7 @@
 <script>
-    let name = 'svelte'
+    import Header from './Header.svelte';
 </script>
-
-<nav>
-    <a href="/">home</a>
-    <a href="/about">about</a>
-    <a href="/about">{name}</a>
-</nav>
-<h1>home</h1>
+<Header />
+<p>I'm a product guy currently at RainFocus, a company that builds a software that helps the coolest companies run huge events.</p>
+<p>Music obsessive, travel lover, and family man.</p>
+<p>Trying to dumb things down.</p>

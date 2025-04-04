@@ -146,7 +146,29 @@
         font-weight: 400;
     }
     
-    /* Layout containers */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 1.8rem;
+        }
+        
+        .item {
+            padding: var(--spacing-sm) 0;
+        }
+        
+        .logbook-container {
+            flex-direction: column;
+            min-height: auto;
+        }
+        
+        .apple-music-container {
+            width: 100%;
+            max-width: 100%;
+            order: -1;
+            position: static; /* Reset to static on mobile */
+            max-height: none;
+        }
+    }
+    
     .logbook-container {
         display: flex;
         flex-wrap: wrap;
@@ -166,7 +188,6 @@
         background-color: rgba(0, 0, 0, 0.03);
         margin-bottom: var(--spacing-lg);
         text-align: center;
-        width: 300px;
         position: sticky;
         top: 80px; /* Adjust as needed based on your header height plus some spacing */
         flex-shrink: 0;
@@ -182,30 +203,5 @@
     
     .apple-music-container a:hover {
         text-decoration: underline;
-    }
-    
-    /* Mobile styles */
-    @media (max-width: 768px) {
-        h1 {
-            font-size: 1.8rem;
-        }
-        
-        .item {
-            padding: var(--spacing-sm) 0;
-        }
-        
-        .logbook-container {
-            flex-direction: column;
-            min-height: auto;
-        }
-        
-        .apple-music-container {
-            width: 100%;
-            max-width: 100%;
-            order: -1;
-            position: static !important; /* Use !important to override sticky */
-            top: auto !important;
-            max-height: none;
-        }
     }
 </style> 

@@ -5,7 +5,7 @@
 
 <div class="app">
     <slot />
-    <Footer />
+    <!-- <Footer /> -->
 </div>
 
 <style>

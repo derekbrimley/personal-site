@@ -51,54 +51,46 @@
 <Header />
 
 <main>
-    <section class="{isVisible ? 'fade-in' : ''}">
-        <div class="apple-music-container">
-            <p>
-                <a
-                    href="https://music.apple.com/us/playlist/2025-favorite-tracks/pl.u-76oNkLNsvqz51B"
-                    target="_blank" rel="noopener noreferrer">
-                    My favorite tracks of 2025
-                </a>
-            </p>
-            <!-- Comment out the problematic iframe until the issue is resolved -->
-            
-            <iframe 
-                title="2025 Favorite Tracks Apple Music Playlist" 
-                height="450" 
-                style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;background:transparent;" 
-                src="https://embed.music.apple.com/us/playlist/2025-favorite-tracks/pl.u-76oNkLNsvqz51B">
-            </iframe>
-           
-        </div>
-    </section>
     <section class="seen-read {isVisible ? 'fade-in' : ''}">
-        <h1>Books, Movies, TV, Concerts, and Albums from 2025</h1>
-        <p class="description">Underlined: "Book"</p>
-        <p class="description">Italicized: <i>Movie</i></p>
-        <p class="description">All Caps: TV SHOW</p>
-        <p class="description">Bolded: <b>Concert</b></p>
-        
-        <ul class="item-list">
-            {#each items as item}
-                <li class="item">
-                    <span class="date">{item.date}</span>
-                    <span class="title">
-                        {#if item.type === 'book'}
-                            "{item.title}"
-                        {:else if item.type === 'movie'}
-                            <i>{item.title}</i>
-                        {:else if item.type === 'tv'} 
-                            {item.title.toUpperCase()}
-                        {:else if item.type === 'concert'}
-                            <b>{item.title}</b>
-                        {:else if item.type === 'album'}
-                            <b>{item.title}</b>
-                        {/if}
-                        
-                    </span>
-                </li>
-            {/each}
-        </ul>
+        <div class="logbook-container">
+            <div class="logbook-content">
+                <h1>Books, Movies, TV, and Music from 2025</h1>
+                <p class="description">Underlined: <u>Book</u></p>
+                <p class="description">Italicized: <i>Movie</i></p>
+                <p class="description">All Caps: TV SHOW</p>
+                <p class="description">Bolded: <b>Concert</b></p>
+                
+                <ul class="item-list">
+                    {#each items as item}
+                        <li class="item">
+                            <span class="date">{item.date}</span>
+                            <span class="title">
+                                {#if item.type === 'book'}
+                                    <u>{item.title}</u>
+                                {:else if item.type === 'movie'}
+                                    <i>{item.title}</i>
+                                {:else if item.type === 'tv'} 
+                                    {item.title.toUpperCase()}
+                                {:else if item.type === 'concert'}
+                                    <b>{item.title}</b>
+                                {/if}
+                                
+                            </span>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
+            
+            <div class="apple-music-container">          
+                <iframe 
+                    title="2025 Favorite Tracks Apple Music Playlist" 
+                    allow="autoplay *; encrypted-media *;"
+                    height="500" 
+                    style="width:100%;overflow:hidden;border-radius:10px;background:transparent;" 
+                    src="https://embed.music.apple.com/us/playlist/2025-favorite-tracks/pl.u-76oNkLNsvqz51B?theme=light&amp;ls=1&amp;app=music&amp;itsct=music_box_player&amp;itscg=30200">
+                </iframe>
+            </div>
+        </div>
     </section>
 </main>
 
@@ -154,14 +146,18 @@
         font-weight: 400;
     }
     
-    @media (max-width: 768px) {
-        h1 {
-            font-size: 1.8rem;
-        }
-        
-        .item {
-            padding: var(--spacing-sm) 0;
-        }
+    /* Layout containers */
+    .logbook-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xl);
+        align-items: flex-start;
+        min-height: 100vh; /* Ensures there's enough height for scrolling */
+    }
+    
+    .logbook-content {
+        flex: 1;
+        min-width: 300px;
     }
     
     .apple-music-container {
@@ -170,7 +166,12 @@
         background-color: rgba(0, 0, 0, 0.03);
         margin-bottom: var(--spacing-lg);
         text-align: center;
-        max-width: 660px;
+        width: 300px;
+        position: sticky;
+        top: 80px; /* Adjust as needed based on your header height plus some spacing */
+        flex-shrink: 0;
+        align-self: flex-start;
+        max-height: calc(100vh - 160px); /* Ensures it doesn't exceed viewport height */
     }
     
     .apple-music-container a {
@@ -181,5 +182,30 @@
     
     .apple-music-container a:hover {
         text-decoration: underline;
+    }
+    
+    /* Mobile styles */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 1.8rem;
+        }
+        
+        .item {
+            padding: var(--spacing-sm) 0;
+        }
+        
+        .logbook-container {
+            flex-direction: column;
+            min-height: auto;
+        }
+        
+        .apple-music-container {
+            width: 100%;
+            max-width: 100%;
+            order: -1;
+            position: static !important; /* Use !important to override sticky */
+            top: auto !important;
+            max-height: none;
+        }
     }
 </style> 

@@ -14,7 +14,7 @@
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/projects">Projects</a></li>
-          <li><a href="/seen-read">Seen/Read</a></li>
+          <li><a href="/logbook">Logbook</a></li>
           <li><a href="/favorites">Favorites</a></li>
           <li><a href="/contact-me">Contact</a></li>
         </ul>

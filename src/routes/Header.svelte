@@ -24,7 +24,7 @@
             <ul>
                 <li><a href="/" on:click={closeMenu}>Home</a></li>
                 <li><a href="/projects" on:click={closeMenu}>Projects</a></li>
-                <li><a href="/seen-read" on:click={closeMenu}>Seen/Read</a></li>
+                <li><a href="/logbook" on:click={closeMenu}>Logbook</a></li>
                 <li><a href="/favorites" on:click={closeMenu}>Favorites</a></li>
                 <li><a href="/contact-me" on:click={closeMenu}>Contact</a></li>
             </ul>

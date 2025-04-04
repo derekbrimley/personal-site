@@ -11,7 +11,7 @@
         }, 100);
     });
     
-    // List of seen/read items in reverse chronological order (newest first)
+    // List of consumed items in reverse chronological order (newest first)
     const items = [
         { date: "01.15", title: "The Master and Margarita" },
         { date: "01.10", title: "Poor Things" },
@@ -23,8 +23,8 @@
 <Header />
 
 <main>
-    <section class="seen-read {isVisible ? 'fade-in' : ''}">
-        <h1>Seen/Read in 2025</h1>
+    <section class="logbook {isVisible ? 'fade-in' : ''}">
+        <h1>Logbook 2025</h1>
         <p class="description">A chronological list of movies, books, and other media I've consumed this year.</p>
         
         <ul class="item-list">

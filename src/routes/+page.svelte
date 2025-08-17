@@ -8,7 +8,7 @@
         // Trigger animations after page loads
         setTimeout(() => {
             isVisible = true;
-        }, 0);
+        }, 100); // Small delay to ensure smooth transition
     });
 </script>
 
@@ -16,7 +16,7 @@
 
 <main class="main">
        
-    <section class="about {isVisible ? 'fade-in' : ''}">
+    <section class="about {isVisible ? 'fade-in' : 'fade-out'}">
         <img src={initials} alt="Derek Brimley" class="about-image" />
         <div class="about-content">
             <div class="about-text">
@@ -48,7 +48,12 @@
 
 <style>
 
+    /* Initial state - content is hidden */
+    .fade-out {
+        opacity: 0;
+    }
     
+    /* Animation state - content fades in */
     section.fade-in {
         animation: fadeIn 0.8s ease forwards;
     }

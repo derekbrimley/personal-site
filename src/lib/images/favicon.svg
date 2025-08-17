@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <title>Derek Brimley — DB Monogram Favicon</title>
+  
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="#5C7658"/>
+  
+  <!-- D - Sloppy blocky letter -->
+  <g fill="white">
+    <!-- Main D shape with rough edges -->
+    <path d="M12 16 L12 48 L20 48 Q32 48 32 32 Q32 16 20 16 Z" 
+          fill="white" stroke="white" stroke-width="1"/>
+    
+    <!-- Inner D cutout with sloppy edges -->
+    <path d="M16 20 L16 44 L20 44 Q28 44 28 32 Q28 20 20 20 Z" 
+          fill="#5C7658"/>
+  </g>
+  
+  <!-- B - Sloppy blocky letter -->
+  <g fill="white">
+    <!-- Main B shape -->
+    <path d="M36 16 L36 48 L48 48 Q52 48 52 44 L52 40 Q52 36 48 36 L44 36 L44 32 L48 32 Q52 32 52 28 L52 24 Q52 20 48 20 Z" 
+          fill="white" stroke="white" stroke-width="1"/>
+    
+    <!-- Inner B cutouts with rough edges -->
+    <path d="M40 20 L40 28 L44 28 Q46 28 46 26 L46 22 Q46 20 44 20 Z" 
+          fill="#5C7658"/>
+    <path d="M40 32 L40 40 L44 40 Q46 40 46 38 L46 34 Q46 32 44 32 Z" 
+          fill="#5C7658"/>
+  </g>
+  
+  <!-- Add some texture/roughness to make it look more sloppy -->
+  <g fill="white" opacity="0.3">
+    <!-- Random rough spots on D -->
+    <rect x="14" y="18" width="2" height="2" rx="1"/>
+    <rect x="18" y="22" width="1" height="1" rx="0.5"/>
+    <rect x="15" y="26" width="1" height="1" rx="0.5"/>
+    <rect x="17" y="30" width="2" height="1" rx="0.5"/>
+    <rect x="16" y="36" width="1" height="2" rx="0.5"/>
+    <rect x="19" y="40" width="1" height="1" rx="0.5"/>
+    
+    <!-- Random rough spots on B -->
+    <rect x="38" y="18" width="1" height="1" rx="0.5"/>
+    <rect x="42" y="24" width="1" height="1" rx="0.5"/>
+    <rect x="39" y="30" width="1" height="1" rx="0.5"/>
+    <rect x="43" y="36" width="1" height="1" rx="0.5"/>
+    <rect x="41" y="42" width="1" height="1" rx="0.5"/>
+  </g>
+</svg>

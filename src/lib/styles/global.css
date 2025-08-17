@@ -1,9 +1,9 @@
 :root {
   /* Colors */
-  --background: #ffffff;
-  --text-primary: #333333;
-  --text-secondary: #6b7280;
-  --accent: #6b7280;
+  --background: #EFE4D2;
+  --text-primary: #5C7658;
+  --text-secondary: #AEC8A4;
+  --accent: #BB5C4F;
   --accent-hover: #4b5563;
   --card-bg: #f9fafb;
   --border: #e5e7eb;
@@ -37,16 +37,22 @@ body {
   color: var(--text-primary);
 }
 
-main {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: var(--spacing-xl);
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
   font-weight: 400;
   margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.page_title {
+  margin: 2rem 12px;
+  text-align: center;
 }
 
 p {

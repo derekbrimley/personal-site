@@ -5,6 +5,7 @@
     let isVisible = false;
     
     onMount(() => {
+        console.log('logbook page loaded');
         // Trigger animations after page loads
         setTimeout(() => {
             isVisible = true;
@@ -43,23 +44,24 @@
         { date: "03.20", title: "Severance", type: "tv" },
         { date: "03.22", title: "The Day The Earth Blew Up: A Looney Tunes Movie", type: "movie" },
         { date: "03.28", title: "Who's Afraid of Virginia Woolf?", type: "movie" },
-        { date: "04.01", title: "The Adventures of Huckleberry Finn", type: "book" },
-        
+        { date: "04.01", title: "The Adventures of Huckleberry Finn", type: "book" },  
+        { date: "04.29", title: "The Scarlet Letter", type: "book" }, 
+        { date: "04.02", title: "Faust, Pt. 1", type: "book" }, 
+        { date: "06.16", title: "Angels in America (audiobook)", type: "book" }, 
+        { date: "06.20", title: "Angels in America (movie)", type: "book" }, 
+        { date: "07.10", title: "Conversations (Steve Reich)", type: "book" }, 
+        { date: "07.15", title: "The Art of Gathering", type: "book" }, 
+        { date: "08.16", title: "The Mysterious Stranger", type: "book" }, 
     ];
 </script>
 
 <Header />
 
-<main>
+<main class="main">
     <section class="seen-read {isVisible ? 'fade-in' : ''}">
+        <h2 class="page_title">Books, Movies, TV, and Music from 2025</h2>
         <div class="logbook-container">
             <div class="logbook-content">
-                <h1>Books, Movies, TV, and Music from 2025</h1>
-                <p class="description">Underlined: <u>Book</u></p>
-                <p class="description">Italicized: <i>Movie</i></p>
-                <p class="description">All Caps: TV SHOW</p>
-                <p class="description">Bolded: <b>Concert</b></p>
-                
                 <ul class="item-list">
                     {#each items as item}
                         <li class="item">

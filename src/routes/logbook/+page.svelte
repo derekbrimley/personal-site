@@ -109,18 +109,8 @@
     section.fade-in {
         animation: fadeIn 0.8s ease forwards;
     }
-    
-    h1 {
-        font-size: 2rem;
-        margin-bottom: var(--spacing-md);
-        font-weight: 300;
-        letter-spacing: -0.01em;
-    }
-    
-    .description {
-        max-width: 600px;
-    }
-    
+  
+
     .item-list {
         list-style: none;
         padding: 0;
@@ -149,9 +139,6 @@
     }
     
     @media (max-width: 768px) {
-        h1 {
-            font-size: 1.8rem;
-        }
         
         .item {
             padding: var(--spacing-sm) 0;
@@ -197,13 +184,4 @@
         max-height: calc(100vh - 160px); /* Ensures it doesn't exceed viewport height */
     }
     
-    .apple-music-container a {
-        color: #fa586a;
-        font-weight: 500;
-        text-decoration: none;
-    }
-    
-    .apple-music-container a:hover {
-        text-decoration: underline;
-    }
 </style> 

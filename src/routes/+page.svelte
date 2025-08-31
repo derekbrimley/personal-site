@@ -1,7 +1,7 @@
 <script>
     import Header from './Header.svelte';
     import { onMount } from 'svelte';
-    import initials from '$lib/images/favicon.svg'
+    import icon from '$lib/images/icon.png'
     let isVisible = false;
     
     onMount(() => {
@@ -17,12 +17,12 @@
 <main class="main">
        
     <section class="about {isVisible ? 'fade-in' : 'fade-out'}">
-        <img src={initials} alt="Derek Brimley" class="about-image" />
+        <img src={icon} alt="Derek Brimley" class="about-image" />
         <div class="about-content">
             <div class="about-text">
-                <p>Making software for events at <a href="https://www.rainfocus.com/" target="_blank">RainFocus.</a></p>
-                <p>Making the most of finitude.</p>
+                <p>Making events more intelligent at <a href="https://www.rainfocus.com/" target="_blank">RainFocus.</a></p>
                 <p>Making contact with reality.</p>
+                <p>Making fun of my Self.</p>
                 <p>Listening closely.</p>
             </div>
         </div>
@@ -59,6 +59,7 @@
     }
 
     .about {
+        background: var(--background-secondary);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -66,12 +67,17 @@
         margin: 200px 0;
         padding: 16px;
         border: 2px solid var(--text-primary);
-        box-shadow: var(--text-primary) 0px 7px 29px 0px
     }
     
     /* About section */
     .about-content {
         max-width: 700px;
+    }
+
+    .about-image {
+        max-width: 100px;
+        margin-bottom: 8px;
+        border: 2px solid var(--text-primary)
     }
 
     .social-icons {

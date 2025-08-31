@@ -75,7 +75,7 @@
     }
 
     .about-image {
-        max-width: 100px;
+        width: 100px;
         margin-bottom: 8px;
         border: 2px solid var(--text-primary)
     }

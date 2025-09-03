@@ -26,7 +26,7 @@
         <div class='project_list'>
             <Project
                 project_img={phase_shifter}
-                project_url='https://phase-shifter.vercel.app/'
+                project_url='https://phasecanon.derek-brimley.com/'
                 project_name='Phase Canon Playground'
                 project_description='An interactive playground making phase shifting melodies with audio files or clickable grid scale.'
             />
@@ -44,7 +44,7 @@
             />
             <Project
                 project_img={limerick_homepage}
-                project_url='https://limerick-game.vercel.app/'
+                project_url='https://limerickgame.derek-brimley.com/'
                 project_name='The Limerick Game'
                 project_description='A collaborative game where players write one line of a limerick at a time.'
             />

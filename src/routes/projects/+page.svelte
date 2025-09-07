@@ -6,6 +6,7 @@
     import phase_shifter from '$lib/images/phase canon playground.png';
     import melody_generator from '$lib/images/melody-generator.png';
     import vision_guide from '$lib/images/vision-guide.png';
+    import oblique_assistant from '$lib/images/oblique-assistant.png';
 
     import { onMount } from 'svelte';
     
@@ -25,6 +26,13 @@
 
         <h2 class="page_title">projects</h2>
         <div class='project_list'>
+            <Project
+                project_img={oblique_assistant}
+                project_url='https://oblique-assistant.derek-brimley.com/'
+                project_name='Oblique Music Assistant'
+                project_description='Your AI companion for creative music breakthroughs.'
+            />
+            
             <Project
                 project_img={phase_shifter}
                 project_url='https://phasecanon.derek-brimley.com/'

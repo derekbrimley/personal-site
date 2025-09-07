@@ -5,6 +5,7 @@
     import interview_gpt from '$lib/images/interview_custom_gpt.png';
     import phase_shifter from '$lib/images/phase canon playground.png';
     import melody_generator from '$lib/images/melody-generator.png';
+    import vision_guide from '$lib/images/vision-guide.png';
 
     import { onMount } from 'svelte';
     
@@ -32,15 +33,9 @@
             />
             <Project
                 project_img={melody_generator}
-                project_url='https://melody-generator-oeez4jp8h-derek-brimleys-projects.vercel.app/'
+                project_url='https://melody-generator.derek-brimley.com/'
                 project_name='Melody Generator'
                 project_description='Web app for generating melodies and chord progressions with configurable parameters.'
-            />
-            <Project
-                project_img={interview_gpt}
-                project_url='https://chatgpt.com/g/g-bpSCO9run-user-interview-analyzer'
-                project_name='User Interview Custom GPT'
-                project_description='A custom GPT that analyzes user interview transcripts to extract key insights, pain points, and opportunities for product improvement.'
             />
             <Project
                 project_img={limerick_homepage}
@@ -48,7 +43,19 @@
                 project_name='The Limerick Game'
                 project_description='A collaborative game where players write one line of a limerick at a time.'
             />
-            
+            <Project
+                project_img={vision_guide}
+                project_url='https://visionguide.derek-brimley.com/'
+                project_name='Vision Guide'
+                project_description="A guided questionaire to help you develop a 'life vision', inspired by the ideas from 
+Sahil Bloom's The 5 Types of Wealth and Cal Newport's various books and podcasts."
+            />
+            <Project
+                project_img={interview_gpt}
+                project_url='https://chatgpt.com/g/g-bpSCO9run-user-interview-analyzer'
+                project_name='User Interview Custom GPT'
+                project_description='A custom GPT that analyzes user interview transcripts to extract key insights, pain points, and opportunities for product improvement.'
+            />
         </div>
     </section>
 

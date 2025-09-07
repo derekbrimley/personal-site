@@ -35,6 +35,7 @@
     
     .project_image {
         width: 250px;
+        border: 1px solid var(--text-primary)
     }
     
     h3 {

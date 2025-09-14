@@ -21,7 +21,6 @@
             <div class="about-text">
                 <p>Making events more intelligent at <a href="https://www.rainfocus.com/" target="_blank">RainFocus.</a></p>
                 <p>Making contact with reality.</p>
-                <p>Making fun of my Self.</p>
                 <p>Listening closely.</p>
             </div>
         </div>

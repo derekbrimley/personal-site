@@ -15,7 +15,6 @@
 <Header />
 
 <main class="main">
-       
     <section class="about {isVisible ? 'fade-in' : 'fade-out'}">
         <img src={icon} alt="Derek Brimley" class="about-image" />
         <div class="about-content">

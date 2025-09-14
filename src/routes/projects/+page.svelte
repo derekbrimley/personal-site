@@ -7,6 +7,7 @@
     import melody_generator from '$lib/images/melody-generator.png';
     import vision_guide from '$lib/images/vision-guide.png';
     import oblique_assistant from '$lib/images/oblique-assistant.png';
+    import standards_journey from '$lib/images/standards_journey.png'
 
     import { onMount } from 'svelte';
     
@@ -32,7 +33,12 @@
                 project_name='Oblique Music Assistant'
                 project_description='Your AI companion for creative music breakthroughs.'
             />
-            
+            <Project
+                project_img={standards_journey}
+                project_url='https://standards-journey.derek-brimley.com/dashboard'
+                project_name='Jazz Standards Workbook'
+                project_description='Log, track your progress, add helpful resources while learning Jazz standards.'
+            />
             <Project
                 project_img={phase_shifter}
                 project_url='https://phasecanon.derek-brimley.com/'

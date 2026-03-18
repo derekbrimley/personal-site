@@ -10,7 +10,9 @@
         <a target='blank' href={project_url}>{project_name}</a>
     </h3>
     <p class='project_description'>{project_description}</p>
-    <img class='project_image' src={project_img} alt='melody generator homepage' />
+    {#if project_img}
+        <img class='project_image' src={project_img} alt='{project_name} homepage' />
+    {/if}
 </div>
 
 <style>

@@ -23,6 +23,12 @@
     });
     const projects = [
         {
+            img: null,
+            url: 'https://reclist-rho.vercel.app/',
+            name: 'Reclist',
+            desc: 'A mobile-first PWA for collecting music recommendations and triaging them into an Apple Music playlist.'
+        },
+        {
             img: piano_coach,
             url: 'https://piano-coach.app',
             name: 'Piano Coach',

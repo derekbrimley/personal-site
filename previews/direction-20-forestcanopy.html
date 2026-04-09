@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 20 — Forest Canopy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,400;1,9..144,200;1,9..144,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --deep: #0D1A0E;
+    --forest: #142015;
+    --moss: #1E3020;
+    --canopy: #2A4A2C;
+    --sage: #4A7A4E;
+    --sage-light: #7AB07E;
+    --gold: #D4A83A;
+    --gold-light: #F0C860;
+    --cream: #F0E8D0;
+    --text: #D8E8D0;
+    --text-dim: #6A8A6A;
+    --light-patch: rgba(212, 168, 58, 0.12);
+    --light-bright: rgba(240, 200, 96, 0.08);
+    --border: rgba(74, 122, 78, 0.2);
+    --border-bright: rgba(74, 122, 78, 0.4);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--deep);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Dappled light effect — multiple radial patches of warm light */
+  .canopy-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 15% 20% at 12% 8%, var(--light-patch) 0%, transparent 100%),
+      radial-gradient(ellipse 8% 12% at 35% 5%, var(--light-bright) 0%, transparent 100%),
+      radial-gradient(ellipse 20% 15% at 68% 12%, var(--light-patch) 0%, transparent 100%),
+      radial-gradient(ellipse 10% 18% at 88% 6%, var(--light-bright) 0%, transparent 100%),
+      radial-gradient(ellipse 12% 10% at 55% 25%, var(--light-patch) 0%, transparent 100%),
+      radial-gradient(ellipse 6% 8% at 25% 35%, var(--light-bright) 0%, transparent 100%),
+      radial-gradient(ellipse 15% 12% at 80% 40%, var(--light-patch) 0%, transparent 100%),
+      radial-gradient(ellipse 8% 15% at 45% 55%, var(--light-bright) 0%, transparent 100%),
+      radial-gradient(ellipse 18% 10% at 15% 65%, var(--light-patch) 0%, transparent 100%),
+      radial-gradient(ellipse 10% 12% at 70% 70%, var(--light-patch) 0%, transparent 100%);
+    filter: blur(20px);
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13, 26, 14, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 3rem;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold-light);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; }
+
+  .nav-link {
+    font-size: 0.72rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-dim);
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover { color: var(--sage-light); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 88vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .hero-left {
+    padding: 6rem 3rem 6rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* CSS-drawn fern fronds */
+  .fern {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .fern-tl {
+    top: -2rem;
+    left: -3rem;
+    width: 200px;
+    height: 200px;
+    opacity: 0.15;
+    background:
+      radial-gradient(ellipse 8px 40px at 60% 80%, var(--sage-light) 0%, transparent 100%),
+      radial-gradient(ellipse 6px 30px at 40% 60%, var(--sage) 0%, transparent 100%),
+      radial-gradient(ellipse 5px 25px at 75% 50%, var(--sage-light) 0%, transparent 100%),
+      radial-gradient(ellipse 4px 20px at 25% 40%, var(--sage) 0%, transparent 100%);
+    filter: blur(2px);
+    transform: rotate(-20deg);
+  }
+
+  .hero-kicker {
+    font-size: 0.68rem;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-kicker::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-name {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3rem, 5.5vw, 5rem);
+    font-weight: 200;
+    font-style: italic;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 2rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-name strong {
+    font-style: normal;
+    font-weight: 400;
+    color: var(--gold-light);
+  }
+
+  .hero-bio {
+    font-size: 1.0rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--text-dim);
+    max-width: 40ch;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .hero-link {
+    font-size: 0.7rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--sage-light);
+    border: 1px solid var(--border-bright);
+    padding: 0.4rem 1rem;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .hero-link:hover { background: var(--border); color: var(--gold-light); }
+
+  /* Right panel — layered canopy effect */
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+    background: var(--forest);
+    border-left: 1px solid var(--border);
+  }
+
+  /* CSS tree layers */
+  .tree-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .layer-back {
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 120%, var(--deep) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 100% at 20% 0%, rgba(42,74,44,0.6) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 120% at 80% -20%, rgba(30,48,32,0.8) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 80% at 50% -10%, rgba(42,74,44,0.4) 0%, transparent 60%);
+  }
+
+  .layer-mid {
+    background:
+      radial-gradient(ellipse 40% 60% at 30% -10%, rgba(74,122,78,0.3) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 70% at 70% -5%, rgba(74,122,78,0.25) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 50% at 50% -15%, rgba(122,176,126,0.15) 0%, transparent 70%);
+  }
+
+  /* Dappled light shafts */
+  .layer-light {
+    background:
+      radial-gradient(ellipse 5% 60% at 30% 20%, var(--light-patch) 0%, transparent 100%),
+      radial-gradient(ellipse 3% 40% at 55% 30%, var(--light-bright) 0%, transparent 100%),
+      radial-gradient(ellipse 4% 50% at 75% 15%, var(--light-patch) 0%, transparent 100%);
+    filter: blur(8px);
+  }
+
+  .hero-right-label {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    font-size: 0.62rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  /* PROJECTS */
+  .section {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .sh-num {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  .sh-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.8rem;
+    font-weight: 200;
+    font-style: italic;
+    color: var(--text);
+  }
+
+  .sh-rule { flex: 1; height: 1px; background: var(--border); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .proj {
+    background: var(--forest);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    transition: border-color 0.25s, background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .proj::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--sage-light), transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .proj:hover { border-color: var(--border-bright); background: var(--moss); }
+  .proj:hover::before { opacity: 1; }
+
+  .proj-icon { font-size: 1.2rem; margin-bottom: 0.75rem; display: block; opacity: 0.7; }
+
+  .proj-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--gold-light);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.4rem;
+    transition: color 0.2s;
+  }
+
+  .proj-name:hover { color: var(--text); }
+
+  .proj-desc {
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--text-dim);
+  }
+
+  /* LOGBOOK */
+  .logbook-section {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .logbook-body {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .logbook-aside h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    font-weight: 200;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .logbook-aside p {
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--text-dim);
+    margin-bottom: 1.5rem;
+  }
+
+  .logbook-cta {
+    font-size: 0.68rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sage-light);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .logbook-cta:hover { color: var(--gold-light); }
+
+  .log-list { list-style: none; }
+
+  .log-item {
+    display: grid;
+    grid-template-columns: 68px 1fr;
+    gap: 1.5rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: baseline;
+  }
+
+  .log-item:first-child { border-top: 1px solid var(--border); }
+
+  .log-date {
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: var(--sage);
+  }
+
+  .log-title { font-size: 0.9rem; font-weight: 300; }
+  .log-title.book { text-decoration: underline; text-decoration-color: var(--text-dim); text-underline-offset: 3px; }
+  .log-title.movie { font-style: italic; }
+  .log-title.tv { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--text-dim); font-weight: 300; }
+  .log-title.concert { color: var(--gold-light); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+  }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--sage);
+    color: var(--deep);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 9999;
+  }
+</style>
+</head>
+<body>
+
+<div class="canopy-layer"></div>
+<div class="label-badge">Direction 20 — Forest Canopy</div>
+
+<nav>
+  <a class="nav-logo" href="#">Derek Brimley</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#">Projects</a>
+    <a class="nav-link" href="#">Logbook</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="fern fern-tl"></div>
+    <div class="hero-kicker">Software Engineer · Salt Lake City</div>
+    <h1 class="hero-name">
+      Derek<br>
+      <strong>Brimley</strong>
+    </h1>
+    <p class="hero-bio">Building software and keeping a record of the things I read, watch, and listen to. Focused on product engineering.</p>
+    <div class="hero-links">
+      <a class="hero-link" href="#">GitHub</a>
+      <a class="hero-link" href="#">LinkedIn</a>
+      <a class="hero-link" href="#">Email</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="tree-layer layer-back"></div>
+    <div class="tree-layer layer-mid"></div>
+    <div class="tree-layer layer-light"></div>
+    <span class="hero-right-label">Wasatch Front · Utah</span>
+  </div>
+</section>
+
+<div class="section">
+  <div class="section-header">
+    <span class="sh-num">01</span>
+    <h2 class="sh-title">Projects</h2>
+    <div class="sh-rule"></div>
+  </div>
+  <div class="projects-grid">
+    <div class="proj">
+      <span class="proj-icon">🎹</span>
+      <a class="proj-name" href="#">Piano Coach</a>
+      <p class="proj-desc">AI-powered tool for learning piano technique and theory at your own pace.</p>
+    </div>
+    <div class="proj">
+      <span class="proj-icon">🃏</span>
+      <a class="proj-name" href="#">Oblique Assistant</a>
+      <p class="proj-desc">Creative prompt generator inspired by Brian Eno's Oblique Strategies.</p>
+    </div>
+    <div class="proj">
+      <span class="proj-icon">🎼</span>
+      <a class="proj-name" href="#">Standards Workbook</a>
+      <p class="proj-desc">Jazz standards reference — charts, recordings, and history.</p>
+    </div>
+  </div>
+</div>
+
+<div class="logbook-section">
+  <div class="section-header">
+    <span class="sh-num">02</span>
+    <h2 class="sh-title">Logbook — 2025</h2>
+    <div class="sh-rule"></div>
+  </div>
+  <div class="logbook-body">
+    <aside class="logbook-aside">
+      <h2>Things read, watched &amp; heard</h2>
+      <p>A running record updated throughout the year.</p>
+      <a class="logbook-cta" href="#">View the full log →</a>
+    </aside>
+    <ul class="log-list">
+      <li class="log-item"><span class="log-date">Mar 14</span><span class="log-title book">Exhalation — Ted Chiang</span></li>
+      <li class="log-item"><span class="log-date">Mar 08</span><span class="log-title movie">All of Us Strangers</span></li>
+      <li class="log-item"><span class="log-date">Feb 28</span><span class="log-title tv">Severance</span></li>
+      <li class="log-item"><span class="log-date">Feb 15</span><span class="log-title book">Four Thousand Weeks — Oliver Burkeman</span></li>
+      <li class="log-item"><span class="log-date">Jan 22</span><span class="log-title concert">Brad Mehldau Trio @ Vivint Arena</span></li>
+      <li class="log-item"><span class="log-date">Jan 10</span><span class="log-title movie">Past Lives</span></li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 Derek Brimley</span>
+  <span>Built with SvelteKit</span>
+</footer>
+
+</body>
+</html>

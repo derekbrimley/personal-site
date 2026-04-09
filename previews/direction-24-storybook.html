@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 24 — Storybook Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #F4EDD6;
+    --parchment2: #EDE4C6;
+    --parchment3: #E6DAB8;
+    --ink: #3A2810;
+    --ink-light: #6B4E2A;
+    --ink-faint: #A88A60;
+    --russet: #8B3A18;
+    --gold: #B8860B;
+    --gold-light: #D4A820;
+    --moss: #4A6840;
+    --sky: #5C7EA8;
+    --border: rgba(58, 40, 16, 0.15);
+    --border-mid: rgba(58, 40, 16, 0.3);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'Lora', serif;
+    font-weight: 400;
+    line-height: 1.75;
+    overflow-x: hidden;
+    /* Aged paper texture */
+    background-image:
+      radial-gradient(ellipse 120% 80% at 30% 20%, rgba(180,150,80,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 120% at 70% 80%, rgba(160,130,70,0.06) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  }
+
+  /* NAV — book header style */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--parchment2);
+    border-bottom: 2px solid var(--ink);
+    padding: 0.6rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 1px 0 rgba(58,40,16,0.08), 0 2px 8px rgba(58,40,16,0.06);
+  }
+
+  .nav-logo {
+    font-family: 'Lora', serif;
+    font-size: 1.05rem;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; }
+
+  .nav-link {
+    font-family: 'Caveat', cursive;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ink-light);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover { color: var(--russet); }
+
+  /* MAP COMPASS ROSE — decorative SVG */
+  .compass {
+    position: absolute;
+    right: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* HERO — map title area */
+  .hero {
+    position: relative;
+    padding: 4rem 3rem 5rem;
+    border-bottom: 2px solid var(--ink);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  /* Decorative map border — inset rule lines */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 1rem;
+    border: 1px solid var(--border);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 1.35rem;
+    border: 1px solid var(--border);
+    pointer-events: none;
+  }
+
+  .hero-left { position: relative; z-index: 1; }
+
+  /* Map title style */
+  .map-label {
+    font-family: 'Caveat', cursive;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-name {
+    font-family: 'Lora', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 600;
+    font-style: italic;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--ink-light);
+    margin-bottom: 2rem;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-bio {
+    font-size: 1rem;
+    font-style: italic;
+    line-height: 1.85;
+    color: var(--ink-light);
+    max-width: 46ch;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+
+  .hero-link {
+    font-family: 'Caveat', cursive;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--russet);
+    text-decoration: none;
+    border-bottom: 1.5px solid rgba(139,58,24,0.35);
+    padding-bottom: 1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .hero-link:hover { color: var(--ink); border-color: var(--ink); }
+
+  /* MAP — SVG illustrated map for hero right */
+  .hero-map {
+    position: relative;
+    z-index: 1;
+  }
+
+  .map-svg {
+    width: 100%;
+    height: auto;
+  }
+
+  /* PROJECTS — illustrated location cards */
+  .projects-section {
+    padding: 4rem 3rem;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+  }
+
+  /* Chapter heading */
+  .chapter-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .chapter-num {
+    font-family: 'Caveat', cursive;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .chapter-title {
+    font-family: 'Lora', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  /* Decorative rule */
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0.75rem auto 0;
+    max-width: 200px;
+    color: var(--gold);
+  }
+
+  .ornament::before, .ornament::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+
+  .ornament-sym { font-size: 0.7rem; opacity: 0.6; }
+
+  /* Location cards */
+  .locations-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .location-card {
+    position: relative;
+    padding: 2rem 2rem 2rem 2.5rem;
+    background: var(--parchment2);
+    border: 1px solid var(--border-mid);
+  }
+
+  /* Map pin marker */
+  .location-card::before {
+    content: '✦';
+    position: absolute;
+    left: 0.85rem;
+    top: 2rem;
+    font-size: 0.8rem;
+    color: var(--russet);
+    line-height: 1;
+  }
+
+  .location-name {
+    font-family: 'Caveat', cursive;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--russet);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.25rem;
+    transition: color 0.2s;
+    line-height: 1.2;
+  }
+
+  .location-name:hover { color: var(--ink); }
+
+  .location-subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--ink-faint);
+    margin-bottom: 0.75rem;
+    font-style: italic;
+  }
+
+  .location-desc {
+    font-size: 0.88rem;
+    font-style: italic;
+    line-height: 1.7;
+    color: var(--ink-light);
+  }
+
+  /* LOGBOOK — storybook chapter style */
+  .logbook-section {
+    padding: 4rem 3rem;
+  }
+
+  .logbook-body {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 5rem;
+    align-items: start;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .log-aside h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 1rem;
+  }
+
+  .log-aside p {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--ink-light);
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+  }
+
+  .log-aside a {
+    font-family: 'Caveat', cursive;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--russet);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .log-aside a:hover { color: var(--ink); }
+
+  .log-list { list-style: none; }
+
+  .log-item {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 1.5rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px dashed var(--border-mid);
+    align-items: baseline;
+  }
+
+  .log-item:first-child { border-top: 1px dashed var(--border-mid); }
+
+  .log-date {
+    font-family: 'Caveat', cursive;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink-faint);
+  }
+
+  .log-title { font-size: 0.95rem; }
+  .log-title.book { text-decoration: underline; text-decoration-color: var(--ink-faint); text-underline-offset: 3px; }
+  .log-title.movie { font-style: italic; }
+  .log-title.tv { font-family: 'Caveat', cursive; font-size: 1.05rem; font-weight: 500; color: var(--moss); }
+  .log-title.concert { font-family: 'Caveat', cursive; font-size: 1.05rem; font-weight: 600; color: var(--russet); }
+
+  footer {
+    border-top: 2px solid var(--ink);
+    padding: 1.25rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--parchment2);
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--ink-light);
+  }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--russet);
+    color: var(--parchment);
+    font-family: 'Caveat', cursive;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.4rem 0.9rem;
+    z-index: 9999;
+    transform: rotate(-1deg);
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 24 — Storybook</div>
+
+<nav>
+  <a class="nav-logo" href="#">Derek Brimley</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#">The Workshop</a>
+    <a class="nav-link" href="#">The Reading Nook</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="map-label">✦ A Complete and Accurate Map of ✦</div>
+    <h1 class="hero-name">Derek Brimley</h1>
+    <div class="hero-subtitle">Software Engineer · Inhabitant of the Wasatch Front</div>
+    <p class="hero-bio">
+      I build software and keep a careful record of the books I've read,
+      the films I've watched, and the concerts I've attended. Somewhere
+      between the mountains and the salt flats, things get made.
+    </p>
+    <div class="hero-links">
+      <a class="hero-link" href="#">GitHub</a>
+      <a class="hero-link" href="#">LinkedIn</a>
+      <a class="hero-link" href="#">Send a Letter</a>
+    </div>
+  </div>
+  <div class="hero-map">
+    <!-- Hand-drawn style SVG map -->
+    <svg class="map-svg" viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg">
+      <!-- Parchment background with rough edges -->
+      <defs>
+        <filter id="roughen">
+          <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="2" result="noise" seed="2"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+
+      <!-- Map border — double ruled like an illustration -->
+      <rect x="8" y="8" width="344" height="284" rx="2" fill="none" stroke="rgba(58,40,16,0.2)" stroke-width="0.5"/>
+      <rect x="12" y="12" width="336" height="276" rx="1" fill="none" stroke="rgba(58,40,16,0.12)" stroke-width="0.5"/>
+
+      <!-- Mountain range (Wasatch) — east side -->
+      <path d="M280,260 L290,220 L300,240 L310,200 L322,230 L332,205 L344,228 L344,260 Z"
+        fill="rgba(74,104,64,0.15)" stroke="rgba(58,40,16,0.3)" stroke-width="0.8" stroke-linejoin="round"/>
+      <path d="M290,220 L297,205 L305,215" fill="none" stroke="rgba(58,40,16,0.2)" stroke-width="0.6"/>
+
+      <!-- Salt flats — west side -->
+      <ellipse cx="60" cy="220" rx="44" ry="18" fill="rgba(180,160,120,0.15)" stroke="rgba(58,40,16,0.2)" stroke-width="0.5" stroke-dasharray="3 2"/>
+      <text x="60" y="224" text-anchor="middle" font-family="Caveat,cursive" font-size="8" fill="rgba(58,40,16,0.4)" font-style="italic">The Salt Flats</text>
+
+      <!-- City marker — Salt Lake City -->
+      <circle cx="180" cy="180" r="4" fill="rgba(58,40,16,0.6)" stroke="rgba(58,40,16,0.3)" stroke-width="0.5"/>
+      <path d="M180,176 L180,168" stroke="rgba(58,40,16,0.5)" stroke-width="0.8"/>
+      <path d="M176,168 L184,168 L182,162 L178,162 Z" fill="rgba(139,58,24,0.6)" stroke="rgba(58,40,16,0.4)" stroke-width="0.5"/>
+      <text x="180" y="194" text-anchor="middle" font-family="Caveat,cursive" font-size="9" fill="rgba(58,40,16,0.7)" font-weight="600">Salt Lake City</text>
+
+      <!-- Dotted trail to Workshop -->
+      <path d="M180,180 C160,160 120,150 100,130" fill="none" stroke="rgba(139,58,24,0.4)" stroke-width="1" stroke-dasharray="4 3"/>
+      <circle cx="100" cy="130" r="14" fill="rgba(244,237,214,0.9)" stroke="rgba(58,40,16,0.25)" stroke-width="0.8"/>
+      <text x="100" y="127" text-anchor="middle" font-family="Caveat,cursive" font-size="7.5" fill="rgba(58,40,16,0.6)">The</text>
+      <text x="100" y="137" text-anchor="middle" font-family="Caveat,cursive" font-size="7.5" fill="rgba(58,40,16,0.6)">Workshop</text>
+
+      <!-- Dotted trail to Reading Nook -->
+      <path d="M180,180 C200,165 230,140 245,118" fill="none" stroke="rgba(92,126,168,0.4)" stroke-width="1" stroke-dasharray="4 3"/>
+      <circle cx="245" cy="108" r="16" fill="rgba(244,237,214,0.9)" stroke="rgba(58,40,16,0.25)" stroke-width="0.8"/>
+      <text x="245" y="105" text-anchor="middle" font-family="Caveat,cursive" font-size="7.5" fill="rgba(58,40,16,0.6)">Reading</text>
+      <text x="245" y="115" text-anchor="middle" font-family="Caveat,cursive" font-size="7.5" fill="rgba(58,40,16,0.6)">Nook</text>
+
+      <!-- A small lake -->
+      <ellipse cx="160" cy="80" rx="20" ry="12" fill="rgba(92,126,168,0.2)" stroke="rgba(92,126,168,0.35)" stroke-width="0.6"/>
+      <text x="160" y="84" text-anchor="middle" font-family="Caveat,cursive" font-size="7" fill="rgba(92,126,168,0.6)" font-style="italic">Great Salt Lake</text>
+
+      <!-- Compass rose -->
+      <g transform="translate(42,52)" opacity="0.5">
+        <line x1="0" y1="-14" x2="0" y2="14" stroke="rgba(58,40,16,0.5)" stroke-width="0.8"/>
+        <line x1="-14" y1="0" x2="14" y2="0" stroke="rgba(58,40,16,0.5)" stroke-width="0.8"/>
+        <polygon points="0,-14 -3,-4 0,-7 3,-4" fill="rgba(58,40,16,0.5)"/>
+        <text x="0" y="-16" text-anchor="middle" font-family="Caveat,cursive" font-size="8" fill="rgba(58,40,16,0.5)">N</text>
+      </g>
+
+      <!-- Title cartouche -->
+      <rect x="20" y="255" width="170" height="28" rx="2" fill="rgba(244,237,214,0.8)" stroke="rgba(58,40,16,0.2)" stroke-width="0.5"/>
+      <text x="105" y="267" text-anchor="middle" font-family="Lora,serif" font-style="italic" font-size="8" fill="rgba(58,40,16,0.5)">A Personal Territory</text>
+      <text x="105" y="278" text-anchor="middle" font-family="Caveat,cursive" font-size="7.5" fill="rgba(58,40,16,0.4)">Scale: 1 : imagination</text>
+    </svg>
+  </div>
+</section>
+
+<section class="projects-section">
+  <div class="chapter-header">
+    <span class="chapter-num">Chapter the First</span>
+    <h2 class="chapter-title">The Workshop & Its Inhabitants</h2>
+    <div class="ornament"><span class="ornament-sym">✦</span></div>
+  </div>
+
+  <div class="locations-grid">
+    <div class="location-card">
+      <a class="location-name" href="#">Piano Coach</a>
+      <div class="location-subtitle">A place of learning and practice</div>
+      <p class="location-desc">An AI-powered tool for learning piano technique and theory at your own pace. The lessons never tire.</p>
+    </div>
+    <div class="location-card">
+      <a class="location-name" href="#">Oblique Assistant</a>
+      <div class="location-subtitle">A cabinet of creative stratagems</div>
+      <p class="location-desc">Creative prompt generator inspired by Brian Eno's Oblique Strategies card deck. When stuck, consult the cards.</p>
+    </div>
+    <div class="location-card">
+      <a class="location-name" href="#">Standards Workbook</a>
+      <div class="location-subtitle">An archive of tunes and their histories</div>
+      <p class="location-desc">Jazz standards reference for musicians — charts, recordings, and the stories behind them.</p>
+    </div>
+    <div class="location-card">
+      <a class="location-name" href="#">Reclist</a>
+      <div class="location-subtitle">A corner for trusted recommendations</div>
+      <p class="location-desc">Track and share book recommendations with people you trust. Good books deserve good company.</p>
+    </div>
+  </div>
+</section>
+
+<section class="logbook-section">
+  <div class="chapter-header">
+    <span class="chapter-num">Chapter the Second</span>
+    <h2 class="chapter-title">The Reading Nook — Dispatches from 2025</h2>
+    <div class="ornament"><span class="ornament-sym">✦</span></div>
+  </div>
+
+  <div class="logbook-body" style="margin-top:2.5rem;">
+    <aside class="log-aside">
+      <h2>A Record of Things Encountered</h2>
+      <p>Books read, films watched, shows followed, and concerts attended. Updated as they occur.</p>
+      <a href="#">Consult the full archive →</a>
+    </aside>
+    <ul class="log-list">
+      <li class="log-item"><span class="log-date">Mar 14</span><span class="log-title book">Exhalation — Ted Chiang</span></li>
+      <li class="log-item"><span class="log-date">Mar 08</span><span class="log-title movie">All of Us Strangers</span></li>
+      <li class="log-item"><span class="log-date">Feb 28</span><span class="log-title tv">Severance</span></li>
+      <li class="log-item"><span class="log-date">Feb 15</span><span class="log-title book">Four Thousand Weeks — Oliver Burkeman</span></li>
+      <li class="log-item"><span class="log-date">Jan 22</span><span class="log-title concert">Brad Mehldau Trio @ Vivint Arena</span></li>
+      <li class="log-item"><span class="log-date">Jan 10</span><span class="log-title movie">Past Lives</span></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Derek Brimley</span>
+  <span><em>Built with SvelteKit · Somewhere in the Wasatch Front</em></span>
+</footer>
+
+</body>
+</html>

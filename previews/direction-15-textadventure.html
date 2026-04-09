@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 15 — Text Adventure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0C0800;
+    --amber: #FFB000;
+    --amber-dim: #A07000;
+    --amber-faint: rgba(255, 176, 0, 0.08);
+    --amber-glow: rgba(255, 176, 0, 0.15);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--amber);
+    font-family: 'Share Tech Mono', monospace;
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* CRT curvature effect suggestion */
+    background-image: radial-gradient(ellipse at center, #1A1000 0%, #0C0800 70%);
+  }
+
+  /* Scanlines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.12) 3px,
+      rgba(0,0,0,0.12) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  @keyframes flicker {
+    0%,95%,100% { opacity: 1; }
+    96% { opacity: 0.8; }
+    97% { opacity: 1; }
+    98% { opacity: 0.85; }
+  }
+
+  .cursor { display: inline-block; width: 0.6em; height: 1em; background: var(--amber); vertical-align: -0.1em; animation: blink 1s step-end infinite; }
+
+  .screen {
+    max-width: 80ch;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    animation: flicker 8s infinite;
+  }
+
+  /* ASCII box-drawing borders */
+  .box {
+    border-top: 1px solid var(--amber-dim);
+    border-bottom: 1px solid var(--amber-dim);
+    position: relative;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .box::before {
+    content: attr(data-title);
+    position: absolute;
+    top: -0.55em;
+    left: 1rem;
+    background: var(--bg);
+    padding: 0 0.5rem;
+    font-size: 0.8em;
+    color: var(--amber-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* Double-line box for main title */
+  .box-double {
+    border-top: 1px solid var(--amber);
+    border-bottom: 1px solid var(--amber);
+    padding: 0;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .box-double::before, .box-double::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: var(--amber);
+    opacity: 0.35;
+  }
+
+  .box-double::before { top: 3px; }
+  .box-double::after { bottom: 3px; }
+
+  .box-double-inner {
+    padding: 1.5rem 2rem;
+  }
+
+  /* ASCII art header line */
+  .ascii-hr {
+    color: var(--amber-dim);
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 1rem 0;
+    font-size: 0.85rem;
+  }
+
+  /* NAV */
+  .nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--amber-dim);
+    padding: 0.5rem 1rem;
+    max-width: 100%;
+  }
+
+  .nav-inner {
+    max-width: 80ch;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+
+  .nav-logo { color: var(--amber); letter-spacing: 0.08em; text-decoration: none; }
+
+  .nav-cmds {
+    display: flex;
+    gap: 0;
+  }
+
+  .nav-cmd {
+    color: var(--amber-dim);
+    text-decoration: none;
+    padding: 0 1rem;
+    border-left: 1px solid var(--amber-dim);
+    font-size: 0.78rem;
+    transition: color 0.1s;
+  }
+
+  .nav-cmd:hover { color: var(--amber); }
+  .nav-cmd::before { content: '> '; color: var(--amber); }
+
+  /* INTRO — room description */
+  .room-desc { margin-bottom: 2rem; }
+  .room-desc p { margin-bottom: 0.75rem; font-size: 0.9rem; }
+  .room-desc .location {
+    color: var(--amber);
+    font-weight: bold;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .exits {
+    font-size: 0.82rem;
+    color: var(--amber-dim);
+    margin-top: 1rem;
+  }
+
+  .exits span { color: var(--amber); }
+
+  /* Inventory / stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--amber-dim);
+    margin: 1.5rem 0;
+    font-size: 0.82rem;
+  }
+
+  .stat {
+    padding: 0.5rem 1rem;
+    border-right: 1px solid var(--amber-dim);
+  }
+
+  .stat:last-child { border-right: none; }
+  .stat-label { color: var(--amber-dim); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .stat-value { color: var(--amber); }
+
+  /* Command history */
+  .cmd-line {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prompt { color: var(--amber); white-space: nowrap; }
+  .cmd-text { color: var(--amber); }
+  .response { padding-left: 1.5rem; font-size: 0.88rem; color: var(--amber-dim); margin-bottom: 1rem; }
+  .response p { margin-bottom: 0.25rem; }
+
+  /* PROJECTS — as items/inventory */
+  .item-list { list-style: none; }
+
+  .item {
+    padding: 0.75rem 0;
+    border-bottom: 1px dotted var(--amber-dim);
+    font-size: 0.88rem;
+  }
+
+  .item:last-child { border-bottom: none; }
+
+  .item-name {
+    color: var(--amber);
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    transition: color 0.1s;
+  }
+
+  .item-name::before { content: '[ '; }
+  .item-name::after { content: ' ]'; }
+  .item-name:hover { color: var(--bg); background: var(--amber); }
+
+  .item-desc { color: var(--amber-dim); padding-left: 2rem; margin-top: 0.2rem; font-style: italic; }
+
+  /* LOGBOOK */
+  .log-entry {
+    display: grid;
+    grid-template-columns: 8ch 1fr;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--amber-faint);
+    font-size: 0.85rem;
+  }
+
+  .le-date { color: var(--amber-dim); }
+  .le-title { color: var(--amber); }
+  .le-title.book::before { content: '"'; }
+  .le-title.book::after { content: '"'; }
+  .le-title.movie { font-style: italic; color: var(--amber-dim); }
+  .le-title.movie::before { content: '* '; }
+  .le-title.tv { text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.08em; }
+  .le-title.concert::before { content: '♪ '; }
+
+  /* Input prompt at bottom */
+  .input-line {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding-top: 1.5rem;
+    font-size: 0.9rem;
+    border-top: 1px solid var(--amber-dim);
+    margin-top: 1.5rem;
+  }
+
+  footer {
+    max-width: 80ch;
+    margin: 0 auto;
+    padding: 1rem;
+    border-top: 1px solid var(--amber-dim);
+    font-size: 0.72rem;
+    color: var(--amber-dim);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--amber);
+    color: var(--bg);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 9999;
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 15 — Text Adventure</div>
+
+<div class="nav-bar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">DEREK BRIMLEY v1.0</a>
+    <div class="nav-cmds">
+      <a class="nav-cmd" href="#">projects</a>
+      <a class="nav-cmd" href="#">logbook</a>
+      <a class="nav-cmd" href="#">about</a>
+    </div>
+  </div>
+</div>
+
+<div class="screen">
+
+  <div class="box-double" style="margin-bottom:2rem; margin-top:1rem;">
+    <div class="box-double-inner">
+      <div style="text-align:center; letter-spacing:0.15em; font-size:1.3rem; margin-bottom:0.25rem;">★ DEREK BRIMLEY'S PERSONAL SITE ★</div>
+      <div style="text-align:center; font-size:0.72rem; color:var(--amber-dim); letter-spacing:0.2em;">A TEXT ADVENTURE IN MULTIPLE PARTS · BOOTSTRAPPED 2026</div>
+    </div>
+  </div>
+
+  <div class="cmd-line"><span class="prompt">></span><span class="cmd-text">look</span></div>
+  <div class="response">
+    <p><strong class="room-desc"><span class="location">THE FOYER</span></strong></p>
+    <p>You are standing at the entrance to Derek Brimley's personal site. The room is warm and well-organized. A faint smell of coffee hangs in the air.</p>
+    <p>Derek is a software engineer based in Salt Lake City, Utah. He builds software and keeps careful records of the books he reads, films he watches, and concerts he attends.</p>
+    <p>There is a bookshelf to the NORTH, a project workshop to the EAST, and a logbook lying open on the table.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat"><div class="stat-label">Location</div><div class="stat-value">Salt Lake City, UT</div></div>
+    <div class="stat"><div class="stat-label">Role</div><div class="stat-value">Product Engineer</div></div>
+    <div class="stat"><div class="stat-label">Status</div><div class="stat-value">Active</div></div>
+  </div>
+
+  <div class="cmd-line"><span class="prompt">></span><span class="cmd-text">examine links</span></div>
+  <div class="response">
+    <p>You see three glowing connections on the wall: <a href="#" style="color:var(--amber);">GITHUB</a>, <a href="#" style="color:var(--amber);">LINKEDIN</a>, and <a href="#" style="color:var(--amber);">EMAIL</a>. Each pulses faintly.</p>
+  </div>
+
+  <div class="ascii-hr">────────────────────────────────────────────────────────────────────────────────</div>
+
+  <div class="box" data-title="[ PROJECTS — INVENTORY ]">
+    <div class="cmd-line"><span class="prompt">></span><span class="cmd-text">go east</span></div>
+    <div class="response"><p>You enter the Project Workshop. Tools line the walls. Several completed projects sit on the workbench.</p></div>
+
+    <div class="cmd-line"><span class="prompt">></span><span class="cmd-text">inventory</span></div>
+    <div class="response">
+      <ul class="item-list">
+        <li class="item">
+          <a class="item-name" href="#">Piano Coach</a>
+          <div class="item-desc">An AI-powered tool for learning piano technique and theory. Sturdy construction. Shows signs of use.</div>
+        </li>
+        <li class="item">
+          <a class="item-name" href="#">Oblique Assistant</a>
+          <div class="item-desc">A deck of digital cards. Each one contains an unexpected directive. Smells faintly of creativity.</div>
+        </li>
+        <li class="item">
+          <a class="item-name" href="#">Standards Workbook</a>
+          <div class="item-desc">A thick reference tome. Jazz charts and recordings carefully documented within.</div>
+        </li>
+        <li class="item">
+          <a class="item-name" href="#">Reclist</a>
+          <div class="item-desc">A small recommendation ledger, dog-eared and well-loved.</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box" data-title="[ LOGBOOK — 2025 ]">
+    <div class="cmd-line"><span class="prompt">></span><span class="cmd-text">read logbook</span></div>
+    <div class="response"><p>You open the logbook. Entries are written in careful hand:</p></div>
+
+    <div class="log-entry"><span class="le-date">MAR 14</span><span class="le-title book">Exhalation — Ted Chiang</span></div>
+    <div class="log-entry"><span class="le-date">MAR 08</span><span class="le-title movie">All of Us Strangers</span></div>
+    <div class="log-entry"><span class="le-date">FEB 28</span><span class="le-title tv">SEVERANCE</span></div>
+    <div class="log-entry"><span class="le-date">FEB 15</span><span class="le-title book">Four Thousand Weeks — Oliver Burkeman</span></div>
+    <div class="log-entry"><span class="le-date">JAN 22</span><span class="le-title concert">Brad Mehldau Trio @ Vivint Arena</span></div>
+    <div class="log-entry"><span class="le-date">JAN 10</span><span class="le-title movie">Past Lives</span></div>
+  </div>
+
+  <div class="input-line">
+    <span class="prompt">></span>
+    <span class="cursor"></span>
+  </div>
+
+</div>
+
+<footer>
+  <span>© 2026 Derek Brimley</span>
+  <span>SAVE · LOAD · QUIT</span>
+</footer>
+
+</body>
+</html>

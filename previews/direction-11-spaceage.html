@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 11 — Space Age Retro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --space: #0D1B3E;
+    --space2: #112244;
+    --space3: #162B52;
+    --cream: #F5F0E6;
+    --orange: #FF6030;
+    --orange-glow: rgba(255, 96, 48, 0.15);
+    --blue-bright: #4FC3F7;
+    --blue-dim: rgba(79, 195, 247, 0.12);
+    --star: rgba(245, 240, 230, 0.6);
+    --text: #E8E2D5;
+    --text-dim: #8090AA;
+    --border: rgba(79, 195, 247, 0.15);
+    --border-bright: rgba(79, 195, 247, 0.35);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--space);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Star field */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, var(--star) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 60%, var(--star) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 50% 10%, var(--star) 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 80%, var(--star) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 30%, var(--star) 0%, transparent 100%),
+      radial-gradient(1px 1px at 20% 85%, var(--star) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 45%, var(--star) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 65%, var(--star) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 35%, var(--star) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 15%, var(--star) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13, 27, 62, 0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 3rem;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .nav-orb {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 8px var(--orange);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+  }
+
+  .nav-link {
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-dim);
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover { color: var(--blue-bright); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 88vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 3rem;
+    overflow: hidden;
+  }
+
+  /* Circular glow behind content */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(79, 195, 247, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Orbit rings */
+  .orbit-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    pointer-events: none;
+  }
+
+  .ring-1 { width: 300px; height: 300px; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(20deg); border-style: dashed; }
+  .ring-2 { width: 500px; height: 500px; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-10deg); }
+  .ring-3 { width: 750px; height: 750px; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(5deg); opacity: 0.5; }
+
+  .planet {
+    position: absolute;
+    border-radius: 50%;
+    top: 50%; left: 50%;
+  }
+
+  .p1 {
+    width: 8px; height: 8px;
+    background: var(--orange);
+    box-shadow: 0 0 12px var(--orange);
+    transform: translate(146px, -148px);
+  }
+
+  .p2 {
+    width: 5px; height: 5px;
+    background: var(--blue-bright);
+    box-shadow: 0 0 8px var(--blue-bright);
+    transform: translate(248px, 10px);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 720px;
+  }
+
+  .hero-mission {
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--blue-bright);
+    margin-bottom: 2rem;
+    opacity: 0.8;
+  }
+
+  .hero-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-name .first { display: block; font-weight: 200; color: var(--text-dim); }
+  .hero-name .last { display: block; }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--orange-glow);
+    border: 1px solid rgba(255, 96, 48, 0.3);
+    color: var(--orange);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+  }
+
+  .hero-bio {
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-dim);
+    max-width: 42ch;
+    margin: 0 auto 2.5rem;
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .hero-link {
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.55rem 1.5rem;
+    border-radius: 100px;
+    transition: all 0.2s;
+  }
+
+  .hero-link.primary {
+    background: var(--orange);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255, 96, 48, 0.3);
+  }
+
+  .hero-link.primary:hover { box-shadow: 0 0 30px rgba(255, 96, 48, 0.5); transform: translateY(-1px); }
+
+  .hero-link.ghost {
+    border: 1px solid var(--border-bright);
+    color: var(--blue-bright);
+  }
+
+  .hero-link.ghost:hover { background: var(--blue-dim); }
+
+  /* PROJECTS */
+  .section {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.62rem;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 0.35rem;
+  }
+
+  .section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .proj {
+    background: var(--space2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+
+  .proj:hover {
+    border-color: var(--border-bright);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(79, 195, 247, 0.08);
+  }
+
+  .proj-glow {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--blue-dim), transparent);
+    border-radius: 12px 12px 0 0;
+    pointer-events: none;
+  }
+
+  .proj-num {
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    color: var(--blue-bright);
+    opacity: 0.5;
+    margin-bottom: 1.5rem;
+  }
+
+  .proj-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+
+  .proj-name:hover { color: var(--blue-bright); }
+
+  .proj-desc {
+    font-size: 0.8rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--text-dim);
+  }
+
+  /* LOGBOOK */
+  .logbook-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+  }
+
+  .logbook-left h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .logbook-left p {
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--text-dim);
+    margin-bottom: 1.5rem;
+  }
+
+  .logbook-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    text-decoration: none;
+    transition: gap 0.2s;
+  }
+
+  .logbook-cta:hover { gap: 0.7rem; }
+
+  .log-list { list-style: none; }
+
+  .log-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1.5rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: baseline;
+  }
+
+  .log-d {
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--blue-bright);
+    opacity: 0.6;
+  }
+
+  .log-t { font-size: 0.88rem; font-weight: 300; }
+  .log-t.book { text-decoration: underline; text-decoration-color: var(--text-dim); text-underline-offset: 3px; }
+  .log-t.movie { font-style: italic; }
+  .log-t.tv { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--text-dim); font-weight: 400; }
+  .log-t.concert { color: var(--orange); font-weight: 400; }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ft { font-size: 0.65rem; font-weight: 300; letter-spacing: 0.06em; color: var(--text-dim); }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--orange);
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    border-radius: 100px;
+    z-index: 9999;
+    box-shadow: 0 0 12px rgba(255, 96, 48, 0.4);
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 11 — Space Age</div>
+
+<nav>
+  <a class="nav-logo" href="#"><div class="nav-orb"></div>Derek Brimley</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#">Projects</a>
+    <a class="nav-link" href="#">Logbook</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="orbit-ring ring-1"></div>
+  <div class="orbit-ring ring-2"></div>
+  <div class="orbit-ring ring-3"></div>
+  <div class="planet p1"></div>
+  <div class="planet p2"></div>
+
+  <div class="hero-content">
+    <div class="hero-mission">Personal Site · Mission Control</div>
+    <h1 class="hero-name">
+      <span class="first">Derek</span>
+      <span class="last">Brimley</span>
+    </h1>
+    <div class="hero-badge">⬡ Software Engineer · Salt Lake City</div>
+    <p class="hero-bio">
+      Building software and keeping a log of the things I read, watch, and listen to.
+      Currently focused on product engineering.
+    </p>
+    <div class="hero-links">
+      <a class="hero-link primary" href="#">View Projects</a>
+      <a class="hero-link ghost" href="#">GitHub</a>
+      <a class="hero-link ghost" href="#">Contact</a>
+    </div>
+  </div>
+</section>
+
+<div class="section">
+  <div class="section-label">Mission Log · Sector 01</div>
+  <div class="section-title">Projects</div>
+  <div class="projects-grid">
+    <div class="proj">
+      <div class="proj-glow"></div>
+      <div class="proj-num">STA-001</div>
+      <a class="proj-name" href="#">Piano Coach</a>
+      <p class="proj-desc">AI-powered tool for learning piano technique and theory at your own pace.</p>
+    </div>
+    <div class="proj">
+      <div class="proj-glow"></div>
+      <div class="proj-num">STA-002</div>
+      <a class="proj-name" href="#">Oblique Assistant</a>
+      <p class="proj-desc">Creative prompt generator inspired by Brian Eno's Oblique Strategies.</p>
+    </div>
+    <div class="proj">
+      <div class="proj-glow"></div>
+      <div class="proj-num">STA-003</div>
+      <a class="proj-name" href="#">Standards Workbook</a>
+      <p class="proj-desc">Jazz standards reference — charts, recordings, and history.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Transmission Log · Sector 02</div>
+  <div class="section-title">Logbook — 2025</div>
+  <div class="logbook-grid">
+    <div class="logbook-left">
+      <h2>Books, Films &amp; Music</h2>
+      <p>A running log of things I've read, watched, and listened to throughout the year.</p>
+      <a class="logbook-cta" href="#">Full log →</a>
+    </div>
+    <ul class="log-list">
+      <li class="log-item"><span class="log-d">Mar 14</span><span class="log-t book">Exhalation — Ted Chiang</span></li>
+      <li class="log-item"><span class="log-d">Mar 08</span><span class="log-t movie">All of Us Strangers</span></li>
+      <li class="log-item"><span class="log-d">Feb 28</span><span class="log-t tv">Severance</span></li>
+      <li class="log-item"><span class="log-d">Feb 15</span><span class="log-t book">Four Thousand Weeks — Oliver Burkeman</span></li>
+      <li class="log-item"><span class="log-d">Jan 22</span><span class="log-t concert">Brad Mehldau Trio @ Vivint Arena</span></li>
+      <li class="log-item"><span class="log-d">Jan 10</span><span class="log-t movie">Past Lives</span></li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <span class="ft">© 2026 Derek Brimley</span>
+  <span class="ft">Built with SvelteKit</span>
+</footer>
+
+</body>
+</html>

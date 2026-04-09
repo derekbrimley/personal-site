@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 7 — Broadsheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --newsprint: #F4F0E8;
+    --ink: #1A1814;
+    --ink2: #2D2A22;
+    --muted: #6B6456;
+    --rule: rgba(26,24,20,0.2);
+    --rule-strong: rgba(26,24,20,0.5);
+    --red: #8B1A1A;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--newsprint);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* subtle newsprint texture */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  }
+
+  /* MASTHEAD */
+  .masthead {
+    border-bottom: 3px double var(--ink);
+    padding: 1.5rem 2.5rem 1rem;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    background: var(--newsprint);
+    z-index: 100;
+  }
+
+  .masthead-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-family: 'Source Serif 4', serif;
+  }
+
+  .masthead-title {
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .masthead-rule {
+    height: 1px;
+    background: var(--ink);
+    margin: 0.5rem 0;
+  }
+
+  .masthead-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .masthead-link {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink);
+    padding: 0.2rem 1.2rem;
+    border-right: 1px solid var(--rule-strong);
+    transition: color 0.1s;
+  }
+
+  .masthead-link:first-child { border-left: 1px solid var(--rule-strong); }
+  .masthead-link:hover { color: var(--red); }
+
+  /* FRONT PAGE */
+  .front-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 2.5rem;
+  }
+
+  /* Above the fold — big headline + columns */
+  .above-fold {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .headline-banner {
+    border-bottom: 1px solid var(--rule-strong);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .kicker {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+
+  .main-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 1.0;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .main-deck {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--muted);
+    max-width: 55ch;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .column-body {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr;
+    gap: 2rem;
+  }
+
+  .col-rule {
+    background: var(--rule);
+    width: 1px;
+    align-self: stretch;
+  }
+
+  .col p {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .col p + p { text-indent: 1.2em; margin-top: 0; }
+
+  .col-head {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: var(--ink);
+    border-top: 2px solid var(--ink);
+    padding-top: 0.5rem;
+  }
+
+  .byline {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+    font-weight: 400;
+  }
+
+  /* LOWER — projects and logbook in newspaper columns */
+  .lower-section {
+    display: grid;
+    grid-template-columns: 2fr 1px 1.2fr;
+    gap: 2rem;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-head {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--ink);
+    border-top: 3px solid var(--ink);
+    padding-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-head em { font-style: italic; color: var(--red); }
+
+  /* Projects as brief items */
+  .brief + .brief {
+    border-top: 1px solid var(--rule);
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+
+  .brief-head {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.25rem;
+    transition: color 0.1s;
+  }
+
+  .brief-head:hover { color: var(--red); }
+
+  .brief-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 0.3rem;
+    display: block;
+  }
+
+  .brief-body {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--ink2);
+  }
+
+  /* Logbook as classified column */
+  .classified {
+    background: rgba(0,0,0,0.03);
+    border: 1px solid var(--rule-strong);
+    padding: 1rem;
+  }
+
+  .classified-head {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-align: center;
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 0.3rem 0;
+    margin-bottom: 0.75rem;
+  }
+
+  .classified-item {
+    font-size: 0.78rem;
+    line-height: 1.55;
+    padding: 0.5rem 0;
+    border-bottom: 1px dotted var(--rule-strong);
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: 0.5rem;
+    align-items: baseline;
+  }
+
+  .ci-date {
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .ci-title.book { text-decoration: underline; }
+  .ci-title.movie { font-style: italic; }
+  .ci-title.tv { text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.06em; }
+  .ci-title.concert { font-weight: 600; color: var(--red); }
+
+  footer {
+    border-top: 3px double var(--ink);
+    padding: 1rem 2.5rem;
+    text-align: center;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--red);
+    color: #fff;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 999;
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 7 — Broadsheet</div>
+
+<header class="masthead">
+  <div class="masthead-top">
+    <span>Salt Lake City, Utah</span>
+    <span>Personal Site · Est. 2026</span>
+    <span>Volume 1, No. 1</span>
+  </div>
+  <div class="masthead-title">The Derek Brimley Gazette</div>
+  <div class="masthead-rule"></div>
+  <nav class="masthead-nav">
+    <a class="masthead-link" href="#">Home</a>
+    <a class="masthead-link" href="#">Projects</a>
+    <a class="masthead-link" href="#">Logbook</a>
+    <a class="masthead-link" href="#">About</a>
+  </nav>
+</header>
+
+<main class="front-page">
+
+  <section class="above-fold">
+    <div class="headline-banner">
+      <div class="kicker">Software Engineer · Salt Lake City</div>
+      <h1 class="main-headline">Derek Brimley</h1>
+      <p class="main-deck">On building software, the things worth reading, and keeping a record of it all.</p>
+    </div>
+    <div class="column-body">
+      <div class="col">
+        <div class="col-head">About This Site</div>
+        <div class="byline">By Derek Brimley · April 2026</div>
+        <p>I'm a software engineer based in Salt Lake City, Utah. This is where I keep a record of the projects I've built, the books I've read, the films I've watched, and the concerts I've attended.</p>
+        <p>The logbook is a personal practice — a habit of noticing what moves through my life and leaving a trace of it behind. The projects section documents what I've made and shipped.</p>
+      </div>
+      <div class="col-rule"></div>
+      <div class="col">
+        <div class="col-head">Current Work</div>
+        <p>Currently focused on product engineering — the kind of work that sits at the intersection of technical execution and understanding what people actually need from software.</p>
+        <p>I'm interested in tools that feel genuinely useful rather than impressive: software that recedes into the background and lets the work happen.</p>
+      </div>
+      <div class="col-rule"></div>
+      <div class="col">
+        <div class="col-head">Get In Touch</div>
+        <p>The best way to reach me is by email. I'm also on GitHub and LinkedIn, though I respond faster to email than anything else.</p>
+        <p style="margin-top: 1rem;"><a href="#" style="color: var(--red); text-decoration: none;">→ GitHub</a><br>
+        <a href="#" style="color: var(--red); text-decoration: none;">→ LinkedIn</a><br>
+        <a href="#" style="color: var(--red); text-decoration: none;">→ Email</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="lower-section">
+    <div class="projects-col">
+      <h2 class="section-head">Selected <em>Projects</em></h2>
+      <div class="brief">
+        <span class="brief-tag">Web Application</span>
+        <a class="brief-head" href="#">Piano Coach</a>
+        <p class="brief-body">An AI-powered tool for learning piano technique and music theory. Built for learners who want to practice without a teacher present but still receive meaningful feedback on their progress.</p>
+      </div>
+      <div class="brief">
+        <span class="brief-tag">Creative Tool</span>
+        <a class="brief-head" href="#">Oblique Assistant</a>
+        <p class="brief-body">A creative prompt generator inspired by Brian Eno and Peter Schmidt's Oblique Strategies card deck. Designed to break creative blocks by offering unexpected directives.</p>
+      </div>
+      <div class="brief">
+        <span class="brief-tag">Reference</span>
+        <a class="brief-head" href="#">Standards Workbook</a>
+        <p class="brief-body">A comprehensive jazz standards reference for practicing musicians. Includes lead sheets, notable recordings, and historical context for the repertoire.</p>
+      </div>
+    </div>
+
+    <div class="col-rule"></div>
+
+    <div class="logbook-col">
+      <h2 class="section-head">The<br><em>Logbook</em></h2>
+      <div class="classified">
+        <div class="classified-head">2025 Reading &amp; Watching</div>
+        <div class="classified-item"><span class="ci-date">Mar 14</span><span class="ci-title book">Exhalation — Ted Chiang</span></div>
+        <div class="classified-item"><span class="ci-date">Mar 08</span><span class="ci-title movie">All of Us Strangers</span></div>
+        <div class="classified-item"><span class="ci-date">Feb 28</span><span class="ci-title tv">Severance</span></div>
+        <div class="classified-item"><span class="ci-date">Feb 15</span><span class="ci-title book">Four Thousand Weeks</span></div>
+        <div class="classified-item"><span class="ci-date">Jan 22</span><span class="ci-title concert">Brad Mehldau Trio</span></div>
+        <div class="classified-item"><span class="ci-date">Jan 10</span><span class="ci-title movie">Past Lives</span></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2026 Derek Brimley · All rights reserved · Built with SvelteKit</p>
+</footer>
+
+</body>
+</html>

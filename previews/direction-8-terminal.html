@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 8 — Neon Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0B0F0C;
+    --bg2: #0F1410;
+    --bg3: #141A14;
+    --green: #00E87A;
+    --green-dim: #007A40;
+    --green-faint: rgba(0, 232, 122, 0.06);
+    --green-glow: rgba(0, 232, 122, 0.15);
+    --amber: #FFB800;
+    --text: #C8D8C4;
+    --text-dim: #5C7A5C;
+    --border: rgba(0, 232, 122, 0.12);
+    --border-bright: rgba(0, 232, 122, 0.3);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.04) 2px,
+      rgba(0, 0, 0, 0.04) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Blinking cursor */
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 0.5em;
+    height: 1.1em;
+    background: var(--green);
+    vertical-align: -0.15em;
+    animation: blink 1.2s step-end infinite;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    height: 52px;
+    display: flex;
+    align-items: center;
+    padding: 0 2.5rem;
+    gap: 2rem;
+  }
+
+  .nav-prompt {
+    font-size: 0.75rem;
+    color: var(--green);
+    letter-spacing: 0.04em;
+    flex: 1;
+  }
+
+  .nav-prompt .ps1 { color: var(--text-dim); }
+  .nav-prompt .dir { color: var(--amber); }
+
+  .nav-links {
+    display: flex;
+    gap: 0;
+  }
+
+  .nav-link {
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--text-dim);
+    padding: 0 1rem;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid var(--border);
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .nav-link:hover { color: var(--green); background: var(--green-faint); }
+
+  /* HERO - terminal window */
+  .hero {
+    padding: 3rem 2.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .term-window {
+    border: 1px solid var(--border-bright);
+    background: var(--bg2);
+    position: relative;
+    box-shadow: 0 0 40px rgba(0, 232, 122, 0.06), inset 0 0 80px rgba(0, 0, 0, 0.2);
+  }
+
+  .term-titlebar {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .term-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border-bright);
+  }
+
+  .term-dot:nth-child(2) { background: var(--amber); opacity: 0.4; }
+  .term-dot:nth-child(3) { background: var(--green-dim); opacity: 0.5; }
+
+  .term-title {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    margin-left: 0.5rem;
+  }
+
+  .term-body {
+    padding: 2rem;
+    font-size: 0.88rem;
+    line-height: 2;
+  }
+
+  .t-line { display: flex; gap: 0.75rem; align-items: baseline; }
+  .t-prompt { color: var(--green); white-space: nowrap; }
+  .t-cmd { color: var(--text); }
+  .t-comment { color: var(--text-dim); font-style: italic; }
+  .t-output { color: var(--text); padding-left: 1.5rem; }
+  .t-key { color: var(--amber); }
+  .t-val { color: var(--green); }
+  .t-string { color: #9ECBFF; }
+  .t-blank { height: 0.5rem; }
+
+  /* PROJECTS */
+  .section {
+    padding: 0 2.5rem 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 0;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .sh-arrow { color: var(--green); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 1rem;
+  }
+
+  .proj-card {
+    background: var(--bg2);
+    padding: 1.75rem;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .proj-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: var(--green);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .proj-card:hover { background: var(--bg3); }
+  .proj-card:hover::before { transform: scaleX(1); }
+
+  .proj-file {
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    margin-bottom: 0.75rem;
+  }
+
+  .proj-file .ext { color: var(--amber); }
+
+  .proj-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--green);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+    transition: text-shadow 0.2s;
+  }
+
+  .proj-name:hover { text-shadow: 0 0 10px rgba(0, 232, 122, 0.4); }
+
+  .proj-desc {
+    font-size: 0.78rem;
+    font-weight: 300;
+    color: var(--text-dim);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .proj-tag {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    background: var(--green-faint);
+    color: var(--green-dim);
+    border: 1px solid var(--green-dim);
+    padding: 0.15rem 0.5rem;
+  }
+
+  /* LOGBOOK */
+  .logbook-table {
+    border: 1px solid var(--border);
+    background: var(--bg2);
+  }
+
+  .lt-header {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border-bright);
+    display: grid;
+    grid-template-columns: 100px 1fr 80px;
+    padding: 0.5rem 1.5rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .lt-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 80px;
+    padding: 0.65rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+    align-items: center;
+    transition: background 0.1s;
+  }
+
+  .lt-row:last-child { border-bottom: none; }
+  .lt-row:hover { background: var(--green-faint); }
+
+  .lt-date { color: var(--text-dim); font-size: 0.72rem; }
+  .lt-title { color: var(--text); }
+  .lt-title.book { text-decoration: underline; text-decoration-color: var(--text-dim); }
+  .lt-title.movie { font-style: italic; }
+  .lt-title.tv { text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.06em; }
+  .lt-title.concert { color: var(--amber); }
+  .lt-type { font-size: 0.6rem; color: var(--green-dim); letter-spacing: 0.08em; text-align: right; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    margin-top: 3rem;
+  }
+
+  .footer-t {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  .footer-t .green { color: var(--green); }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--green);
+    color: var(--bg);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 999;
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 8 — Neon Terminal</div>
+
+<nav>
+  <div class="nav-prompt">
+    <span class="ps1">derek@personal-site</span>:<span class="dir">~/</span>$ <span class="cursor"></span>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="#">./projects</a>
+    <a class="nav-link" href="#">./logbook</a>
+    <a class="nav-link" href="#">./about</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="term-window">
+    <div class="term-titlebar">
+      <div class="term-dot"></div>
+      <div class="term-dot"></div>
+      <div class="term-dot"></div>
+      <span class="term-title">derek@personal-site: ~ — bash</span>
+    </div>
+    <div class="term-body">
+      <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">cat about.json</span></div>
+      <div class="t-blank"></div>
+      <div class="t-output">{</div>
+      <div class="t-output">&nbsp;&nbsp;<span class="t-key">"name"</span>: <span class="t-string">"Derek Brimley"</span>,</div>
+      <div class="t-output">&nbsp;&nbsp;<span class="t-key">"role"</span>: <span class="t-string">"Software Engineer"</span>,</div>
+      <div class="t-output">&nbsp;&nbsp;<span class="t-key">"location"</span>: <span class="t-string">"Salt Lake City, UT"</span>,</div>
+      <div class="t-output">&nbsp;&nbsp;<span class="t-key">"focus"</span>: <span class="t-string">"Product engineering"</span>,</div>
+      <div class="t-output">&nbsp;&nbsp;<span class="t-key">"interests"</span>: [</div>
+      <div class="t-output">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-string">"building software"</span>, <span class="t-string">"reading books"</span>,</div>
+      <div class="t-output">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-string">"watching films"</span>, <span class="t-string">"live music"</span></div>
+      <div class="t-output">&nbsp;&nbsp;],</div>
+      <div class="t-output">&nbsp;&nbsp;<span class="t-key">"links"</span>: {</div>
+      <div class="t-output">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"github"</span>: <span class="t-val">→ github.com/derekbrimley</span>,</div>
+      <div class="t-output">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"linkedin"</span>: <span class="t-val">→ linkedin.com/in/derekbrimley</span></div>
+      <div class="t-output">&nbsp;&nbsp;}</div>
+      <div class="t-output">}</div>
+      <div class="t-blank"></div>
+      <div class="t-line"><span class="t-prompt">$</span><span class="cursor"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="sh-arrow">//</span>
+    <span>ls ./projects</span>
+  </div>
+  <div class="projects-grid">
+    <div class="proj-card">
+      <div class="proj-file">projects/<span class="ext">piano-coach/</span></div>
+      <a class="proj-name" href="#">Piano Coach</a>
+      <p class="proj-desc">AI-powered tool for learning piano technique and theory at your own pace.</p>
+      <span class="proj-tag">web-app</span>
+    </div>
+    <div class="proj-card">
+      <div class="proj-file">projects/<span class="ext">oblique-assistant/</span></div>
+      <a class="proj-name" href="#">Oblique Assistant</a>
+      <p class="proj-desc">Creative prompt generator inspired by Eno's Oblique Strategies card deck.</p>
+      <span class="proj-tag">tool</span>
+    </div>
+    <div class="proj-card">
+      <div class="proj-file">projects/<span class="ext">standards-workbook/</span></div>
+      <a class="proj-name" href="#">Standards Workbook</a>
+      <p class="proj-desc">Jazz standards reference — charts, recordings, and history.</p>
+      <span class="proj-tag">reference</span>
+    </div>
+    <div class="proj-card">
+      <div class="proj-file">projects/<span class="ext">reclist/</span></div>
+      <a class="proj-name" href="#">Reclist</a>
+      <p class="proj-desc">Track and share book recommendations with people you trust.</p>
+      <span class="proj-tag">app</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="sh-arrow">//</span>
+    <span>cat ./logbook/2025.log</span>
+  </div>
+  <div class="logbook-table">
+    <div class="lt-header">
+      <span>DATE</span>
+      <span>ENTRY</span>
+      <span>TYPE</span>
+    </div>
+    <div class="lt-row"><span class="lt-date">2025-03-14</span><span class="lt-title book">Exhalation — Ted Chiang</span><span class="lt-type">book</span></div>
+    <div class="lt-row"><span class="lt-date">2025-03-08</span><span class="lt-title movie">All of Us Strangers</span><span class="lt-type">film</span></div>
+    <div class="lt-row"><span class="lt-date">2025-02-28</span><span class="lt-title tv">Severance</span><span class="lt-type">tv</span></div>
+    <div class="lt-row"><span class="lt-date">2025-02-15</span><span class="lt-title book">Four Thousand Weeks — O. Burkeman</span><span class="lt-type">book</span></div>
+    <div class="lt-row"><span class="lt-date">2025-01-22</span><span class="lt-title concert">Brad Mehldau Trio @ Vivint Arena</span><span class="lt-type">concert</span></div>
+    <div class="lt-row"><span class="lt-date">2025-01-10</span><span class="lt-title movie">Past Lives</span><span class="lt-type">film</span></div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-t">© 2026 <span class="green">Derek Brimley</span></span>
+  <span class="footer-t">Built with <span class="green">SvelteKit</span></span>
+</footer>
+
+</body>
+</html>

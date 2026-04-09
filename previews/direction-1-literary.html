@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 1 — The Literary Press</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1817;
+    --paper: #F5F0E8;
+    --cream: #FDFAF5;
+    --accent: #BB5C4F;
+    --rule: #1a1817;
+    --muted: #7a7166;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--cream);
+    border-bottom: 2px solid var(--ink);
+    padding: 0 3rem;
+    display: flex;
+    align-items: stretch;
+    height: 56px;
+  }
+
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .nav-center {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-left: 1px solid var(--ink);
+    border-right: 1px solid var(--ink);
+  }
+
+  .nav-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink);
+    padding: 0 2rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--ink);
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .nav-link:last-child { border-right: none; }
+  .nav-link:hover { background: var(--ink); color: var(--cream); }
+
+  .nav-issue {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    padding-left: 1.5rem;
+    text-align: right;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 0 3rem;
+    border-bottom: 2px solid var(--ink);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 520px;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    padding: 4rem 4rem 4rem 0;
+    border-right: 1px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 2rem;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-bio {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--ink);
+    max-width: 38ch;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+
+  .hero-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    padding: 0.5rem 1.1rem;
+    margin-right: -1px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .hero-link:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .hero-right {
+    padding: 4rem 0 4rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+  }
+
+  .hero-ornament {
+    position: absolute;
+    top: 3rem;
+    right: 0;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18rem;
+    line-height: 1;
+    color: var(--paper);
+    letter-spacing: -0.05em;
+    user-select: none;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-pullquote {
+    position: relative;
+    z-index: 1;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--ink);
+    border-left: 3px solid var(--accent);
+    padding-left: 1.5rem;
+    max-width: 32ch;
+  }
+
+  .hero-caption {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 1rem;
+    letter-spacing: 0.08em;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    padding: 0 3rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    border-bottom: 1px solid var(--ink);
+    height: 48px;
+  }
+
+  .section-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    width: 3rem;
+  }
+
+  .section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    flex: 1;
+  }
+
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--ink);
+    opacity: 0.15;
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    padding: 3rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .project-item {
+    padding: 2.5rem 2.5rem 2.5rem 0;
+    border-right: 1px solid var(--ink);
+    position: relative;
+  }
+
+  .project-item:last-child { border-right: none; padding-right: 0; }
+  .project-item:not(:first-child) { padding-left: 2.5rem; }
+
+  .project-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .project-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    color: var(--ink);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.75rem;
+    transition: color 0.15s;
+  }
+
+  .project-name:hover { color: var(--accent); }
+
+  .project-desc {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  .project-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid currentColor;
+    color: var(--muted);
+    padding: 0.2rem 0.5rem;
+    margin-top: 1.25rem;
+  }
+
+  /* LOGBOOK */
+  .logbook-section {
+    padding: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+  }
+
+  .logbook-intro h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .logbook-intro p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .logbook-list {
+    list-style: none;
+  }
+
+  .logbook-item {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 1.5rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgba(26,24,23,0.12);
+    align-items: baseline;
+  }
+
+  .logbook-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  .logbook-title {
+    font-size: 0.9rem;
+    color: var(--ink);
+  }
+
+  .logbook-title.book { text-decoration: underline; }
+  .logbook-title.movie { font-style: italic; }
+  .logbook-title.tv { text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.08em; }
+  .logbook-title.concert { font-weight: 500; }
+
+  /* FOOTER */
+  footer {
+    border-top: 2px solid var(--ink);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 999;
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 1 — The Literary Press</div>
+
+<nav>
+  <a class="nav-logo" href="#">Derek Brimley</a>
+  <div class="nav-center">
+    <a class="nav-link" href="#">01 — Projects</a>
+    <a class="nav-link" href="#">02 — Logbook</a>
+  </div>
+  <div class="nav-issue">Personal Site · 2026</div>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div>
+      <div class="hero-eyebrow">Software engineer — Salt Lake City, UT</div>
+      <h1 class="hero-name">Derek<br><em>Brimley</em></h1>
+      <p class="hero-bio">
+        I build software and occasionally write about the things I read, watch, and listen to.
+        Currently focused on product engineering and whatever I find interesting enough to ship.
+      </p>
+    </div>
+    <div class="hero-links">
+      <a class="hero-link" href="#">GitHub</a>
+      <a class="hero-link" href="#">LinkedIn</a>
+      <a class="hero-link" href="#">Email</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-ornament">D</div>
+    <blockquote class="hero-pullquote">
+      "Building things carefully, one at a time."
+    </blockquote>
+    <p class="hero-caption">— Engineering philosophy</p>
+  </div>
+</section>
+
+<div class="section-header">
+  <span class="section-number">01</span>
+  <span class="section-title">Selected Projects</span>
+  <span class="section-rule"></span>
+</div>
+
+<div class="projects-grid">
+  <div class="project-item">
+    <div class="project-num">001</div>
+    <a class="project-name" href="#">Piano Coach</a>
+    <p class="project-desc">An AI-powered tool for learning piano technique and theory at your own pace.</p>
+    <span class="project-tag">Web App</span>
+  </div>
+  <div class="project-item">
+    <div class="project-num">002</div>
+    <a class="project-name" href="#">Oblique Assistant</a>
+    <p class="project-desc">A creative prompt generator inspired by Brian Eno's Oblique Strategies card deck.</p>
+    <span class="project-tag">Tool</span>
+  </div>
+  <div class="project-item">
+    <div class="project-num">003</div>
+    <a class="project-name" href="#">Standards Workbook</a>
+    <p class="project-desc">A jazz standards reference for musicians — charts, recordings, and history.</p>
+    <span class="project-tag">Reference</span>
+  </div>
+</div>
+
+<div class="section-header">
+  <span class="section-number">02</span>
+  <span class="section-title">Logbook — 2025</span>
+  <span class="section-rule"></span>
+</div>
+
+<div class="logbook-section">
+  <div class="logbook-intro">
+    <h2>Books, Films & Music</h2>
+    <p>A running log of things I've read, watched, and listened to throughout the year.</p>
+  </div>
+  <ul class="logbook-list">
+    <li class="logbook-item">
+      <span class="logbook-date">Mar 14</span>
+      <span class="logbook-title book">Exhalation — Ted Chiang</span>
+    </li>
+    <li class="logbook-item">
+      <span class="logbook-date">Mar 08</span>
+      <span class="logbook-title movie">All of Us Strangers</span>
+    </li>
+    <li class="logbook-item">
+      <span class="logbook-date">Feb 28</span>
+      <span class="logbook-title tv">Severance</span>
+    </li>
+    <li class="logbook-item">
+      <span class="logbook-date">Feb 15</span>
+      <span class="logbook-title book">Four Thousand Weeks — Oliver Burkeman</span>
+    </li>
+    <li class="logbook-item">
+      <span class="logbook-date">Jan 22</span>
+      <span class="logbook-title concert">Brad Mehldau Trio @ Vivint Arena</span>
+    </li>
+    <li class="logbook-item">
+      <span class="logbook-date">Jan 10</span>
+      <span class="logbook-title movie">Past Lives</span>
+    </li>
+  </ul>
+</div>
+
+<footer>
+  <span class="footer-copy">© 2026 Derek Brimley — All rights reserved</span>
+  <span class="footer-copy">Built with SvelteKit</span>
+</footer>
+
+</body>
+</html>

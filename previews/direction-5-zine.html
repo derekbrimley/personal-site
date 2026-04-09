@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 5 — Lo-fi Zine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --paper: #F2E8D5;
+    --aged: #E8D9BE;
+    --dark: #2C1A0E;
+    --ink: #1E1208;
+    --rust: #C4522A;
+    --sage: #6B7C5A;
+    --faded: #9A8B76;
+    --tape: rgba(255, 220, 120, 0.45);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Courier Prime', monospace;
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* Subtle paper texture */
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  /* NAV */
+  nav {
+    border-bottom: 2px solid var(--ink);
+    padding: 1rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--aged);
+    z-index: 100;
+    border-top: 4px solid var(--ink);
+  }
+
+  .nav-stamp {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    text-decoration: none;
+    position: relative;
+  }
+
+  .nav-stamp::before {
+    content: '★';
+    color: var(--rust);
+    margin-right: 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--faded);
+    text-decoration: none;
+    text-transform: lowercase;
+    border-bottom: 1px dashed var(--faded);
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .nav-link:hover { color: var(--rust); border-color: var(--rust); }
+
+  /* HERO */
+  .hero {
+    padding: 4rem 2.5rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+  }
+
+  /* Tape strips */
+  .tape-h {
+    position: absolute;
+    height: 22px;
+    background: var(--tape);
+    border: 1px solid rgba(200, 160, 60, 0.3);
+  }
+
+  .tape-1 { top: 2rem; left: 2rem; width: 70px; transform: rotate(-3deg); }
+  .tape-2 { top: 2rem; right: 3rem; width: 50px; transform: rotate(2deg); }
+  .tape-3 { bottom: 1.5rem; right: 6rem; width: 60px; transform: rotate(-1deg); }
+
+  .hero-left {
+    position: relative;
+  }
+
+  .hero-issue {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+    font-family: 'Courier Prime', monospace;
+  }
+
+  .hero-name {
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 1.0;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-ruled {
+    border-top: 1px solid var(--faded);
+    border-bottom: 1px solid var(--faded);
+    padding: 0.75rem 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.78rem;
+    color: var(--faded);
+    letter-spacing: 0.06em;
+    font-style: italic;
+  }
+
+  .hero-bio {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--dark);
+    max-width: 44ch;
+  }
+
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sticker {
+    display: inline-block;
+    background: var(--rust);
+    color: #fff;
+    font-family: 'Special Elite', cursive;
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+    transform: rotate(-2deg);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+    width: fit-content;
+  }
+
+  .sticker-sage {
+    background: var(--sage);
+    transform: rotate(1.5deg);
+    margin-left: 2rem;
+  }
+
+  .hand-note {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    color: var(--dark);
+    line-height: 1.6;
+    background: rgba(255,255,255,0.35);
+    border: 1px solid var(--faded);
+    padding: 1.25rem;
+    transform: rotate(-0.5deg);
+    position: relative;
+  }
+
+  .hand-note::before {
+    content: '↓ about me';
+    position: absolute;
+    top: -1.2rem;
+    left: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--faded);
+    font-family: 'Caveat', cursive;
+  }
+
+  .social-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .social-btn {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+    padding: 0.4rem 0.8rem;
+    background: transparent;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .social-btn:hover { background: var(--ink); color: var(--paper); }
+
+  /* PROJECTS */
+  .projects-section {
+    padding: 3rem 2.5rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .section-marker {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .marker-num {
+    font-family: 'Special Elite', cursive;
+    font-size: 2rem;
+    color: var(--rust);
+    line-height: 1;
+  }
+
+  .marker-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--faded);
+    border-top: 1px solid var(--faded);
+    border-bottom: 1px solid var(--faded);
+    padding: 0.3rem 0;
+    flex: 1;
+  }
+
+  .projects-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .project-entry {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px dashed var(--faded);
+    align-items: start;
+  }
+
+  .p-bullet {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.2rem;
+    color: var(--rust);
+    margin-top: -2px;
+  }
+
+  .p-name {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.1rem;
+    color: var(--ink);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.3rem;
+    transition: color 0.15s;
+  }
+
+  .p-name:hover { color: var(--rust); }
+
+  .p-desc {
+    font-size: 0.8rem;
+    color: var(--faded);
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  .p-handtag {
+    font-family: 'Caveat', cursive;
+    font-size: 0.85rem;
+    color: var(--sage);
+    white-space: nowrap;
+    transform: rotate(2deg);
+    display: inline-block;
+    margin-top: 0.2rem;
+  }
+
+  /* LOGBOOK */
+  .logbook-section {
+    padding: 3rem 2.5rem;
+  }
+
+  .logbook-note {
+    background: rgba(255,255,255,0.4);
+    border: 1.5px solid var(--faded);
+    padding: 2rem;
+    max-width: 640px;
+    transform: rotate(-0.3deg);
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .logbook-note::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    right: 0;
+    height: 3px;
+    background: repeating-linear-gradient(90deg, var(--rust) 0, var(--rust) 4px, transparent 4px, transparent 8px);
+  }
+
+  .logbook-note h2 {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+
+  .logbook-note p {
+    font-size: 0.8rem;
+    color: var(--faded);
+    font-style: italic;
+  }
+
+  .logbook-rows {
+    list-style: none;
+    max-width: 560px;
+  }
+
+  .log-row {
+    display: grid;
+    grid-template-columns: 5rem 1fr;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--aged);
+  }
+
+  .log-d {
+    font-size: 0.68rem;
+    color: var(--rust);
+    letter-spacing: 0.06em;
+    margin-top: 2px;
+  }
+
+  .log-t { font-size: 0.85rem; color: var(--dark); }
+  .log-t.book { text-decoration: underline; }
+  .log-t.movie { font-style: italic; }
+  .log-t.tv { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.06em; color: var(--faded); }
+  .log-t.concert { font-family: 'Caveat', cursive; font-size: 1rem; color: var(--sage); }
+
+  footer {
+    border-top: 2px solid var(--ink);
+    border-bottom: 4px solid var(--ink);
+    padding: 1rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--aged);
+  }
+
+  .footer-t {
+    font-size: 0.68rem;
+    color: var(--faded);
+    letter-spacing: 0.06em;
+  }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--rust);
+    color: #fff;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 999;
+    transform: rotate(-1deg);
+    border: 1.5px solid var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 5 — Lo-fi Zine</div>
+
+<nav>
+  <a class="nav-stamp" href="#">derek brimley</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#">projects</a>
+    <a class="nav-link" href="#">logbook</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="tape-h tape-1"></div>
+  <div class="tape-h tape-2"></div>
+  <div class="tape-h tape-3"></div>
+
+  <div class="hero-left">
+    <div class="hero-issue">vol. 1 · personal site · 2026</div>
+    <h1 class="hero-name">Derek<br>Brimley</h1>
+    <div class="hero-ruled">
+      <p class="hero-subtitle">software engineer somewhere in salt lake city, ut</p>
+    </div>
+    <p class="hero-bio">
+      Building software. Reading books. Watching films.
+      Logging it all here so I can remember what I thought about things.
+    </p>
+  </div>
+
+  <div class="hero-right">
+    <div class="sticker">Product Engineer ★</div>
+    <div class="sticker sticker-sage">SLC, Utah 🌿</div>
+    <div class="hand-note">
+      "I build software and occasionally write about the things I read, watch, and listen to."
+    </div>
+    <div class="social-row">
+      <a class="social-btn" href="#">GitHub</a>
+      <a class="social-btn" href="#">LinkedIn</a>
+      <a class="social-btn" href="#">Email</a>
+    </div>
+  </div>
+</section>
+
+<section class="projects-section">
+  <div class="section-marker">
+    <span class="marker-num">01</span>
+    <span class="marker-label">selected projects — things i've made</span>
+  </div>
+
+  <ul class="projects-list">
+    <li class="project-entry">
+      <span class="p-bullet">◆</span>
+      <div>
+        <a class="p-name" href="#">Piano Coach</a>
+        <p class="p-desc">An AI-powered tool for learning piano technique and theory at your own pace.</p>
+      </div>
+      <span class="p-handtag">web app →</span>
+    </li>
+    <li class="project-entry">
+      <span class="p-bullet">◆</span>
+      <div>
+        <a class="p-name" href="#">Oblique Assistant</a>
+        <p class="p-desc">Creative prompt generator inspired by Brian Eno's Oblique Strategies.</p>
+      </div>
+      <span class="p-handtag">tool →</span>
+    </li>
+    <li class="project-entry">
+      <span class="p-bullet">◆</span>
+      <div>
+        <a class="p-name" href="#">Standards Workbook</a>
+        <p class="p-desc">Jazz standards reference for musicians — charts, recordings, and history.</p>
+      </div>
+      <span class="p-handtag">reference →</span>
+    </li>
+    <li class="project-entry">
+      <span class="p-bullet">◆</span>
+      <div>
+        <a class="p-name" href="#">Reclist</a>
+        <p class="p-desc">Track and share book recommendations with people you trust.</p>
+      </div>
+      <span class="p-handtag">app →</span>
+    </li>
+  </ul>
+</section>
+
+<section class="logbook-section">
+  <div class="section-marker">
+    <span class="marker-num">02</span>
+    <span class="marker-label">logbook — 2025 reading, watching, listening</span>
+  </div>
+
+  <div class="logbook-note">
+    <h2>The 2025 Logbook</h2>
+    <p>books are underlined · movies are italic · tv is ALL CAPS · concerts are handwritten</p>
+  </div>
+
+  <ul class="logbook-rows">
+    <li class="log-row"><span class="log-d">Mar 14</span><span class="log-t book">Exhalation — Ted Chiang</span></li>
+    <li class="log-row"><span class="log-d">Mar 08</span><span class="log-t movie">All of Us Strangers</span></li>
+    <li class="log-row"><span class="log-d">Feb 28</span><span class="log-t tv">Severance</span></li>
+    <li class="log-row"><span class="log-d">Feb 15</span><span class="log-t book">Four Thousand Weeks — Oliver Burkeman</span></li>
+    <li class="log-row"><span class="log-d">Jan 22</span><span class="log-t concert">Brad Mehldau Trio @ Vivint Arena</span></li>
+    <li class="log-row"><span class="log-d">Jan 10</span><span class="log-t movie">Past Lives</span></li>
+  </ul>
+</section>
+
+<footer>
+  <span class="footer-t">© 2026 Derek Brimley — hand-crafted with care</span>
+  <span class="footer-t">Built with SvelteKit ✦</span>
+</footer>
+
+</body>
+</html>

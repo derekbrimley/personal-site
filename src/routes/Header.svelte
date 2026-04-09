@@ -1,171 +1,104 @@
-<script>
-    let isMenuOpen = false;
-    
-    function toggleMenu() {
-        isMenuOpen = !isMenuOpen;
-    }
-    
-    function closeMenu() {
-        isMenuOpen = false;
-    }
-</script>
+<header class="site-header">
+  <nav class="header-nav">
+    <a class="nav-item" href="/">about</a>
+    <a class="nav-item" href="/projects">projects</a>
+    <a class="nav-item" href="/notes" data-sveltekit-reload>notes</a>
+  </nav>
+  <div class="header-identity">
+    <div class="ascii-banner">
+      <pre class="ascii-name">
+      <span class="coral">██████╗</span> <span class="purple">███████╗</span><span class="green">██████╗</span> <span class="yellow">███████╗</span><span class="pink">██╗  ██╗</span>
+      <span class="coral">██╔══██╗</span><span class="purple">██╔════╝</span><span class="green">██╔══██╗</span><span class="yellow">██╔════╝</span><span class="pink">██║ ██╔╝</span>
+      <span class="coral">██║  ██║</span><span class="purple">█████╗  </span><span class="green">██████╔╝</span><span class="yellow">█████╗  </span><span class="pink">█████╔╝</span>
+      <span class="coral">██║  ██║</span><span class="purple">██╔══╝  </span><span class="green">██╔══██╗</span><span class="yellow">██╔══╝  </span><span class="pink">██╔═██╗</span>
+      <span class="coral">██████╔╝</span><span class="purple">███████╗</span><span class="green">██║  ██║</span><span class="yellow">███████╗</span><span class="pink">██║  ██╗</span>
+      <span class="yellow">██████╗ </span><span class="pink">██████╗ </span><span class="coral">██╗</span><span class="purple">███╗   ███╗</span><span class="green">██╗     </span><span class="coral">███████╗</span><span class="yellow">██╗   ██╗</span>
+      <span class="yellow">██╔══██╗</span><span class="pink">██╔══██╗</span><span class="coral">██║</span><span class="purple">████╗ ████║</span><span class="green">██║     </span><span class="coral">██╔════╝</span><span class="yellow">╚██╗ ██╔╝</span>
+      <span class="yellow">██████╔╝</span><span class="pink">██████╔╝</span><span class="coral">██║</span><span class="purple">██╔████╔██║</span><span class="green">██║     </span><span class="coral">█████╗  </span><span class="yellow"> ╚████╔╝ </span>
+      <span class="yellow">██╔══██╗</span><span class="pink">██╔══██╗</span><span class="coral">██║</span><span class="purple">██║╚██╔╝██║</span><span class="green">██║     </span><span class="coral">██╔══╝  </span><span class="yellow">  ╚██╔╝  </span>
+      <span class="yellow">██████╔╝</span><span class="pink">██║  ██║</span><span class="coral">██║</span><span class="purple">██║ ╚═╝ ██║</span><span class="green">███████╗</span><span class="coral">███████╗</span><span class="yellow">   ██║   </span>
 
-<header>
-    <div class="container header-container">
-        <div class="logo">
-            <h1><a href="/" on:click={closeMenu}>derek brimley</a></h1>
-        </div>
-        
-        <button class="mobile-menu-toggle" on:click={toggleMenu} aria-label="Toggle menu">
-            <span class={`hamburger ${isMenuOpen ? 'open' : ''}`}></span>
-        </button>
-        
-        <nav class={isMenuOpen ? 'show' : ''}>
-            <ul>
-                <li><a href="/projects" on:click={closeMenu}>Projects</a></li>
-                <li><a href="/logbook" on:click={closeMenu}>Logbook</a></li>
-                <!-- <li><a href="/favorites" on:click={closeMenu}>Favorites</a></li>
-                <li><a href="/contact-me" on:click={closeMenu}>Contact</a></li> -->
-            </ul>
-        </nav>
-    </div>
+      </pre>
+      </div>
+  </div>
 </header>
 
 <style>
-    header {
-        padding: var(--spacing-md) 0;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        transition: background-color var(--transition-normal);
-        background-color: rgba(255, 255, 255, 0.9);
-        border-bottom: 1px solid var(--border);
+  .coral {
+    color: var(--coral)
+  }
+  .yellow {
+    color: var(--yellow)
+  }
+  .purple {
+    color: var(--purple)
+  }
+  .pink {
+    color: var(--pink)
+  }
+  .green {
+    color: var(--green)
+  }
+  
+  .site-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .header-nav {
+    padding: 1rem 1.5rem;
+    border-right: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .nav-item {
+    font-size: 0.7rem;
+    font-weight: 400;
+    text-decoration: none;
+    color: var(--link);
+    padding: 0.25rem 0.7rem;
+    border: 1px dashed transparent;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+    letter-spacing: 0.04em;
+  }
+
+  .nav-item:hover {
+    border-color: var(--border);
+    background: rgba(34, 34, 32, 0.04);
+    text-decoration: none;
+  }
+
+  .nav-item + .nav-item {
+    border-left: 1px dotted var(--text-dim);
+  }
+
+  .header-identity {
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.6rem;
+    min-width: 200px;
+  }
+
+  @media (max-width: 600px) {
+    .site-header {
+      grid-template-columns: 1fr;
     }
-    
-    .header-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+
+    .header-nav {
+      border-right: none;
     }
-    
-    .logo h1 {
-        font-size: 1.2rem;
-        font-weight: 400;
-        letter-spacing: 0.05em;
-        text-transform: lowercase;
-        margin: 0;
+
+    .header-identity {
+      align-items: flex-start;
+      min-width: 0;
+      padding: 0.75rem 1.5rem;
+      border-top: 1px dotted var(--text-dim);
     }
-    
-    .logo a {
-        text-decoration: none;
-        transition: color var(--transition-fast);
-        color: var(--text-primary);
-    }
-    
-    nav {
-        display: flex;
-        align-items: center;
-    }
-    
-    nav ul {
-        display: flex;
-        list-style: none;
-        gap: var(--spacing-xl);
-    }
-    
-    nav a {
-        font-weight: 400;
-        font-size: 0.9rem;
-        text-transform: lowercase;
-        letter-spacing: 0.03em;
-    }
-    
-    nav a::after {
-        display: none;
-    }
-    
-    .mobile-menu-toggle {
-        display: none;
-        background: none;
-        border: none;
-        cursor: pointer;
-        width: 24px;
-        height: 24px;
-        position: relative;
-    }
-    
-    .hamburger {
-        width: 24px;
-        height: 1px;
-        display: block;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: background-color var(--transition-normal);
-        background-color: var(--text-primary);
-    }
-    
-    .hamburger::before, .hamburger::after {
-        content: '';
-        width: 24px;
-        height: 1px;
-        position: absolute;
-        transition: transform var(--transition-normal);
-        background-color: var(--text-primary);
-    }
-    
-    .hamburger::before {
-        top: -6px;
-    }
-    
-    .hamburger::after {
-        bottom: -6px;
-    }
-    
-    .hamburger.open {
-        background-color: transparent;
-    }
-    
-    .hamburger.open::before {
-        transform: rotate(45deg);
-        top: 0;
-    }
-    
-    .hamburger.open::after {
-        transform: rotate(-45deg);
-        bottom: 0;
-    }
-    
-    @media (max-width: 768px) {
-        .mobile-menu-toggle {
-            display: block;
-            z-index: 101;
-        }
-        
-        nav {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 75%;
-            max-width: 250px;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transform: translateX(100%);
-            transition: transform var(--transition-normal);
-            background-color: var(--background);
-            border-left: 1px solid var(--border);
-        }
-        
-        nav.show {
-            transform: translateX(0);
-        }
-        
-        nav ul {
-            flex-direction: column;
-            align-items: center;
-            gap: var(--spacing-xl);
-        }
-    }
+  }
 </style>

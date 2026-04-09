@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 16 — BBS / ANSI Art</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #000000;
+    --cyan: #00AAAA;
+    --cyan-bright: #55FFFF;
+    --white: #AAAAAA;
+    --white-bright: #FFFFFF;
+    --yellow: #FFFF55;
+    --magenta: #AA00AA;
+    --magenta-bright: #FF55FF;
+    --green: #00AA00;
+    --green-bright: #55FF55;
+    --red: #AA0000;
+    --red-bright: #FF5555;
+    --blue: #0000AA;
+    --blue-bright: #5555FF;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Share Tech Mono', monospace;
+    line-height: 1.4;
+    overflow-x: hidden;
+  }
+
+  .screen {
+    max-width: 80ch;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  /* ANSI-style header block */
+  .ansi-header {
+    background: var(--blue);
+    padding: 0;
+    margin-bottom: 0;
+  }
+
+  .header-top {
+    background: var(--cyan);
+    color: var(--bg);
+    padding: 0.15rem 1rem;
+    font-size: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .header-banner {
+    background: var(--bg);
+    padding: 1.5rem 1rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--cyan);
+  }
+
+  /* Block character art */
+  .ascii-art {
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: var(--cyan-bright);
+    text-shadow: 0 0 8px rgba(85, 255, 255, 0.4);
+    margin-bottom: 0.5rem;
+  }
+
+  .banner-sub {
+    font-size: 0.72rem;
+    color: var(--yellow);
+    letter-spacing: 0.15em;
+  }
+
+  /* NAV bar */
+  .nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--blue);
+    border-bottom: 1px solid var(--cyan);
+    padding: 0.3rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+  }
+
+  .nav-item {
+    color: var(--white-bright);
+    text-decoration: none;
+    padding: 0.1rem 0.6rem;
+    transition: background 0.1s, color 0.1s;
+  }
+
+  .nav-item:hover { background: var(--cyan); color: var(--bg); }
+  .nav-item.active { background: var(--cyan); color: var(--bg); }
+
+  .nav-status { color: var(--yellow); font-size: 0.72rem; align-self: center; }
+
+  /* Board sections */
+  .board-section {
+    border: 1px solid var(--cyan);
+    margin: 1rem;
+    margin-top: 0;
+  }
+
+  .board-header {
+    background: var(--cyan);
+    color: var(--bg);
+    padding: 0.2rem 0.75rem;
+    font-size: 0.78rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .board-header .bh-left { font-weight: bold; letter-spacing: 0.08em; }
+  .board-header .bh-right { font-size: 0.68rem; opacity: 0.8; }
+
+  .board-body { padding: 0.75rem; }
+
+  /* User info / sysop message */
+  .sysop-msg {
+    border: 1px solid var(--yellow);
+    padding: 0.75rem;
+    margin: 1rem;
+    position: relative;
+  }
+
+  .sysop-msg::before {
+    content: ' SysOp Message ';
+    position: absolute;
+    top: -0.6em;
+    left: 0.75rem;
+    background: var(--bg);
+    color: var(--yellow);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    padding: 0 0.25rem;
+  }
+
+  .sysop-text { font-size: 0.85rem; color: var(--white); line-height: 1.6; }
+  .sysop-text .hi { color: var(--green-bright); }
+  .sysop-text .handle { color: var(--cyan-bright); }
+  .sysop-text .em { color: var(--yellow); }
+
+  /* Thread list */
+  .thread-header {
+    display: grid;
+    grid-template-columns: 4ch 1fr 10ch 6ch;
+    gap: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--white);
+    color: var(--bg);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  .thread {
+    display: grid;
+    grid-template-columns: 4ch 1fr 10ch 6ch;
+    gap: 0.5rem;
+    padding: 0.3rem 0.5rem;
+    border-bottom: 1px solid rgba(0, 170, 170, 0.2);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+
+  .thread:hover { background: rgba(0, 170, 170, 0.12); }
+  .thread:last-child { border-bottom: none; }
+
+  .t-num { color: var(--yellow); }
+  .t-title { color: var(--cyan-bright); text-decoration: none; }
+  .t-title:hover { color: var(--white-bright); }
+  .t-date { color: var(--white); font-size: 0.72rem; }
+  .t-type {
+    font-size: 0.65rem;
+    text-align: right;
+    color: var(--green-bright);
+    letter-spacing: 0.06em;
+  }
+
+  /* ANSI block decoration */
+  .ansi-block {
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--magenta-bright);
+    padding: 0.5rem 0.75rem;
+    border-left: 3px solid var(--magenta-bright);
+  }
+
+  /* Logbook as message board */
+  .msg-entry {
+    padding: 0.6rem 0.5rem;
+    border-bottom: 1px solid rgba(0,170,170,0.15);
+    display: grid;
+    grid-template-columns: 8ch 1fr;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  .msg-entry:last-child { border-bottom: none; }
+
+  .msg-date { color: var(--yellow); font-size: 0.72rem; align-self: center; }
+  .msg-title { color: var(--white); }
+  .msg-title.book { color: var(--cyan-bright); }
+  .msg-title.movie { color: var(--magenta-bright); font-style: italic; }
+  .msg-title.tv { color: var(--green-bright); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.06em; }
+  .msg-title.concert { color: var(--yellow); }
+
+  /* Status bar at bottom */
+  .status-bar {
+    background: var(--cyan);
+    color: var(--bg);
+    padding: 0.2rem 1rem;
+    font-size: 0.72rem;
+    display: flex;
+    justify-content: space-between;
+    max-width: 80ch;
+    margin: 0 auto;
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+  }
+
+  /* Colored block decorations */
+  .blocks { letter-spacing: -0.05em; }
+  .c { color: var(--cyan); }
+  .y { color: var(--yellow); }
+  .m { color: var(--magenta-bright); }
+  .g { color: var(--green-bright); }
+  .r { color: var(--red-bright); }
+  .w { color: var(--white-bright); }
+
+  .label-badge {
+    position: fixed;
+    bottom: 2rem;
+    right: 1.5rem;
+    background: var(--yellow);
+    color: var(--bg);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 9999;
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 16 — BBS / ANSI</div>
+
+<div class="screen">
+
+  <div class="ansi-header">
+    <div class="header-top">
+      <span>PERSONAL-BBS v2.1 · SaltLake node · 28800 baud</span>
+      <span>Lines: 3 · Users Online: 1</span>
+    </div>
+    <div class="header-banner">
+      <div class="ascii-art">
+<span class="c">██████╗ </span><span class="y">██████╗ </span><span class="m">███████╗</span><span class="g">██╗  ██╗</span>
+<span class="c">██╔══██╗</span><span class="y">██╔══██╗</span><span class="m">██╔════╝</span><span class="g">██║ ██╔╝</span>
+<span class="c">██║  ██║</span><span class="y">██████╔╝</span><span class="m">█████╗  </span><span class="g">█████╔╝ </span>
+<span class="c">██║  ██║</span><span class="y">██╔══██╗</span><span class="m">██╔══╝  </span><span class="g">██╔═██╗ </span>
+<span class="c">██████╔╝</span><span class="y">██║  ██║</span><span class="m">███████╗</span><span class="g">██║  ██╗</span>
+      </div>
+      <div class="banner-sub">★ ★ ★ · DEREK BRIMLEY'S PERSONAL BOARD · ★ ★ ★</div>
+    </div>
+  </div>
+
+  <nav class="nav-bar">
+    <div style="display:flex; gap:0;">
+      <a class="nav-item active" href="#">[M]ain</a>
+      <a class="nav-item" href="#">[P]rojects</a>
+      <a class="nav-item" href="#">[L]ogbook</a>
+      <a class="nav-item" href="#">[A]bout</a>
+      <a class="nav-item" href="#">[G]oodbye</a>
+    </div>
+    <span class="nav-status">04/02/2026 · SLC,UT</span>
+  </nav>
+
+  <div class="sysop-msg">
+    <p class="sysop-text">
+      Welcome to my board. I'm <span class="handle">Derek Brimley</span>, a <span class="em">software engineer</span> in <span class="hi">Salt Lake City, Utah</span>.
+      I build software and log what I read, watch, and listen to. Browse the PROJECT FILES board for what I've shipped, or check the LOGBOOK section for the 2025 media log.
+      <br><br>
+      Connect: <a href="#" style="color:var(--cyan-bright);">GitHub</a> ·
+      <a href="#" style="color:var(--cyan-bright);">LinkedIn</a> ·
+      <a href="#" style="color:var(--cyan-bright);">Email</a>
+    </p>
+  </div>
+
+  <div class="board-section">
+    <div class="board-header">
+      <span class="bh-left">▓▓ PROJECT FILES ▓▓</span>
+      <span class="bh-right">4 files · updated 2026</span>
+    </div>
+    <div class="board-body">
+      <div class="thread-header">
+        <span>#</span><span>Title</span><span>Date</span><span>Type</span>
+      </div>
+      <div class="thread">
+        <span class="t-num">001</span>
+        <a class="t-title" href="#">Piano Coach</a>
+        <span class="t-date">2025-03-01</span>
+        <span class="t-type">WEB-APP</span>
+      </div>
+      <div class="thread">
+        <span class="t-num">002</span>
+        <a class="t-title" href="#">Oblique Assistant</a>
+        <span class="t-date">2024-11-15</span>
+        <span class="t-type">TOOL</span>
+      </div>
+      <div class="thread">
+        <span class="t-num">003</span>
+        <a class="t-title" href="#">Standards Workbook</a>
+        <span class="t-date">2024-08-20</span>
+        <span class="t-type">REF</span>
+      </div>
+      <div class="thread">
+        <span class="t-num">004</span>
+        <a class="t-title" href="#">Reclist</a>
+        <span class="t-date">2024-05-10</span>
+        <span class="t-type">APP</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="board-section">
+    <div class="board-header">
+      <span class="bh-left">▓▓ LOGBOOK 2025 ▓▓</span>
+      <span class="bh-right">books · films · tv · concerts</span>
+    </div>
+    <div class="board-body">
+      <div class="ansi-block"><span class="c">█</span><span class="y">█</span><span class="m">█</span> KEY: <span class="c">book</span> <span class="m">film</span> <span class="g">TV</span> <span class="y">concert</span></div>
+      <div class="msg-entry"><span class="msg-date">MAR 14</span><span class="msg-title book">Exhalation — Ted Chiang</span></div>
+      <div class="msg-entry"><span class="msg-date">MAR 08</span><span class="msg-title movie">All of Us Strangers</span></div>
+      <div class="msg-entry"><span class="msg-date">FEB 28</span><span class="msg-title tv">SEVERANCE</span></div>
+      <div class="msg-entry"><span class="msg-date">FEB 15</span><span class="msg-title book">Four Thousand Weeks — Oliver Burkeman</span></div>
+      <div class="msg-entry"><span class="msg-date">JAN 22</span><span class="msg-title concert">Brad Mehldau Trio @ Vivint Arena</span></div>
+      <div class="msg-entry"><span class="msg-date">JAN 10</span><span class="msg-title movie">Past Lives</span></div>
+    </div>
+  </div>
+
+  <div style="height:2rem;"></div>
+
+  <div class="status-bar">
+    <span>[F1] Help  [F2] Search  [F3] New Msg  [F10] Logoff</span>
+    <span>© 2026 Derek Brimley</span>
+  </div>
+
+</div>
+
+</body>
+</html>

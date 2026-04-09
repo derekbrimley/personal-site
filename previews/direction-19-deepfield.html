@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 19 — Deep Field</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Roboto+Mono:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --void: #04030A;
+    --text: #D8D4E8;
+    --text-dim: #6A6480;
+    --nebula-purple: rgba(100, 60, 180, 0.18);
+    --nebula-blue: rgba(40, 80, 200, 0.12);
+    --nebula-orange: rgba(200, 100, 40, 0.10);
+    --nebula-teal: rgba(40, 160, 180, 0.08);
+    --star-color: rgba(220, 215, 240, 0.8);
+    --accent: #C87840;
+    --accent-dim: rgba(200, 120, 64, 0.2);
+    --border: rgba(216, 212, 232, 0.07);
+    --border-bright: rgba(216, 212, 232, 0.15);
+    --mono: 'Roboto Mono', monospace;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-weight: 400;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Nebula background — CSS only */
+  .nebula-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 30%, var(--nebula-purple) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 75% 20%, var(--nebula-blue) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 60% 70%, var(--nebula-orange) 0%, transparent 70%),
+      radial-gradient(ellipse 70% 30% at 10% 80%, var(--nebula-teal) 0%, transparent 70%),
+      radial-gradient(ellipse 30% 40% at 90% 60%, var(--nebula-purple) 0%, transparent 70%);
+    filter: blur(40px);
+  }
+
+  /* Star field */
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      radial-gradient(1px 1px at 5% 8%, var(--star-color) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 18% 22%, var(--star-color) 0%, transparent 100%),
+      radial-gradient(1px 1px at 32% 5%, rgba(220,215,240,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 47% 38%, var(--star-color) 0%, transparent 100%),
+      radial-gradient(2px 2px at 61% 12%, rgba(255,240,200,0.9) 0%, transparent 100%),
+      radial-gradient(1px 1px at 73% 55%, var(--star-color) 0%, transparent 100%),
+      radial-gradient(1px 1px at 85% 28%, rgba(220,215,240,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 92% 75%, var(--star-color) 0%, transparent 100%),
+      radial-gradient(1px 1px at 12% 65%, rgba(220,215,240,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 28% 82%, var(--star-color) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 55% 90%, rgba(255,220,180,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 78% 88%, var(--star-color) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 60%, rgba(220,215,240,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 8% 45%, var(--star-color) 0%, transparent 100%),
+      radial-gradient(1px 1px at 95% 40%, rgba(220,215,240,0.5) 0%, transparent 100%);
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(4, 3, 10, 0.75);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 3rem;
+    justify-content: space-between;
+  }
+
+  .nav-coords {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 200;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+  }
+
+  .nav-logo {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--text);
+    text-decoration: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .nav-links { display: flex; gap: 2rem; }
+
+  .nav-link {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 200;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-dim);
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 88vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 3rem;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .hero-data {
+    position: absolute;
+    top: 2rem;
+    right: 3rem;
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 200;
+    line-height: 1.8;
+    color: var(--text-dim);
+    text-align: right;
+    letter-spacing: 0.08em;
+  }
+
+  .hero-data .label { color: var(--accent); opacity: 0.7; }
+
+  .hero-content { max-width: 600px; }
+
+  .hero-classification {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 200;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2.5rem;
+    opacity: 0.8;
+  }
+
+  .hero-name {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(2.8rem, 5vw, 5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--text-dim);
+    font-size: 0.55em;
+    display: block;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.25rem;
+  }
+
+  .hero-bio {
+    font-size: 1.0rem;
+    font-style: italic;
+    line-height: 1.85;
+    color: var(--text-dim);
+    max-width: 44ch;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-links { display: flex; gap: 1.5rem; }
+
+  .hero-link {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 200;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-dim);
+    border: 1px solid var(--border-bright);
+    padding: 0.4rem 0.9rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .hero-link:hover { color: var(--accent); border-color: var(--accent-dim); }
+
+  /* SECTION */
+  .section {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-meta {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 200;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.6;
+    margin-bottom: 0.4rem;
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+  }
+
+  /* Projects — data cards */
+  .proj-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .proj-card {
+    background: rgba(4, 3, 10, 0.6);
+    backdrop-filter: blur(4px);
+    padding: 2rem;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .proj-card:hover { background: rgba(20, 15, 40, 0.8); }
+
+  .proj-id {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    font-weight: 200;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    opacity: 0.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .proj-name {
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--text);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+
+  .proj-name:hover { color: var(--accent); }
+
+  .proj-desc {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 200;
+    line-height: 1.65;
+    color: var(--text-dim);
+  }
+
+  /* Logbook */
+  .logbook-inner {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 4rem;
+  }
+
+  .log-aside {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 200;
+    line-height: 1.8;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  .log-aside h3 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .log-list { list-style: none; }
+
+  .log-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1.5rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: baseline;
+  }
+
+  .log-item:first-child { border-top: 1px solid var(--border); }
+
+  .log-date {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 200;
+    color: var(--accent);
+    opacity: 0.6;
+    letter-spacing: 0.06em;
+  }
+
+  .log-title { font-size: 0.9rem; }
+  .log-title.book { text-decoration: underline; text-decoration-color: var(--text-dim); text-underline-offset: 3px; }
+  .log-title.movie { font-style: italic; }
+  .log-title.tv { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); font-weight: 200; }
+  .log-title.concert { color: var(--accent); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 200;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--accent);
+    color: var(--void);
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 9999;
+  }
+</style>
+</head>
+<body>
+
+<div class="nebula-layer"></div>
+<div class="stars"></div>
+<div class="label-badge">Direction 19 — Deep Field</div>
+
+<nav>
+  <span class="nav-coords">RA 00h 14m 28s · Dec +20° 52′</span>
+  <a class="nav-logo" href="#">Derek Brimley</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#">Projects</a>
+    <a class="nav-link" href="#">Logbook</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-data">
+    <div><span class="label">OBJ TYPE</span> · Personal Site</div>
+    <div><span class="label">LOCATION</span> · Salt Lake City, UT</div>
+    <div><span class="label">ROLE</span> · Product Engineer</div>
+    <div><span class="label">EPOCH</span> · J2026.0</div>
+    <div><span class="label">MAG</span> · +1.0</div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-classification">Object Classification · Personal Site · 2026</div>
+    <h1 class="hero-name">
+      <em>Software Engineer</em>
+      Derek Brimley
+    </h1>
+    <p class="hero-bio">Building software and keeping a record of the things I read, watch, and listen to. Currently focused on product engineering.</p>
+    <div class="hero-links">
+      <a class="hero-link" href="#">GitHub</a>
+      <a class="hero-link" href="#">LinkedIn</a>
+      <a class="hero-link" href="#">Email</a>
+    </div>
+  </div>
+</section>
+
+<div class="section">
+  <div class="section-meta">Catalogue · Sector 01</div>
+  <div class="section-title">Projects</div>
+  <div class="proj-grid">
+    <div class="proj-card">
+      <div class="proj-id">NGC-001 · Web Application</div>
+      <a class="proj-name" href="#">Piano Coach</a>
+      <p class="proj-desc">AI-powered tool for learning piano technique and theory at your own pace.</p>
+    </div>
+    <div class="proj-card">
+      <div class="proj-id">NGC-002 · Creative Tool</div>
+      <a class="proj-name" href="#">Oblique Assistant</a>
+      <p class="proj-desc">Creative prompt generator inspired by Brian Eno's Oblique Strategies.</p>
+    </div>
+    <div class="proj-card">
+      <div class="proj-id">NGC-003 · Reference</div>
+      <a class="proj-name" href="#">Standards Workbook</a>
+      <p class="proj-desc">Jazz standards reference — charts, recordings, and history.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-meta">Transmission Log · Sector 02</div>
+  <div class="section-title">Logbook — 2025</div>
+  <div class="logbook-inner">
+    <div class="log-aside">
+      <h3>Books, Films &amp; Music</h3>
+      <p>A running log of things read, watched, and listened to throughout 2025. Updated as they occur.</p>
+    </div>
+    <ul class="log-list">
+      <li class="log-item"><span class="log-date">2025·03·14</span><span class="log-title book">Exhalation — Ted Chiang</span></li>
+      <li class="log-item"><span class="log-date">2025·03·08</span><span class="log-title movie">All of Us Strangers</span></li>
+      <li class="log-item"><span class="log-date">2025·02·28</span><span class="log-title tv">Severance</span></li>
+      <li class="log-item"><span class="log-date">2025·02·15</span><span class="log-title book">Four Thousand Weeks — O. Burkeman</span></li>
+      <li class="log-item"><span class="log-date">2025·01·22</span><span class="log-title concert">Brad Mehldau Trio @ Vivint Arena</span></li>
+      <li class="log-item"><span class="log-date">2025·01·10</span><span class="log-title movie">Past Lives</span></li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 Derek Brimley</span>
+  <span>Built with SvelteKit · Observed from Earth</span>
+</footer>
+
+</body>
+</html>

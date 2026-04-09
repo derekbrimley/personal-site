@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/notes", "destination": "https://notes.derek-brimley.com/" },
+    { "source": "/notes/:path*", "destination": "https://notes.derek-brimley.com/:path*" }
+  ]
+}

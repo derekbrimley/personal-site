@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 4 — Wabi-Sabi Minimal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white: #FAFAF8;
+    --paper: #F5F3EF;
+    --ink: #1D1C1A;
+    --ink-light: #6B6860;
+    --ink-faint: #C4C0B8;
+    --indigo: #3D3F6E;
+    --rule: rgba(29, 28, 26, 0.12);
+    --rule-strong: rgba(29, 28, 26, 0.25);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--white);
+    color: var(--ink);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 max(3rem, 6vw);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 3rem;
+  }
+
+  .nav-link {
+    font-size: 0.78rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink-light);
+    transition: color 0.25s;
+  }
+
+  .nav-link:hover { color: var(--ink); }
+
+  /* HERO */
+  .hero {
+    padding: max(5rem, 10vh) max(3rem, 6vw);
+    padding-bottom: max(6rem, 12vh);
+    position: relative;
+    border-bottom: 1px solid var(--rule);
+    overflow: hidden;
+  }
+
+  .hero-bg-char {
+    position: absolute;
+    right: -0.1em;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: clamp(16rem, 30vw, 26rem);
+    font-weight: 600;
+    color: var(--paper);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.05em;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+  }
+
+  .hero-kicker {
+    font-size: 0.72rem;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .hero-kicker::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--indigo);
+  }
+
+  .hero-name {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 400;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 3rem;
+  }
+
+  .hero-name .first { display: block; }
+  .hero-name .last {
+    display: block;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--indigo);
+  }
+
+  .hero-bio {
+    font-size: 1.0rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--ink-light);
+    max-width: 42ch;
+    margin-bottom: 3rem;
+  }
+
+  .hero-bio strong {
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .hero-link {
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-strong);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .hero-link:hover { color: var(--indigo); border-color: var(--indigo); }
+
+  /* PROJECTS */
+  .section {
+    padding: 5rem max(3rem, 6vw);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .section-num {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    font-weight: 300;
+    width: 2rem;
+  }
+
+  .section-title {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .section-title-en {
+    font-size: 0.72rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-left: 1rem;
+  }
+
+  .projects-list {
+    list-style: none;
+  }
+
+  .project-row {
+    display: grid;
+    grid-template-columns: 3rem 1fr auto;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .project-row:last-child { border-bottom: 1px solid var(--rule); }
+
+  .project-row:hover { background: var(--paper); margin: 0 -1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; }
+
+  .project-idx {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    margin-top: 0.25rem;
+    font-weight: 300;
+  }
+
+  .project-body {}
+
+  .project-name {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--ink);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.35rem;
+    transition: color 0.2s;
+  }
+
+  .project-name:hover { color: var(--indigo); }
+
+  .project-desc {
+    font-size: 0.85rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--ink-light);
+  }
+
+  .project-tag {
+    font-size: 0.62rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    white-space: nowrap;
+    margin-top: 0.25rem;
+    border: 1px solid var(--rule-strong);
+    padding: 0.2rem 0.6rem;
+    align-self: start;
+  }
+
+  /* LOGBOOK */
+  .logbook-section {
+    padding: 5rem max(3rem, 6vw);
+  }
+
+  .logbook-body {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .logbook-aside {}
+
+  .logbook-aside h2 {
+    font-family: 'Shippori Mincho B1', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+
+  .logbook-aside p {
+    font-size: 0.82rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--ink-light);
+    margin-bottom: 2rem;
+  }
+
+  .logbook-cta {
+    font-size: 0.7rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--indigo);
+    text-decoration: none;
+    border-bottom: 1px solid var(--indigo);
+    padding-bottom: 2px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .logbook-cta:hover { opacity: 1; }
+
+  .logbook-list { list-style: none; }
+
+  .logbook-item {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 1.5rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+
+  .logbook-item:first-child { border-top: 1px solid var(--rule); }
+
+  .item-date {
+    font-size: 0.67rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--indigo);
+  }
+
+  .item-title {
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: var(--ink);
+  }
+
+  .item-title.book { text-decoration: underline; text-decoration-color: var(--ink-faint); text-underline-offset: 3px; }
+  .item-title.movie { font-style: italic; }
+  .item-title.tv { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--ink-light); }
+  .item-title.concert { color: var(--indigo); font-weight: 400; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 2rem max(3rem, 6vw);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text {
+    font-size: 0.72rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+  }
+
+  /* Page load animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-content { animation: fadeIn 1.2s ease forwards; }
+  .section { animation: fadeIn 1s ease 0.2s both; }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--indigo);
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 999;
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 4 — Wabi-Sabi Minimal</div>
+
+<nav>
+  <a class="nav-logo" href="#">derek brimley</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#">Projects</a>
+    <a class="nav-link" href="#">Logbook</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg-char">DB</div>
+  <div class="hero-content">
+    <div class="hero-kicker">Software engineer · Salt Lake City, Utah</div>
+    <h1 class="hero-name">
+      <span class="first">Derek</span>
+      <span class="last">Brimley</span>
+    </h1>
+    <p class="hero-bio">
+      I build <strong>software</strong> and write about the things I read, watch, and listen to.
+      Currently focused on product engineering and whatever I find interesting enough to ship.
+    </p>
+    <div class="hero-links">
+      <a class="hero-link" href="#">GitHub</a>
+      <a class="hero-link" href="#">LinkedIn</a>
+      <a class="hero-link" href="#">Email</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <span class="section-title">Projects <span class="section-title-en">Selected work</span></span>
+  </div>
+  <ul class="projects-list">
+    <li class="project-row">
+      <span class="project-idx">001</span>
+      <div class="project-body">
+        <a class="project-name" href="#">Piano Coach</a>
+        <p class="project-desc">An AI-powered tool for learning piano technique and theory at your own pace.</p>
+      </div>
+      <span class="project-tag">Web App</span>
+    </li>
+    <li class="project-row">
+      <span class="project-idx">002</span>
+      <div class="project-body">
+        <a class="project-name" href="#">Oblique Assistant</a>
+        <p class="project-desc">Creative prompt generator inspired by Brian Eno's Oblique Strategies card deck.</p>
+      </div>
+      <span class="project-tag">Tool</span>
+    </li>
+    <li class="project-row">
+      <span class="project-idx">003</span>
+      <div class="project-body">
+        <a class="project-name" href="#">Standards Workbook</a>
+        <p class="project-desc">A jazz standards reference for musicians — charts, recordings, and history.</p>
+      </div>
+      <span class="project-tag">Reference</span>
+    </li>
+    <li class="project-row">
+      <span class="project-idx">004</span>
+      <div class="project-body">
+        <a class="project-name" href="#">Reclist</a>
+        <p class="project-desc">A curated reading list tool for tracking and sharing book recommendations.</p>
+      </div>
+      <span class="project-tag">App</span>
+    </li>
+  </ul>
+</section>
+
+<section class="logbook-section">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <span class="section-title">Logbook <span class="section-title-en">Books, Films & Music — 2025</span></span>
+  </div>
+  <div class="logbook-body">
+    <aside class="logbook-aside">
+      <h2>A running record of things consumed</h2>
+      <p>Books I've read, films I've watched, shows I've followed, and concerts I've attended — updated as they happen.</p>
+      <a class="logbook-cta" href="#">View the full log →</a>
+    </aside>
+    <ul class="logbook-list">
+      <li class="logbook-item">
+        <span class="item-date">Mar 14</span>
+        <span class="item-title book">Exhalation — Ted Chiang</span>
+      </li>
+      <li class="logbook-item">
+        <span class="item-date">Mar 08</span>
+        <span class="item-title movie">All of Us Strangers</span>
+      </li>
+      <li class="logbook-item">
+        <span class="item-date">Feb 28</span>
+        <span class="item-title tv">Severance</span>
+      </li>
+      <li class="logbook-item">
+        <span class="item-date">Feb 15</span>
+        <span class="item-title book">Four Thousand Weeks — Oliver Burkeman</span>
+      </li>
+      <li class="logbook-item">
+        <span class="item-date">Jan 22</span>
+        <span class="item-title concert">Brad Mehldau Trio @ Vivint Arena</span>
+      </li>
+      <li class="logbook-item">
+        <span class="item-date">Jan 10</span>
+        <span class="item-title movie">Past Lives</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-text">© 2026 Derek Brimley</span>
+  <span class="footer-text">Built with SvelteKit</span>
+</footer>
+
+</body>
+</html>

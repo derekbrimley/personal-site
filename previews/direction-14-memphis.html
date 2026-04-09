@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 14 — Memphis Maximalist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FFF9F0;
+    --black: #0F0F0F;
+    --coral: #FF5757;
+    --yellow: #FFD600;
+    --teal: #00B8A9;
+    --purple: #6C4BFF;
+    --pink: #FF6B9D;
+    --border: 3px solid var(--black);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--cream);
+    color: var(--black);
+    font-family: 'Archivo', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* Memphis squiggles and dots pattern */
+    background-image:
+      radial-gradient(circle, var(--black) 1px, transparent 1px),
+      radial-gradient(circle, var(--coral) 1px, transparent 1px);
+    background-size: 30px 30px, 60px 60px;
+    background-position: 0 0, 15px 15px;
+  }
+
+  /* solid bg for content areas */
+  .solid { background: var(--cream); }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--yellow);
+    border-bottom: var(--border);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 2.5rem;
+    justify-content: space-between;
+    box-shadow: 4px 4px 0 var(--black);
+  }
+
+  .nav-logo {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--black);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0;
+  }
+
+  .nav-link {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    padding: 0 1.25rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    border-left: 3px solid var(--black);
+    transition: background 0.1s;
+  }
+
+  .nav-link:hover { background: var(--coral); }
+
+  /* HERO */
+  .hero {
+    background: var(--cream);
+    border-bottom: var(--border);
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    min-height: 82vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Memphis decorative shapes */
+  .shape {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .shape-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid var(--teal);
+    top: 10%;
+    right: 5%;
+  }
+
+  .shape-zigzag {
+    top: 5%;
+    left: 3%;
+    font-size: 3rem;
+    color: var(--purple);
+    opacity: 0.3;
+    font-family: 'Archivo Black', sans-serif;
+  }
+
+  .shape-triangle {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 86px solid var(--yellow);
+    bottom: 15%;
+    left: 2%;
+    opacity: 0.4;
+  }
+
+  .shape-stripe {
+    width: 200px;
+    height: 200px;
+    top: 50%;
+    right: 8%;
+    transform: translateY(-50%) rotate(-15deg);
+    background: repeating-linear-gradient(
+      45deg,
+      var(--pink),
+      var(--pink) 6px,
+      transparent 6px,
+      transparent 20px
+    );
+    opacity: 0.2;
+  }
+
+  .hero-left {
+    padding: 4.5rem 3rem;
+    background: var(--cream);
+    position: relative;
+    z-index: 1;
+    border-right: var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hero-sticker {
+    display: inline-block;
+    background: var(--coral);
+    color: #fff;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.75rem;
+    border: 3px solid var(--black);
+    box-shadow: 3px 3px 0 var(--black);
+    margin-bottom: 2rem;
+    width: fit-content;
+  }
+
+  .hero-name {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 7rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--black);
+    margin-bottom: 2rem;
+  }
+
+  .hero-name .outlined {
+    display: block;
+    -webkit-text-stroke: 3px var(--black);
+    color: transparent;
+  }
+
+  .hero-bio {
+    font-size: 1.0rem;
+    line-height: 1.75;
+    max-width: 38ch;
+    color: var(--black);
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 0;
+  }
+
+  .hero-link {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    padding: 0.6rem 1.1rem;
+    border: 3px solid var(--black);
+    margin-right: -3px;
+    transition: background 0.1s, color 0.1s;
+    box-shadow: 3px 3px 0 var(--black);
+  }
+
+  .hero-link:hover { background: var(--black); color: var(--yellow); }
+
+  .hero-right {
+    background: var(--teal);
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .info-block {
+    flex: 1;
+    padding: 2rem 2.5rem;
+    border-bottom: var(--border);
+    background: var(--teal);
+  }
+
+  .info-block:nth-child(2) { background: var(--purple); }
+  .info-block:nth-child(3) { background: var(--yellow); }
+  .info-block:last-child { border-bottom: none; }
+
+  .info-label {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.5);
+    margin-bottom: 0.4rem;
+  }
+
+  .info-value {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: var(--black);
+    line-height: 1.2;
+  }
+
+  /* PROJECTS */
+  .projects-section {
+    background: var(--cream);
+    border-bottom: var(--border);
+    padding: 3.5rem 2.5rem;
+  }
+
+  .sec-title-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .sec-num {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 3rem;
+    color: var(--yellow);
+    -webkit-text-stroke: 3px var(--black);
+    line-height: 1;
+  }
+
+  .sec-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .proj {
+    border: 3px solid var(--black);
+    margin: 0 -3px -3px 0;
+    padding: 2rem;
+    background: var(--cream);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .proj:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--black);
+    z-index: 1;
+  }
+
+  .proj:nth-child(1) .proj-color-bar { background: var(--coral); }
+  .proj:nth-child(2) .proj-color-bar { background: var(--teal); }
+  .proj:nth-child(3) .proj-color-bar { background: var(--purple); }
+
+  .proj-color-bar {
+    height: 6px;
+    margin: -2rem -2rem 1.5rem;
+    margin-top: -2rem;
+  }
+
+  .proj-num {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: #888;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .proj-name {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    color: var(--black);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: color 0.1s;
+  }
+
+  .proj-name:hover { color: var(--coral); }
+
+  .proj-desc {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  /* LOGBOOK */
+  .logbook-section {
+    background: var(--cream);
+    padding: 3.5rem 2.5rem;
+  }
+
+  .log-list { list-style: none; max-width: 700px; }
+
+  .log-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1.5rem;
+    border-bottom: 3px solid var(--black);
+    padding: 0.8rem 0;
+    align-items: center;
+  }
+
+  .log-item:first-child { border-top: 3px solid var(--black); }
+
+  .log-d {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .log-t { font-size: 0.9rem; }
+  .log-t.book { text-decoration: underline; }
+  .log-t.movie { font-style: italic; }
+  .log-t.tv { font-family: 'Archivo Black', sans-serif; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .log-t.concert { font-family: 'Archivo Black', sans-serif; color: var(--coral); }
+
+  footer {
+    background: var(--black);
+    border-top: var(--border);
+    padding: 1rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ft {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--yellow);
+  }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--coral);
+    color: #fff;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 999;
+    border: 3px solid var(--black);
+    box-shadow: 3px 3px 0 var(--black);
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 14 — Memphis</div>
+
+<nav>
+  <a class="nav-logo" href="#">Derek Brimley</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#">Projects</a>
+    <a class="nav-link" href="#">Logbook</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="shape shape-circle"></div>
+  <div class="shape shape-zigzag">///</div>
+  <div class="shape shape-triangle"></div>
+  <div class="shape shape-stripe"></div>
+
+  <div class="hero-left">
+    <div>
+      <div class="hero-sticker">★ Software Engineer · SLC, UT</div>
+      <h1 class="hero-name">
+        Derek<br>
+        <span class="outlined">Brimley</span>
+      </h1>
+      <p class="hero-bio">
+        Building software and keeping a record of the books I read, films I watch, and music I hear. Currently focused on product engineering.
+      </p>
+    </div>
+    <div class="hero-links">
+      <a class="hero-link" href="#">GitHub</a>
+      <a class="hero-link" href="#">LinkedIn</a>
+      <a class="hero-link" href="#">Email</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="info-block">
+      <div class="info-label">Location</div>
+      <div class="info-value">Salt Lake City<br>Utah</div>
+    </div>
+    <div class="info-block">
+      <div class="info-label">Role</div>
+      <div class="info-value">Product<br>Engineer</div>
+    </div>
+    <div class="info-block">
+      <div class="info-label">Currently</div>
+      <div class="info-value">Building &amp;<br>Logging</div>
+    </div>
+  </div>
+</section>
+
+<section class="projects-section">
+  <div class="sec-title-row">
+    <span class="sec-num">01</span>
+    <span class="sec-title">Projects</span>
+  </div>
+  <div class="projects-grid">
+    <div class="proj">
+      <div class="proj-color-bar"></div>
+      <div class="proj-num">001</div>
+      <a class="proj-name" href="#">Piano Coach</a>
+      <p class="proj-desc">AI-powered tool for learning piano technique and theory.</p>
+    </div>
+    <div class="proj">
+      <div class="proj-color-bar"></div>
+      <div class="proj-num">002</div>
+      <a class="proj-name" href="#">Oblique Assistant</a>
+      <p class="proj-desc">Creative prompt generator based on Eno's Oblique Strategies.</p>
+    </div>
+    <div class="proj">
+      <div class="proj-color-bar"></div>
+      <div class="proj-num">003</div>
+      <a class="proj-name" href="#">Standards Workbook</a>
+      <p class="proj-desc">Jazz standards reference for musicians.</p>
+    </div>
+  </div>
+</section>
+
+<section class="logbook-section">
+  <div class="sec-title-row">
+    <span class="sec-num">02</span>
+    <span class="sec-title">Logbook 2025</span>
+  </div>
+  <ul class="log-list">
+    <li class="log-item"><span class="log-d">Mar 14</span><span class="log-t book">Exhalation — Ted Chiang</span></li>
+    <li class="log-item"><span class="log-d">Mar 08</span><span class="log-t movie">All of Us Strangers</span></li>
+    <li class="log-item"><span class="log-d">Feb 28</span><span class="log-t tv">Severance</span></li>
+    <li class="log-item"><span class="log-d">Feb 15</span><span class="log-t book">Four Thousand Weeks — Oliver Burkeman</span></li>
+    <li class="log-item"><span class="log-d">Jan 22</span><span class="log-t concert">Brad Mehldau Trio @ Vivint Arena</span></li>
+    <li class="log-item"><span class="log-d">Jan 10</span><span class="log-t movie">Past Lives</span></li>
+  </ul>
+</section>
+
+<footer>
+  <span class="ft">© 2026 Derek Brimley</span>
+  <span class="ft">Built with SvelteKit ★</span>
+</footer>
+
+</body>
+</html>

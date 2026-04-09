@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 13 — Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@100;200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blueprint: #0B2E6E;
+    --blueprint2: #0D3580;
+    --blueprint3: #0F3D94;
+    --line: rgba(79, 168, 255, 0.25);
+    --line-bright: rgba(79, 168, 255, 0.5);
+    --cyan: #4FC3F7;
+    --cyan-dim: rgba(79, 195, 247, 0.15);
+    --white: rgba(255, 255, 255, 0.92);
+    --white-dim: rgba(255, 255, 255, 0.45);
+    --white-faint: rgba(255, 255, 255, 0.18);
+    --yellow: #FFE066;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--blueprint);
+    color: var(--white);
+    font-family: 'Azeret Mono', monospace;
+    font-weight: 200;
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* Blueprint grid */
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px),
+      linear-gradient(var(--white-faint) 1px, transparent 1px),
+      linear-gradient(90deg, var(--white-faint) 1px, transparent 1px);
+    background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--blueprint2);
+    border-bottom: 1px solid var(--line-bright);
+    height: 52px;
+    display: flex;
+    align-items: center;
+    padding: 0 2.5rem;
+    justify-content: space-between;
+    /* blueprint title block line */
+    border-top: 3px solid var(--cyan);
+  }
+
+  .nav-logo {
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .nav-logo::before {
+    content: '⊕';
+    font-size: 0.8rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0;
+  }
+
+  .nav-link {
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--white-dim);
+    padding: 0 1.5rem;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid var(--line-bright);
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .nav-link:hover { color: var(--cyan); background: var(--cyan-dim); }
+
+  /* HERO — technical drawing title block */
+  .hero {
+    padding: 3rem 2.5rem;
+    border-bottom: 1px solid var(--line-bright);
+  }
+
+  /* Title block frame */
+  .title-block {
+    border: 1px solid var(--line-bright);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    margin-bottom: 3rem;
+  }
+
+  .title-block::before {
+    content: 'PERSONAL SITE — SPECIFICATION SHEET';
+    position: absolute;
+    top: -0.55rem;
+    left: 1rem;
+    font-size: 0.55rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    background: var(--blueprint);
+    padding: 0 0.4rem;
+    color: var(--cyan);
+  }
+
+  .title-main {
+    padding: 2.5rem 2.5rem;
+    border-right: 1px solid var(--line-bright);
+  }
+
+  .title-heading {
+    font-size: 0.55rem;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .title-name {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 1.0;
+    margin-bottom: 0;
+  }
+
+  .title-name .sub {
+    display: block;
+    font-size: 0.35em;
+    font-weight: 200;
+    letter-spacing: 0.3em;
+    color: var(--cyan);
+    margin-top: 0.5rem;
+  }
+
+  .title-specs {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+  }
+
+  .spec-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    border-bottom: 1px solid var(--line-bright);
+    min-height: 44px;
+  }
+
+  .spec-row:last-child { border-bottom: none; }
+
+  .spec-label {
+    font-size: 0.55rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    padding: 0.75rem 1rem;
+    border-right: 1px solid var(--line-bright);
+    display: flex;
+    align-items: center;
+    background: var(--white-faint);
+  }
+
+  .spec-value {
+    font-size: 0.72rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .spec-value.cyan { color: var(--cyan); }
+
+  /* Bio section */
+  .bio-block {
+    border: 1px solid var(--line-bright);
+    padding: 1.5rem 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .bio-block::before {
+    content: '§ DESCRIPTION';
+    position: absolute;
+    top: -0.55rem;
+    left: 1rem;
+    font-size: 0.55rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    background: var(--blueprint);
+    padding: 0 0.4rem;
+    color: var(--cyan);
+  }
+
+  .bio-text {
+    font-size: 0.82rem;
+    font-weight: 200;
+    line-height: 1.8;
+    color: var(--white-dim);
+    max-width: 80ch;
+  }
+
+  .links-row {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .bp-link {
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--cyan);
+    border: 1px solid var(--line-bright);
+    padding: 0.4rem 1rem;
+    transition: background 0.15s;
+  }
+
+  .bp-link:hover { background: var(--cyan-dim); }
+
+  /* PROJECTS */
+  .section-heading {
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line-bright);
+  }
+
+  .projects-table {
+    border: 1px solid var(--line-bright);
+    margin-bottom: 3rem;
+  }
+
+  .pt-header {
+    display: grid;
+    grid-template-columns: 60px 200px 1fr 100px;
+    background: var(--white-faint);
+    border-bottom: 1px solid var(--line-bright);
+    font-size: 0.55rem;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+
+  .pt-header > span, .pt-row > span, .pt-row > a {
+    padding: 0.65rem 1rem;
+    border-right: 1px solid var(--line-bright);
+  }
+
+  .pt-header > span:last-child, .pt-row > span:last-child { border-right: none; }
+
+  .pt-row {
+    display: grid;
+    grid-template-columns: 60px 200px 1fr 100px;
+    border-bottom: 1px solid var(--line-bright);
+    transition: background 0.1s;
+  }
+
+  .pt-row:last-child { border-bottom: none; }
+  .pt-row:hover { background: var(--cyan-dim); }
+
+  .pt-num {
+    font-size: 0.62rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: var(--white-dim);
+    display: flex;
+    align-items: center;
+  }
+
+  .pt-name {
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--cyan);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+  }
+
+  .pt-name:hover { color: var(--yellow); }
+
+  .pt-desc {
+    font-size: 0.72rem;
+    font-weight: 200;
+    color: var(--white-dim);
+    display: flex;
+    align-items: center;
+  }
+
+  .pt-tag {
+    font-size: 0.55rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    display: flex;
+    align-items: center;
+  }
+
+  /* LOGBOOK */
+  .logbook-table {
+    border: 1px solid var(--line-bright);
+  }
+
+  .lt-header {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px;
+    background: var(--white-faint);
+    border-bottom: 1px solid var(--line-bright);
+    font-size: 0.55rem;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+
+  .lt-header > span { padding: 0.65rem 1rem; border-right: 1px solid var(--line-bright); }
+  .lt-header > span:last-child { border-right: none; }
+
+  .lt-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px;
+    border-bottom: 1px solid var(--line-bright);
+    transition: background 0.1s;
+  }
+
+  .lt-row:last-child { border-bottom: none; }
+  .lt-row:hover { background: var(--cyan-dim); }
+
+  .lt-row > span { padding: 0.65rem 1rem; border-right: 1px solid var(--line-bright); font-size: 0.72rem; display: flex; align-items: center; }
+  .lt-row > span:last-child { border-right: none; }
+
+  .lt-date { font-weight: 200; color: var(--cyan); font-size: 0.62rem; }
+  .lt-title { font-weight: 200; }
+  .lt-title.book { text-decoration: underline; text-decoration-color: var(--line-bright); }
+  .lt-title.movie { font-style: italic; }
+  .lt-title.tv { text-transform: uppercase; font-size: 0.62rem; letter-spacing: 0.1em; }
+  .lt-title.concert { color: var(--yellow); }
+  .lt-type { font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--white-dim); }
+
+  footer {
+    border-top: 1px solid var(--line-bright);
+    padding: 1rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+  }
+
+  .ft { font-size: 0.6rem; font-weight: 200; letter-spacing: 0.1em; color: var(--white-dim); }
+  .ft span { color: var(--cyan); }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--cyan);
+    color: var(--blueprint);
+    font-family: 'Azeret Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 999;
+    border: 1px solid var(--blueprint);
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 13 — Blueprint</div>
+
+<nav>
+  <a class="nav-logo" href="#">Derek Brimley</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#">./projects</a>
+    <a class="nav-link" href="#">./logbook</a>
+  </div>
+</nav>
+
+<section style="padding: 3rem 2.5rem; border-bottom: 1px solid var(--line-bright);">
+
+  <div class="title-block">
+    <div class="title-main">
+      <div class="title-heading">Subject</div>
+      <div class="title-name">
+        Derek Brimley
+        <span class="sub">Software Engineer — Personal Site</span>
+      </div>
+    </div>
+    <div class="title-specs">
+      <div class="spec-row">
+        <span class="spec-label">Location</span>
+        <span class="spec-value">Salt Lake City, UT</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Role</span>
+        <span class="spec-value cyan">Product Engineer</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">GitHub</span>
+        <span class="spec-value cyan">→ github.com/derek</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-label">Revision</span>
+        <span class="spec-value">v1.0 · April 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bio-block">
+    <p class="bio-text">Building software and keeping a record of things read, watched, and listened to. Currently focused on product engineering — work that sits at the intersection of technical execution and understanding what people actually need from software.</p>
+  </div>
+
+  <div class="links-row">
+    <a class="bp-link" href="#">GitHub →</a>
+    <a class="bp-link" href="#">LinkedIn →</a>
+    <a class="bp-link" href="#">Email →</a>
+  </div>
+
+</section>
+
+<section style="padding: 2.5rem; border-bottom: 1px solid var(--line-bright);">
+  <div class="section-heading">§ 01 · Selected Projects</div>
+  <div class="projects-table">
+    <div class="pt-header">
+      <span>REF</span>
+      <span>Name</span>
+      <span>Description</span>
+      <span>Type</span>
+    </div>
+    <div class="pt-row">
+      <span class="pt-num">001</span>
+      <a class="pt-name" href="#">Piano Coach</a>
+      <span class="pt-desc">AI-powered tool for learning piano technique and theory.</span>
+      <span class="pt-tag">Web App</span>
+    </div>
+    <div class="pt-row">
+      <span class="pt-num">002</span>
+      <a class="pt-name" href="#">Oblique Assistant</a>
+      <span class="pt-desc">Creative prompt generator based on Eno's Oblique Strategies.</span>
+      <span class="pt-tag">Tool</span>
+    </div>
+    <div class="pt-row">
+      <span class="pt-num">003</span>
+      <a class="pt-name" href="#">Standards Workbook</a>
+      <span class="pt-desc">Jazz standards reference — charts, recordings, history.</span>
+      <span class="pt-tag">Reference</span>
+    </div>
+    <div class="pt-row">
+      <span class="pt-num">004</span>
+      <a class="pt-name" href="#">Reclist</a>
+      <span class="pt-desc">Track and share book recommendations.</span>
+      <span class="pt-tag">App</span>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 2.5rem;">
+  <div class="section-heading">§ 02 · Logbook 2025</div>
+  <div class="logbook-table">
+    <div class="lt-header">
+      <span>Date</span>
+      <span>Entry</span>
+      <span>Type</span>
+    </div>
+    <div class="lt-row"><span class="lt-date">2025-03-14</span><span class="lt-title book">Exhalation — Ted Chiang</span><span class="lt-type">book</span></div>
+    <div class="lt-row"><span class="lt-date">2025-03-08</span><span class="lt-title movie">All of Us Strangers</span><span class="lt-type">film</span></div>
+    <div class="lt-row"><span class="lt-date">2025-02-28</span><span class="lt-title tv">Severance</span><span class="lt-type">tv</span></div>
+    <div class="lt-row"><span class="lt-date">2025-02-15</span><span class="lt-title book">Four Thousand Weeks — O. Burkeman</span><span class="lt-type">book</span></div>
+    <div class="lt-row"><span class="lt-date">2025-01-22</span><span class="lt-title concert">Brad Mehldau Trio @ Vivint Arena</span><span class="lt-type">concert</span></div>
+    <div class="lt-row"><span class="lt-date">2025-01-10</span><span class="lt-title movie">Past Lives</span><span class="lt-type">film</span></div>
+  </div>
+</section>
+
+<footer>
+  <span class="ft">© 2026 <span>Derek Brimley</span> — All rights reserved</span>
+  <span class="ft">Built with <span>SvelteKit</span></span>
+</footer>
+
+</body>
+</html>

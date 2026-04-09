@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 3 — Brutalist Grid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white: #FFFFFF;
+    --black: #0F0F0F;
+    --sage: #5C7658;
+    --sage-light: #EBF0EA;
+    --terra: #BB5C4F;
+    --off-white: #F8F8F6;
+    --grid-line: rgba(15,15,15,0.08);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 2px solid var(--black);
+    height: 60px;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .nav-logo-block {
+    background: var(--sage);
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    border-right: 2px solid var(--black);
+    text-decoration: none;
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: stretch;
+    margin-left: auto;
+  }
+
+  .nav-link {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    border-left: 2px solid var(--black);
+    transition: background 0.1s, color 0.1s;
+  }
+
+  .nav-link span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--sage);
+    margin-right: 0.5rem;
+  }
+
+  .nav-link:hover { background: var(--black); color: var(--white); }
+  .nav-link:hover span { color: var(--sage-light); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    border-bottom: 2px solid var(--black);
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    min-height: 80vh;
+  }
+
+  .hero-main {
+    padding: 4rem 3rem;
+    border-right: 2px solid var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-main::before {
+    content: 'DB';
+    position: absolute;
+    bottom: -2rem;
+    right: -1rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 20rem;
+    font-weight: 800;
+    color: var(--sage-light);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--terra);
+    color: var(--white);
+    padding: 0.3rem 0.7rem;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 3rem;
+  }
+
+  .hero-name .line2 {
+    display: block;
+    -webkit-text-stroke: 2px var(--black);
+    color: transparent;
+  }
+
+  .hero-bio {
+    position: relative;
+    z-index: 1;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    max-width: 46ch;
+    color: #444;
+    border-left: 3px solid var(--sage);
+    padding-left: 1rem;
+  }
+
+  .hero-side {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-side-block {
+    flex: 1;
+    padding: 2.5rem 2rem;
+    border-bottom: 2px solid var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .hero-side-block:last-child { border-bottom: none; }
+
+  .side-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 0.75rem;
+  }
+
+  .side-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  .side-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .side-link {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.15s;
+  }
+
+  .side-link::before {
+    content: '→';
+    color: var(--terra);
+  }
+
+  .side-link:hover { color: var(--terra); }
+
+  /* PROJECTS */
+  .projects-section {
+    position: relative;
+    z-index: 1;
+    border-bottom: 2px solid var(--black);
+  }
+
+  .projects-header {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 2px solid var(--black);
+    height: 52px;
+  }
+
+  .projects-header-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--black);
+    color: var(--white);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    border-right: 2px solid var(--black);
+  }
+
+  .projects-header-sub {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: #888;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto auto;
+  }
+
+  .proj {
+    border-right: 2px solid var(--black);
+    border-bottom: 2px solid var(--black);
+    padding: 2rem;
+    transition: background 0.15s;
+  }
+
+  .proj:hover { background: var(--sage-light); }
+  .proj:last-child { border-right: none; }
+
+  .proj-1 { grid-column: span 5; }
+  .proj-2 { grid-column: span 4; }
+  .proj-3 { grid-column: span 3; }
+
+  .proj-num {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .proj-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: var(--black);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 1rem;
+    transition: color 0.15s;
+  }
+
+  .proj-name:hover { color: var(--terra); }
+
+  .proj-desc {
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: #666;
+  }
+
+  .proj-tag {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--black);
+    padding: 0.2rem 0.5rem;
+    color: var(--black);
+  }
+
+  /* LOGBOOK */
+  .logbook-section {
+    position: relative;
+    z-index: 1;
+  }
+
+  .logbook-header {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 2px solid var(--black);
+    height: 52px;
+  }
+
+  .logbook-header-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: var(--terra);
+    color: var(--white);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .logbook-body {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .logbook-meta {
+    padding: 2.5rem 2rem;
+    border-right: 2px solid var(--black);
+  }
+
+  .logbook-meta h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .logbook-meta p {
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: #666;
+  }
+
+  .logbook-list {
+    list-style: none;
+  }
+
+  .logbook-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    border-bottom: 1px solid var(--grid-line);
+  }
+
+  .logbook-row:last-child { border-bottom: none; }
+
+  .log-date {
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    color: var(--sage);
+    padding: 0.9rem 1rem;
+    border-right: 2px solid var(--black);
+    font-weight: 700;
+  }
+
+  .log-title {
+    font-size: 0.82rem;
+    padding: 0.9rem 1.5rem;
+    color: var(--black);
+  }
+
+  .log-title.book { text-decoration: underline; }
+  .log-title.movie { font-style: italic; }
+  .log-title.tv { text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.06em; }
+  .log-title.concert { font-weight: 700; color: var(--terra); }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 2px solid var(--black);
+    height: 52px;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .footer-copy {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #888;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    border-right: 2px solid var(--black);
+  }
+
+  .footer-copy:last-child { border-right: none; margin-left: auto; }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--terra);
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 999;
+    border: 2px solid var(--black);
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 3 — Brutalist Grid</div>
+
+<nav>
+  <a class="nav-logo-block" href="#">
+    <span class="nav-logo">Derek Brimley</span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="#"><span>01</span>Projects</a>
+    <a class="nav-link" href="#"><span>02</span>Logbook</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-main">
+    <div>
+      <div class="hero-tag">Software Engineer — SLC, UT</div>
+      <h1 class="hero-name">
+        Derek<br>
+        <span class="line2">Brimley</span>
+      </h1>
+    </div>
+    <p class="hero-bio">
+      Building software and logging what I read, watch, and listen to.
+      Currently focused on product engineering and shipping whatever catches my attention.
+    </p>
+  </div>
+  <div class="hero-side">
+    <div class="hero-side-block">
+      <div class="side-label">Location</div>
+      <div class="side-value">Salt Lake City<br>Utah</div>
+    </div>
+    <div class="hero-side-block">
+      <div class="side-label">Role</div>
+      <div class="side-value">Product<br>Engineer</div>
+    </div>
+    <div class="hero-side-block">
+      <div class="side-label">Connect</div>
+      <div class="side-links">
+        <a class="side-link" href="#">GitHub</a>
+        <a class="side-link" href="#">LinkedIn</a>
+        <a class="side-link" href="#">Email</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="projects-section">
+  <div class="projects-header">
+    <span class="projects-header-label">01 / Projects</span>
+    <span class="projects-header-sub">Selected work — 2023–2026</span>
+  </div>
+  <div class="projects-grid">
+    <div class="proj proj-1">
+      <span class="proj-num">001</span>
+      <a class="proj-name" href="#">Piano Coach</a>
+      <p class="proj-desc">An AI-powered tool for learning piano technique and theory at your own pace.</p>
+      <span class="proj-tag">Web App</span>
+    </div>
+    <div class="proj proj-2">
+      <span class="proj-num">002</span>
+      <a class="proj-name" href="#">Oblique Assistant</a>
+      <p class="proj-desc">Creative prompt generator inspired by Brian Eno's Oblique Strategies card deck.</p>
+      <span class="proj-tag">Tool</span>
+    </div>
+    <div class="proj proj-3">
+      <span class="proj-num">003</span>
+      <a class="proj-name" href="#">Standards Workbook</a>
+      <p class="proj-desc">Jazz standards reference for musicians.</p>
+      <span class="proj-tag">Reference</span>
+    </div>
+  </div>
+</section>
+
+<section class="logbook-section">
+  <div class="logbook-header">
+    <span class="logbook-header-label">02 / Logbook — 2025</span>
+  </div>
+  <div class="logbook-body">
+    <div class="logbook-meta">
+      <h2>Books,<br>Films &amp;<br>Music</h2>
+      <p>A running log of things I've read, watched, and listened to. Updated as I go.</p>
+    </div>
+    <ul class="logbook-list">
+      <li class="logbook-row">
+        <span class="log-date">MAR 14</span>
+        <span class="log-title book">Exhalation — Ted Chiang</span>
+      </li>
+      <li class="logbook-row">
+        <span class="log-date">MAR 08</span>
+        <span class="log-title movie">All of Us Strangers</span>
+      </li>
+      <li class="logbook-row">
+        <span class="log-date">FEB 28</span>
+        <span class="log-title tv">Severance</span>
+      </li>
+      <li class="logbook-row">
+        <span class="log-date">FEB 15</span>
+        <span class="log-title book">Four Thousand Weeks — Oliver Burkeman</span>
+      </li>
+      <li class="logbook-row">
+        <span class="log-date">JAN 22</span>
+        <span class="log-title concert">Brad Mehldau Trio @ Vivint Arena</span>
+      </li>
+      <li class="logbook-row">
+        <span class="log-date">JAN 10</span>
+        <span class="log-title movie">Past Lives</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2026 Derek Brimley</span>
+  <span class="footer-copy">Built with SvelteKit</span>
+</footer>
+
+</body>
+</html>

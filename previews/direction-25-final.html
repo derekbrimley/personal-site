@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 25 — Final</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F0EFEB;
+    --text: #222220;
+    --text-dim: #777770;
+    --link: #1A4FAD;
+    --border: #222220;
+    --shadow: #222220;
+    --grid-line: rgba(34, 34, 32, 0.08);
+    --dash: #222220;
+    /* accent colors — BBS meets Memphis */
+    --teal: #00A896;
+    --coral: #FF5757;
+    --yellow: #E6C200;
+    --purple: #6C4BFF;
+    --pink: #D4006A;
+    --green: #1A7A3C;
+  }
+
+  html { font-size: 15px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-weight: 400;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* PAGE WRAPPER — outer dashed border like the wireframe */
+  .page-outer {
+    position: relative;
+    z-index: 1;
+    max-width: 1060px;
+    margin: 2rem auto;
+    border: 2px solid var(--border);
+    box-shadow: 5px 5px 0 var(--shadow);
+    min-height: calc(100vh - 4rem);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  .site-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0;
+    border-bottom: 2px solid var(--border);
+  }
+
+  /* Left side of header — nav */
+  .header-nav {
+    padding: 1rem 1.5rem;
+    border-right: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+
+  .nav-item {
+    font-size: 0.7rem;
+    font-weight: 400;
+    text-decoration: none;
+    color: var(--link);
+    padding: 0.25rem 0.7rem;
+    border: 1px dashed transparent;
+    transition: border-color 0.15s, background 0.15s;
+    letter-spacing: 0.04em;
+  }
+
+  .nav-item:hover {
+    border-color: var(--border);
+    background: rgba(34,34,32,0.04);
+  }
+
+  .nav-item + .nav-item {
+    border-left: 1px dotted var(--text-dim);
+  }
+
+  /* Right side of header — name + socials */
+  .header-identity {
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.6rem;
+    min-width: 220px;
+  }
+
+  .site-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .socials {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .social-link {
+    font-size: 0.62rem;
+    text-decoration: none;
+    color: var(--link);
+    border: 1px dashed var(--text-dim);
+    padding: 0.15rem 0.45rem;
+    letter-spacing: 0.06em;
+    transition: border-color 0.15s;
+    white-space: nowrap;
+  }
+
+  .social-link::before {
+    content: '○ ';
+    color: var(--text-dim);
+    font-size: 0.55rem;
+  }
+
+  .social-link:hover { border-color: var(--border); }
+
+  /* MAIN — two-column: content + right-side label */
+  .main-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 36px;
+    flex: 1;
+  }
+
+  /* Content area */
+  .main-content {
+    padding: 2rem 2rem 2rem 2rem;
+    border-right: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Right vertical label */
+  .side-label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 1rem 0;
+    border-left: 1px dotted var(--text-dim);
+    user-select: none;
+  }
+
+  /* Section separators */
+  .content-row {
+    border-bottom: 1px dotted var(--text-dim);
+    padding: 2rem 0;
+  }
+
+  .content-row:last-child { border-bottom: none; }
+
+  /* ABOUT row */
+  .about-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .about-bio {
+    font-size: 0.82rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .about-meta {
+    border: 2px dashed var(--border);
+    padding: 1rem 1.25rem;
+    box-shadow: 3px 3px 0 var(--shadow);
+  }
+
+  .meta-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    font-size: 0.7rem;
+  }
+
+  .meta-row + .meta-row { border-top: 1px dotted var(--text-dim); }
+
+  .meta-key { color: var(--text-dim); }
+  .meta-val { color: var(--text); font-weight: 700; }
+  .meta-val a { color: var(--link); text-decoration: none; }
+  .meta-val a:hover { text-decoration: underline; }
+
+  /* Section label */
+  .section-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 1.25rem;
+  }
+
+  /* WORK row — two big dashed boxes side by side */
+  .work-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .work-block {
+    border: 2px dashed var(--border);
+    padding: 1.25rem 1.5rem;
+    box-shadow: 3px 3px 0 var(--shadow);
+    position: relative;
+  }
+
+  /* Slightly janky — the "current" block slightly taller padding-wise */
+  .work-block.current {
+    border-style: solid;
+    padding: 1.5rem;
+  }
+
+  .work-block-label {
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border: 1px dotted var(--text-dim);
+    padding: 0.1rem 0.4rem;
+    display: inline-block;
+    margin-bottom: 0.75rem;
+  }
+
+  .work-company {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.2rem;
+    letter-spacing: 0.01em;
+  }
+
+  .work-title {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 0.75rem;
+    font-style: italic;
+  }
+
+  .work-dates {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.06em;
+  }
+
+  .work-desc {
+    font-size: 0.72rem;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  /* EDUCATION row — smaller box, asymmetric */
+  .edu-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .edu-block {
+    border: 2px dashed var(--border);
+    padding: 1.25rem 1.5rem;
+    box-shadow: 3px 3px 0 var(--shadow);
+  }
+
+  .edu-school {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.2rem;
+  }
+
+  .edu-degree {
+    font-size: 0.72rem;
+    font-style: italic;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .edu-dates {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  /* Skills block — right side of edu row */
+  .skills-block {
+    border: 2px dashed var(--border);
+    padding: 1.25rem 1.5rem;
+    box-shadow: 3px 3px 0 var(--shadow);
+  }
+
+  .skills-list {
+    list-style: none;
+    font-size: 0.68rem;
+    line-height: 2;
+    color: var(--text);
+  }
+
+  .skills-list li::before {
+    content: '—  ';
+    color: var(--text-dim);
+  }
+
+  /* PROJECTS row — 4 small dashed boxes */
+  .proj-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .proj-block {
+    border: 2px dashed var(--border);
+    padding: 1rem 1.1rem;
+    box-shadow: 2px 2px 0 var(--shadow);
+    transition: box-shadow 0.1s, transform 0.1s;
+  }
+
+  /* Janky: each proj block slightly different top padding */
+  .proj-block:nth-child(2) { margin-top: 6px; }
+  .proj-block:nth-child(3) { margin-top: -4px; }
+  .proj-block:nth-child(4) { margin-top: 3px; }
+
+  .proj-block:hover {
+    box-shadow: 4px 4px 0 var(--shadow);
+    transform: translate(-2px, -2px);
+  }
+
+  .proj-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--link);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.01em;
+  }
+
+  .proj-name:hover { text-decoration: underline; }
+
+  .proj-desc {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    line-height: 1.65;
+  }
+
+  /* LOGBOOK row */
+  .log-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .log-aside {
+    border: 2px dashed var(--border);
+    padding: 1rem 1.25rem;
+    box-shadow: 3px 3px 0 var(--shadow);
+  }
+
+  .log-aside-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  .log-aside-sub {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+
+  .log-more {
+    font-size: 0.62rem;
+    color: var(--link);
+    text-decoration: none;
+  }
+
+  .log-more:hover { text-decoration: underline; }
+
+  .log-list { list-style: none; }
+
+  .log-entry {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 1rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px dotted var(--text-dim);
+    align-items: baseline;
+    font-size: 0.72rem;
+  }
+
+  .log-entry:first-child { border-top: 1px dotted var(--text-dim); }
+
+  .log-date { color: var(--text-dim); font-size: 0.62rem; }
+  .log-title.book { text-decoration: underline; text-decoration-color: var(--text-dim); text-underline-offset: 2px; }
+  .log-title.movie { font-style: italic; }
+  .log-title.tv { font-weight: 700; font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); }
+  .log-title.concert { color: var(--link); }
+
+  /* FOOTER */
+  .site-footer {
+    border-top: 2px solid var(--border);
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 0;
+  }
+
+  .footer-link {
+    font-size: 0.65rem;
+    color: var(--link);
+    text-decoration: none;
+    padding: 0.2rem 0.7rem;
+    border-right: 1px dotted var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+
+  .footer-link:first-child { border-left: 1px dotted var(--text-dim); }
+  .footer-link:hover { text-decoration: underline; }
+
+  .footer-copy {
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  /* Colored boxes */
+  .about-meta {
+    border-color: var(--teal);
+    box-shadow: 3px 3px 0 var(--teal);
+    background: rgba(0, 168, 150, 0.04);
+  }
+
+  .work-block.current {
+    border-color: var(--coral);
+    box-shadow: 3px 3px 0 var(--coral);
+    background: rgba(255, 87, 87, 0.04);
+  }
+
+  .work-block:not(.current) {
+    border-color: var(--yellow);
+    box-shadow: 3px 3px 0 var(--yellow);
+    background: rgba(230, 194, 0, 0.05);
+  }
+
+  .edu-block {
+    border-color: var(--purple);
+    box-shadow: 3px 3px 0 var(--purple);
+    background: rgba(108, 75, 255, 0.04);
+  }
+
+  .skills-block {
+    border-color: var(--green);
+    box-shadow: 3px 3px 0 var(--green);
+    background: rgba(26, 122, 60, 0.04);
+  }
+
+  .proj-block:nth-child(1) { border-color: var(--teal);   box-shadow: 2px 2px 0 var(--teal);   background: rgba(0,168,150,0.04); }
+  .proj-block:nth-child(2) { border-color: var(--coral);  box-shadow: 2px 2px 0 var(--coral);  background: rgba(255,87,87,0.04); }
+  .proj-block:nth-child(3) { border-color: var(--purple); box-shadow: 2px 2px 0 var(--purple); background: rgba(108,75,255,0.04); }
+  .proj-block:nth-child(4) { border-color: var(--pink);   box-shadow: 2px 2px 0 var(--pink);   background: rgba(212,0,106,0.04); }
+
+  .log-aside {
+    border-color: var(--pink);
+    box-shadow: 3px 3px 0 var(--pink);
+    background: rgba(212, 0, 106, 0.04);
+  }
+
+  /* ASCII art */
+  .ascii-banner {
+    border-bottom: 1px dotted var(--text-dim);
+    padding: 1.5rem 0 1rem;
+    overflow-x: auto;
+  }
+
+  .ascii-name {
+    font-size: 0.46rem;
+    line-height: 1.18;
+    color: var(--text);
+    white-space: pre;
+    letter-spacing: 0;
+    display: block;
+    opacity: 0.85;
+  }
+
+  .ascii-art {
+    font-size: 0.66rem;
+    line-height: 1.35;
+    color: var(--text-dim);
+    white-space: pre;
+    letter-spacing: 0;
+    display: block;
+    margin-top: 1.25rem;
+  }
+
+  /* Preview label */
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--text);
+    color: var(--bg);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 9999;
+    box-shadow: 2px 2px 0 var(--text-dim);
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 25 — Final</div>
+
+<div class="page-outer">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <nav class="header-nav">
+      <a class="nav-item" href="#">about</a>
+      <a class="nav-item" href="#">projects</a>
+      <a class="nav-item" href="#">notes</a>
+      <a class="nav-item" href="#">recs</a>
+      <a class="nav-item" href="#">contact</a>
+    </nav>
+    <div class="header-identity">
+      <span class="site-name">Derek Brimley</span>
+      <div class="socials">
+        <a class="social-link" href="#">email</a>
+        <a class="social-link" href="#">linkedin</a>
+        <a class="social-link" href="#">github</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <div class="main-wrapper">
+    <main class="main-content">
+
+      <!-- ASCII NAME BANNER -->
+      <div class="ascii-banner">
+<pre class="ascii-name">██████╗ ███████╗██████╗ ███████╗██╗  ██╗
+██╔══██╗██╔════╝██╔══██╗██╔════╝██║ ██╔╝
+██║  ██║█████╗  ██████╔╝█████╗  █████╔╝
+██║  ██║██╔══╝  ██╔══██╗██╔══╝  ██╔═██╗
+██████╔╝███████╗██║  ██║███████╗██║  ██╗
+██████╗ ██████╗ ██╗███╗   ███╗██╗     ███████╗██╗   ██╗
+██╔══██╗██╔══██╗██║████╗ ████║██║     ██╔════╝╚██╗ ██╔╝
+██████╔╝██████╔╝██║██╔████╔██║██║     █████╗   ╚████╔╝
+██╔══██╗██╔══██╗██║██║╚██╔╝██║██║     ██╔══╝    ╚██╔╝
+██████╔╝██║  ██║██║██║ ╚═╝ ██║███████╗███████╗   ██║</pre>
+      </div>
+
+      <!-- ABOUT -->
+      <div class="content-row">
+        <div class="section-label">about</div>
+        <div class="about-row">
+          <p class="about-bio">
+            Software engineer based in Salt Lake City, Utah. I build product software and keep a record
+            of the things I read, watch, and listen to. Interested in how technology intersects with
+            creativity, music, and the way people learn things.
+          </p>
+<pre class="ascii-art">        O
+       \|&gt;       .*.    .*.    .*.
+        |        (*o*) (*o*) (*o*)
+       / \        |||    |||    |||
+  _____|_|_________|||____|||____|||_____
+  |      .    .   garden   .    .       |
+  `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'</pre>
+          <div class="about-meta">
+            <div class="meta-row"><span class="meta-key">location</span><span class="meta-val">Salt Lake City, UT</span></div>
+            <div class="meta-row"><span class="meta-key">role</span><span class="meta-val">Product Eng.</span></div>
+            <div class="meta-row"><span class="meta-key">github</span><span class="meta-val"><a href="#">@derekbrimley</a></span></div>
+            <div class="meta-row"><span class="meta-key">email</span><span class="meta-val"><a href="#">→ say hello</a></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORK -->
+      <div class="content-row">
+        <div class="section-label">work</div>
+        <div class="work-row">
+          <div class="work-block current">
+            <span class="work-block-label">current</span>
+            <div class="work-company">RainFocus</div>
+            <div class="work-title">Software Engineer</div>
+            <div class="work-dates">2021 — present</div>
+            <p class="work-desc">Building event management software used by enterprise conferences. Working across the product stack on features that help organizers plan and run large-scale events.</p>
+          </div>
+          <div class="work-block">
+            <span class="work-block-label">previous</span>
+            <div class="work-company">Various</div>
+            <div class="work-title">Frontend / Full-Stack</div>
+            <div class="work-dates">2016 — 2021</div>
+            <p class="work-desc">Worked at a few different product and agency shops. Lots of React, some backend work, a season of writing way too much jQuery.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDUCATION -->
+      <div class="content-row">
+        <div class="section-label">education</div>
+        <div class="edu-row">
+          <div class="edu-block">
+            <div class="edu-school">Brigham Young University</div>
+            <div class="edu-degree">B.S. Information Systems</div>
+            <div class="edu-dates">2012 — 2016</div>
+          </div>
+          <div class="skills-block">
+            <div class="section-label" style="margin-bottom:0.75rem;">tools</div>
+            <ul class="skills-list">
+              <li>TypeScript</li>
+              <li>React / Svelte</li>
+              <li>Node.js</li>
+              <li>PostgreSQL</li>
+              <li>Git</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div class="content-row">
+        <div class="section-label">projects</div>
+        <div class="proj-row">
+          <div class="proj-block">
+            <a class="proj-name" href="#">Piano Coach</a>
+            <p class="proj-desc">AI tool for learning piano technique.</p>
+          </div>
+          <div class="proj-block">
+            <a class="proj-name" href="#">Oblique Assistant</a>
+            <p class="proj-desc">Creative prompt generator. Eno-inspired.</p>
+          </div>
+          <div class="proj-block">
+            <a class="proj-name" href="#">Standards Workbook</a>
+            <p class="proj-desc">Jazz standards charts + recordings.</p>
+          </div>
+          <div class="proj-block">
+            <a class="proj-name" href="#">Reclist</a>
+            <p class="proj-desc">Share book recommendations.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOGBOOK -->
+      <div class="content-row">
+        <div class="section-label">logbook — 2025</div>
+        <div class="log-row">
+          <div class="log-aside">
+            <div class="log-aside-title">reading / watching / listening</div>
+            <p class="log-aside-sub">A running record updated throughout the year.</p>
+            <a class="log-more" href="#">full archive →</a>
+          </div>
+          <ul class="log-list">
+            <li class="log-entry"><span class="log-date">Mar 14</span><span class="log-title book">Exhalation — Ted Chiang</span></li>
+            <li class="log-entry"><span class="log-date">Mar 08</span><span class="log-title movie">All of Us Strangers</span></li>
+            <li class="log-entry"><span class="log-date">Feb 28</span><span class="log-title tv">Severance</span></li>
+            <li class="log-entry"><span class="log-date">Feb 15</span><span class="log-title book">Four Thousand Weeks — Oliver Burkeman</span></li>
+            <li class="log-entry"><span class="log-date">Jan 22</span><span class="log-title concert">Brad Mehldau Trio @ Vivint Arena</span></li>
+            <li class="log-entry"><span class="log-date">Jan 10</span><span class="log-title movie">Past Lives</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Right-side vertical label -->
+    <div class="side-label">Home / Resume</div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a class="footer-link" href="#">resume</a>
+      <a class="footer-link" href="#">projects</a>
+      <a class="footer-link" href="#">notes</a>
+      <a class="footer-link" href="#">recs</a>
+      <a class="footer-link" href="#">contact</a>
+    </div>
+    <span class="footer-copy">© 2026 Derek Brimley</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

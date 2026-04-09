@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction 10 — Cinematic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@300;400;500;700;900&family=Libre+Franklin:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0E0C0A;
+    --bg2: #161410;
+    --bg3: #1C1916;
+    --text: #F0EAE0;
+    --text-dim: #7A7060;
+    --gold: #C8A84B;
+    --gold-dim: rgba(200, 168, 75, 0.15);
+    --red: #CC3B2B;
+    --border: rgba(240, 234, 224, 0.08);
+    --border-gold: rgba(200, 168, 75, 0.25);
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Libre Franklin', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Film grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+  }
+
+  /* NAV — filmstrip */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border-gold);
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 3rem;
+    justify-content: space-between;
+  }
+
+  /* Film perforations top */
+  nav::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0, transparent 6px,
+      var(--gold-dim) 6px, var(--gold-dim) 14px,
+      transparent 14px, transparent 20px
+    );
+  }
+
+  .nav-logo {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+  }
+
+  .nav-link {
+    font-size: 0.7rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-dim);
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover { color: var(--gold); }
+
+  /* HERO — title card */
+  .hero {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Vignette */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+  }
+
+  /* Gold frame lines */
+  .hero-frame {
+    position: absolute;
+    inset: 3rem;
+    border: 1px solid var(--border-gold);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-frame::before, .hero-frame::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: var(--gold);
+    border-style: solid;
+  }
+
+  .hero-frame::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .hero-frame::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+  }
+
+  .hero-rating {
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .hero-rating::before, .hero-rating::after {
+    content: '';
+    width: 3rem;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+
+  .hero-name {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: clamp(4rem, 10vw, 10rem);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 40px rgba(0,0,0,0.8);
+  }
+
+  .hero-name .highlight { color: var(--gold); }
+
+  .hero-tagline {
+    font-size: 1.0rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+    margin-bottom: 3rem;
+  }
+
+  .hero-credits {
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 2.5rem;
+    line-height: 2;
+  }
+
+  .hero-credits .credit-role { color: var(--gold); }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .hero-btn {
+    font-size: 0.68rem;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.7rem 1.8rem;
+    border: 1px solid var(--border-gold);
+    color: var(--text);
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  .hero-btn:hover { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
+
+  .hero-btn.primary {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--bg);
+    font-weight: 400;
+  }
+
+  .hero-btn.primary:hover { background: #d4b455; }
+
+  /* PROJECTS */
+  .section {
+    padding: 4rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-title-block {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border-gold);
+    padding-bottom: 1rem;
+  }
+
+  .st-eyebrow {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 300;
+  }
+
+  .st-title {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text);
+  }
+
+  .projects-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .proj {
+    background: var(--bg2);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.25s;
+  }
+
+  .proj:hover { background: var(--bg3); }
+
+  /* Gold corner accent */
+  .proj::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 24px 24px 0;
+    border-color: transparent var(--gold-dim) transparent transparent;
+    transition: border-color 0.2s;
+  }
+
+  .proj:hover::after { border-color: transparent var(--gold) transparent transparent; }
+
+  .proj-num {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+
+  .proj:hover .proj-num { color: var(--gold-dim); }
+
+  .proj-name {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+  }
+
+  .proj-name:hover { color: var(--gold); }
+
+  .proj-desc {
+    font-size: 0.8rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* LOGBOOK */
+  .logbook-section {
+    border-top: 1px solid var(--border);
+    padding: 4rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .logbook-inner {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+  }
+
+  .logbook-left h2 {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .logbook-left h2 .gold { color: var(--gold); }
+
+  .logbook-left p {
+    font-size: 0.82rem;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+
+  .logbook-list { list-style: none; }
+
+  .log-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 1.5rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: baseline;
+  }
+
+  .log-d {
+    font-size: 0.65rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+
+  .log-t { font-size: 0.88rem; font-weight: 300; color: var(--text); }
+  .log-t.book { text-decoration: underline; text-decoration-color: var(--text-dim); text-underline-offset: 3px; }
+  .log-t.movie { font-style: italic; }
+  .log-t.tv { font-family: 'Big Shoulders Display', sans-serif; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+  .log-t.concert { color: var(--gold); font-weight: 400; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ft { font-size: 0.65rem; font-weight: 300; letter-spacing: 0.1em; color: var(--text-dim); }
+
+  .label-badge {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 9999;
+  }
+</style>
+</head>
+<body>
+
+<div class="label-badge">Direction 10 — Cinematic</div>
+
+<nav>
+  <a class="nav-logo" href="#">Derek Brimley</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#">Projects</a>
+    <a class="nav-link" href="#">Logbook</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-frame"></div>
+  <div class="hero-content">
+    <div class="hero-rating">A Personal Site</div>
+    <h1 class="hero-name">
+      Derek<br>
+      <span class="highlight">Brimley</span>
+    </h1>
+    <p class="hero-tagline">"Building things carefully, one at a time."</p>
+    <div class="hero-credits">
+      <span class="credit-role">Role</span> · Software Engineer<br>
+      <span class="credit-role">Location</span> · Salt Lake City, Utah<br>
+      <span class="credit-role">Focus</span> · Product Engineering
+    </div>
+    <div class="hero-btns">
+      <a class="hero-btn primary" href="#">View Projects</a>
+      <a class="hero-btn" href="#">GitHub</a>
+      <a class="hero-btn" href="#">Contact</a>
+    </div>
+  </div>
+</section>
+
+<div class="section">
+  <div class="section-title-block">
+    <span class="st-eyebrow">Act I</span>
+    <span class="st-title">Selected Projects</span>
+  </div>
+  <div class="projects-row">
+    <div class="proj">
+      <div class="proj-num">01</div>
+      <a class="proj-name" href="#">Piano Coach</a>
+      <p class="proj-desc">AI-powered tool for learning piano technique and theory at your own pace.</p>
+    </div>
+    <div class="proj">
+      <div class="proj-num">02</div>
+      <a class="proj-name" href="#">Oblique Assistant</a>
+      <p class="proj-desc">Creative prompt generator inspired by Brian Eno's Oblique Strategies.</p>
+    </div>
+    <div class="proj">
+      <div class="proj-num">03</div>
+      <a class="proj-name" href="#">Standards Workbook</a>
+      <p class="proj-desc">Jazz standards reference for musicians — charts, recordings, and history.</p>
+    </div>
+  </div>
+</div>
+
+<div class="logbook-section">
+  <div class="section-title-block">
+    <span class="st-eyebrow">Act II</span>
+    <span class="st-title">The Logbook</span>
+  </div>
+  <div class="logbook-inner">
+    <div class="logbook-left">
+      <h2>Books, Films<br>&amp; <span class="gold">Music</span></h2>
+      <p>A running record of what I've been reading, watching, and listening to throughout 2025.</p>
+    </div>
+    <ul class="logbook-list">
+      <li class="log-row"><span class="log-d">Mar 14</span><span class="log-t book">Exhalation — Ted Chiang</span></li>
+      <li class="log-row"><span class="log-d">Mar 08</span><span class="log-t movie">All of Us Strangers</span></li>
+      <li class="log-row"><span class="log-d">Feb 28</span><span class="log-t tv">Severance</span></li>
+      <li class="log-row"><span class="log-d">Feb 15</span><span class="log-t book">Four Thousand Weeks — Oliver Burkeman</span></li>
+      <li class="log-row"><span class="log-d">Jan 22</span><span class="log-t concert">Brad Mehldau Trio @ Vivint Arena</span></li>
+      <li class="log-row"><span class="log-d">Jan 10</span><span class="log-t movie">Past Lives</span></li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <span class="ft">© 2026 Derek Brimley</span>
+  <span class="ft">Built with SvelteKit</span>
+</footer>
+
+</body>
+</html>

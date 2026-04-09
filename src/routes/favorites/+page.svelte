@@ -1,5 +1,4 @@
 <script>
-    import Header from '../Header.svelte';
     import { onMount } from 'svelte';
     
     let isVisible = false;
@@ -72,8 +71,6 @@
     const movies = [];
     const quotes = [];
 </script>
-
-<Header />
 
 <main>
     <section class="favorites-section {isVisible ? 'fade-in' : ''}">

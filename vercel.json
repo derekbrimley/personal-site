@@ -1,10 +1,13 @@
 {
+  "redirects": [
+    { "source": "/notes", "destination": "/notes/" }
+  ],
   "rewrites": [
     { "source": "/index.css", "destination": "https://notes.derek-brimley.com/index.css" },
     { "source": "/prescript.js", "destination": "https://notes.derek-brimley.com/prescript.js" },
     { "source": "/postscript.js", "destination": "https://notes.derek-brimley.com/postscript.js" },
     { "source": "/static/:path*", "destination": "https://notes.derek-brimley.com/static/:path*" },
-    { "source": "/notes", "destination": "https://notes.derek-brimley.com/" },
+    { "source": "/notes/", "destination": "https://notes.derek-brimley.com/" },
     { "source": "/notes/:path*", "destination": "https://notes.derek-brimley.com/:path*" }
   ]
 }

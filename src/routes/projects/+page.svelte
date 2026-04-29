@@ -12,11 +12,17 @@
 
   const projects = [
     {
+      img: undefined,
+      url: 'https://summer-school.derek-brimley.com',
+      name: 'WonderPath',
+      desc: 'AI-powered summer learning app for kids — generates personalized lessons based on their curiosity, with a wonder book to capture discoveries.'
+    },
+    {
       img: crates,
       url: 'https://crate-zeta.vercel.app//',
       name: 'Crates',
       desc: 'Intentionally choose what to listen to from your favorite albums and recommendations you\'ve collected'
-    },  
+    },
     {
       img: piano_coach,
       url: 'https://piano-coach.derek-brimley.com',

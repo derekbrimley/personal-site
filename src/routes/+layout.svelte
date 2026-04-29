@@ -7,10 +7,11 @@
   const sideLabels = {
     '/': 'Home / Resume',
     '/projects': 'Projects',
-
+    '/notes': 'Notes',
   };
 
-  $: sideLabel = sideLabels[$page.url.pathname] ?? 'Derek Brimley';
+  $: sideLabel = sideLabels[$page.url.pathname]
+    ?? ($page.url.pathname.startsWith('/notes') ? 'Notes' : 'Derek Brimley');
 </script>
 
 <div class="page-outer">
@@ -24,7 +25,7 @@
   <footer class="site-footer">
     <div class="footer-links">
       <a class="footer-link" href="/projects">projects</a>
-      <a class="footer-link" href="/notes" data-sveltekit-reload>notes</a>
+      <a class="footer-link" href="/notes">notes</a>
     </div>
     <div class="socials">
       <a class="social-link" href="https://github.com/derekbrimley" target="_blank" rel="noopener noreferrer">github</a>
@@ -64,7 +65,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.6rem;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.22em;
     text-transform: uppercase;
@@ -86,7 +87,7 @@
   }
 
   .footer-link {
-    font-size: 0.65rem;
+    font-size: 1rem;
     color: var(--link);
     text-decoration: none;
     padding: 0.2rem 0.7rem;
@@ -103,7 +104,7 @@
   }
 
   .footer-copy {
-    font-size: 0.6rem;
+    font-size: 1rem;
     color: var(--text-dim);
     letter-spacing: 0.06em;
   }
@@ -115,7 +116,7 @@
   }
 
   .social-link {
-    font-size: 0.62rem;
+    font-size: 1rem;
     text-decoration: none;
     color: var(--link);
     border: 1px dashed var(--text-dim);
@@ -128,7 +129,7 @@
   .social-link::before {
     content: '○ ';
     color: var(--text-dim);
-    font-size: 0.55rem;
+    font-size: 1rem;
   }
 
   .social-link:hover {

@@ -90,12 +90,12 @@
   <div class="section-label">recent projects</div>
   <div class="proj-row">
     <div class="proj-block">
-      <a class="proj-name" href="https://piano-coach.app" target="_blank" rel="noopener noreferrer">Piano Coach</a>
-      <p class="proj-desc">AI tool for learning piano technique.</p>
+      <a class="proj-name" href="https://crates.derek-brimley.com" target="_blank" rel="noopener noreferrer">Crates</a>
+      <p class="proj-desc">Album-based library for favorites and recommendations</p>
     </div>
     <div class="proj-block">
-      <a class="proj-name" href="https://oblique-assistant.derek-brimley.com/" target="_blank" rel="noopener noreferrer">Oblique Assistant</a>
-      <p class="proj-desc">Creative prompt generator. Eno-inspired.</p>
+      <a class="proj-name" href="https://piano-coach.derek-brimley.com/" target="_blank" rel="noopener noreferrer">Piano Coach</a>
+      <p class="proj-desc">Deliberate practice for guided sessions based on your goals.</p>
     </div>
   </div>
   <a class="all-projects-link" href="/projects">all projects →</a>
@@ -103,11 +103,11 @@
 
 <!-- NOTES -->
 <div class="content-row">
-  <div class="section-label">notes / digital garden</div>
+  <div class="section-label">notes</div>
   <div class="log-row">
     <div class="log-aside">
-      <div class="log-aside-title">thinking out loud</div>
-      <p class="log-aside-sub">A collection of notes, ideas, and half-formed thoughts from my Obsidian vault.</p>
+      <!-- <div class="log-aside-title">thoughts</div> -->
+      <!-- <p class="log-aside-sub">A collection of notes, ideas, and half-formed thoughts from my Obsidian vault.</p> -->
       <a class="log-more" href="/notes" data-sveltekit-reload>explore notes →</a>
     </div>
   </div>
@@ -133,7 +133,7 @@
   }
 
   .about-bio {
-    font-size: 0.82rem;
+    font-size: 1rem;
     line-height: 1.8;
     color: var(--text);
     margin-bottom: 4;
@@ -149,7 +149,7 @@
   .meta-row {
     text-align: center;
     padding: 0.3rem 0;
-    font-size: 0.7rem;
+    font-size: 1rem;
   }
 
   .meta-row + .meta-row {
@@ -185,7 +185,7 @@
   }
 
   .work-block-label {
-    font-size: 0.55rem;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -197,28 +197,28 @@
   }
 
   .work-company {
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 0.2rem;
   }
 
   .work-title {
-    font-size: 0.75rem;
+    font-size: 1rem;
     color: var(--text-dim);
     margin-bottom: 0.75rem;
     font-style: italic;
   }
 
   .work-dates {
-    font-size: 0.65rem;
+    font-size: 1rem;
     color: var(--text-dim);
     margin-bottom: 0.75rem;
     letter-spacing: 0.06em;
   }
 
   .work-desc {
-    font-size: 0.72rem;
+    font-size: 1rem;
     line-height: 1.75;
     color: var(--text);
     margin-bottom: 0;
@@ -240,21 +240,21 @@
   }
 
   .edu-school {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 0.2rem;
   }
 
   .edu-degree {
-    font-size: 0.72rem;
+    font-size: 1rem;
     font-style: italic;
     color: var(--text-dim);
     margin-bottom: 0.5rem;
   }
 
   .edu-dates {
-    font-size: 0.65rem;
+    font-size: 1rem;
     color: var(--text-dim);
     letter-spacing: 0.05em;
   }
@@ -268,7 +268,7 @@
 
   .skills-list {
     list-style: none;
-    font-size: 0.68rem;
+    font-size: 1rem;
     line-height: 2;
     color: var(--text);
   }
@@ -311,7 +311,7 @@
   }
 
   .proj-name {
-    font-size: 0.75rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--link);
     text-decoration: none;
@@ -322,14 +322,14 @@
   .proj-name:hover { text-decoration: underline; }
 
   .proj-desc {
-    font-size: 0.65rem;
+    font-size: 1rem;
     color: var(--text-dim);
     line-height: 1.65;
     margin-bottom: 0;
   }
 
   .all-projects-link {
-    font-size: 0.65rem;
+    font-size: 1rem;
     color: var(--link);
     text-decoration: none;
     display: inline-block;
@@ -353,47 +353,27 @@
   }
 
   .log-aside-title {
-    font-size: 0.75rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 0.4rem;
   }
 
   .log-aside-sub {
-    font-size: 0.65rem;
+    font-size: 1rem;
     color: var(--text-dim);
     line-height: 1.7;
     margin-bottom: 0.75rem;
   }
 
   .log-more {
-    font-size: 0.62rem;
+    font-size: 1rem;
     color: var(--link);
     text-decoration: none;
   }
 
   .log-more:hover { text-decoration: underline; }
 
-  .log-list { list-style: none; }
-
-  .log-entry {
-    display: grid;
-    grid-template-columns: 60px 1fr;
-    gap: 1rem;
-    padding: 0.55rem 0;
-    border-bottom: 1px dotted var(--text-dim);
-    align-items: baseline;
-    font-size: 0.72rem;
-  }
-
-  .log-entry:first-child { border-top: 1px dotted var(--text-dim); }
-
-  .log-date { color: var(--text-dim); font-size: 0.62rem; }
-  .log-title { display: inline; }
-  .log-title.book { text-decoration: underline; text-decoration-color: var(--text-dim); text-underline-offset: 2px; }
-  .log-title.movie { font-style: italic; }
-  .log-title.tv { font-weight: 700; font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); }
-  .log-title.concert { color: var(--link); }
 
   /* RESPONSIVE */
   @media (max-width: 768px) {

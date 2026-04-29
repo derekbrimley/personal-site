@@ -2,7 +2,7 @@
   <nav class="header-nav">
     <a class="nav-item" href="/">about</a>
     <a class="nav-item" href="/projects">projects</a>
-    <a class="nav-item" href="/notes" data-sveltekit-reload>notes</a>
+    <a class="nav-item" href="/notes">notes</a>
   </nav>
   <div class="header-identity">
     <div class="ascii-banner">
@@ -55,7 +55,7 @@
   }
 
   .nav-item {
-    font-size: 0.7rem;
+    font-size: 1rem;
     font-weight: 400;
     text-decoration: none;
     color: var(--link);

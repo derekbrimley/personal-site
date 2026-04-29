@@ -28,7 +28,7 @@
   }
 
   h3 {
-    font-size: 0.82rem;
+    font-size: 1rem;
     font-weight: 700;
     margin-top: 0;
     margin-bottom: 0.5rem;
@@ -44,7 +44,7 @@
   }
 
   .project_description {
-    font-size: 0.68rem;
+    font-size: 1rem;
     color: var(--text-dim);
     line-height: 1.65;
     margin-bottom: 0.75rem;

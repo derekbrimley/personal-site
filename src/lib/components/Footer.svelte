@@ -78,7 +78,7 @@
   .footer-links a {
     text-transform: lowercase;
     letter-spacing: 0.02em;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   
   .social-icons {
@@ -103,7 +103,7 @@
   .footer-bottom {
     padding-top: var(--spacing-md);
     text-align: center;
-    font-size: 0.8rem;
+    font-size: 1rem;
     opacity: 0.7;
     border-top: 1px solid var(--border);
   }

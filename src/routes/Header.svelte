@@ -1,8 +1,8 @@
 <header class="site-header">
   <nav class="header-nav">
-    <a class="nav-item" href="/">about</a>
-    <a class="nav-item" href="/projects">projects</a>
-    <a class="nav-item" href="/notes">notes</a>
+    <a class="nav-item" href="/">About</a>
+    <a class="nav-item" href="/projects">Projects</a>
+    <a class="nav-item" href="/notes">Notes</a>
   </nav>
   <div class="header-identity">
     <div class="ascii-banner">

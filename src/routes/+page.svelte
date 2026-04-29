@@ -1,6 +1,6 @@
 <!-- ABOUT -->
 <div class="content-row">
-  <div class="section-label">about</div>
+  <div class="section-label">About</div>
   <div class="about-row">
     <div>
       <p class="about-bio">I'm a product manager at RainFocus, trying to stay focused on what matters.</p>
@@ -10,17 +10,17 @@
     <div class="about-meta">
       <div class="meta-row">
         <span class="meta-val">
-          <a href="https://x.com/derekbrimley" target="_blank" rel="noopener noreferrer">twitter</a>
+          <a href="https://x.com/derekbrimley" target="_blank" rel="noopener noreferrer">Twitter</a>
         </span>
       </div>
       <div class="meta-row">
         <span class="meta-val">
-          <a href="https://github.com/derekbrimley" target="_blank" rel="noopener noreferrer">github</a>
+          <a href="https://github.com/derekbrimley" target="_blank" rel="noopener noreferrer">Github</a>
         </span>
       </div>
       <div class="meta-row">
         <span class="meta-val">
-          <a href="https://www.linkedin.com/in/derekbrimley/" target="_blank" rel="noopener noreferrer">linkedin</a>
+          <a href="https://www.linkedin.com/in/derekbrimley/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </span>
       </div>
     </div>
@@ -32,7 +32,7 @@
   <div class="section-label">work</div>
   <div class="work-row">
     <div class="work-block current">
-      <span class="work-block-label">current</span>
+      <span class="work-block-label">Current</span>
       <div class="work-company">RainFocus</div>
       <div class="work-title">Principal Product Manager</div>
       <div class="work-dates">2022 — present</div>
@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="work-block">
-      <span class="work-block-label">previous</span>
+      <span class="work-block-label">Previous</span>
       <div class="work-company">Forcepoint</div>
       <div class="work-title">Frontend Developer / Product Manager</div>
       <div class="work-dates">2018 — 2022</div>
@@ -63,13 +63,13 @@
 <div class="content-row">
   <div class="edu-row">
     <div class="edu-block">
-      <div class="section-label">education</div>
+      <div class="section-label">Education</div>
       <div class="edu-school">Brigham Young University</div>
       <div class="edu-degree">B.S. Information Systems</div>
       <div class="edu-dates">2010 — 2017</div>
     </div>
     <div class="skills-block">
-      <div class="section-label" style="margin-bottom: 0.75rem;">skills</div>
+      <div class="section-label" style="margin-bottom: 0.75rem;">Skills</div>
       <ul class="skills-list">
         <li>User research</li>
         <li>Data analytics</li>
@@ -79,7 +79,7 @@
       </ul>
     </div>
     <div class="interests-block">
-      <div class="section-label" style="margin-bottom: 0.75rem;">interests</div>
+      <div class="section-label" style="margin-bottom: 0.75rem;">Interests</div>
       <div class="skills-list">Effective altruism; piano; running; woodworking; baking; community building</div>
     </div>
   </div>
@@ -87,7 +87,7 @@
 
 <!-- PROJECTS -->
 <div class="content-row">
-  <div class="section-label">recent projects</div>
+  <div class="section-label">Recent projects</div>
   <div class="proj-row">
     <div class="proj-block">
       <a class="proj-name" href="https://crates.derek-brimley.com" target="_blank" rel="noopener noreferrer">Crates</a>
@@ -98,17 +98,17 @@
       <p class="proj-desc">Deliberate practice for guided sessions based on your goals.</p>
     </div>
   </div>
-  <a class="all-projects-link" href="/projects">all projects →</a>
+  <a class="all-projects-link" href="/projects">All projects →</a>
 </div>
 
 <!-- NOTES -->
 <div class="content-row">
-  <div class="section-label">notes</div>
+  <div class="section-label">Notes</div>
   <div class="log-row">
     <div class="log-aside">
       <!-- <div class="log-aside-title">thoughts</div> -->
       <!-- <p class="log-aside-sub">A collection of notes, ideas, and half-formed thoughts from my Obsidian vault.</p> -->
-      <a class="log-more" href="/notes" data-sveltekit-reload>explore notes →</a>
+      <a class="log-more" href="/notes" data-sveltekit-reload>Explore my notes →</a>
     </div>
   </div>
 </div>

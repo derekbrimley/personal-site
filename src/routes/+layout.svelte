@@ -24,12 +24,14 @@
   </div>
   <footer class="site-footer">
     <div class="footer-links">
-      <a class="footer-link" href="/projects">projects</a>
-      <a class="footer-link" href="/notes">notes</a>
+      <a class="footer-link" href="/">About</a>
+      <a class="footer-link" href="/projects">Projects</a>
+      <a class="footer-link" href="/notes">Notes</a>
     </div>
     <div class="socials">
-      <a class="social-link" href="https://github.com/derekbrimley" target="_blank" rel="noopener noreferrer">github</a>
-      <a class="social-link" href="https://www.linkedin.com/in/derekbrimley/" target="_blank" rel="noopener noreferrer">linkedin</a>
+      <a class="social-link" href="https://x.com/derekbrimley" target="_blank" rel="noopener noreferrer">Twitter</a>
+      <a class="social-link" href="https://github.com/derekbrimley" target="_blank" rel="noopener noreferrer">Github</a>
+      <a class="social-link" href="https://www.linkedin.com/in/derekbrimley/" target="_blank" rel="noopener noreferrer">Linkedin</a>
     </div>
     <span class="footer-copy">© 2026 Derek Brimley</span>
   </footer>

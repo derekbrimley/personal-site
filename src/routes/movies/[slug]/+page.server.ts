@@ -1,8 +1,10 @@
 import { error, redirect } from '@sveltejs/kit';
 import { collectionsFromMovies, listMovies, matchMovie, slugify } from '$lib/server/movies';
 import { movieCard } from '$lib/server/movieCards';
+import { requireMoviesAccess, withKey } from '$lib/server/movieAccess';
 
-export async function load({ params, url }) {
+export async function load({ params, url, locals }) {
+	requireMoviesAccess(locals);
 	let movies;
 	try {
 		movies = await listMovies();
@@ -19,8 +21,8 @@ export async function load({ params, url }) {
 			kind: 'collection' as const,
 			name: collection.name,
 			movies: collection.movies.map(movieCard),
-			pageUrl: `${url.origin}/movies/${collection.slug}`,
-			posterUrl: latest ? `${url.origin}/movies/${latest.slug}/poster` : null
+			pageUrl: withKey(`${url.origin}/movies/${collection.slug}`),
+			posterUrl: latest ? withKey(`${url.origin}/movies/${latest.slug}/poster`) : null
 		};
 	}
 
@@ -40,7 +42,7 @@ export async function load({ params, url }) {
 		collection: movie.collection
 			? { slug: slugify(movie.collection), name: movie.collection }
 			: null,
-		pageUrl: `${url.origin}/movies/${movie.slug}`,
-		posterUrl: movie.poster ? `${url.origin}/movies/${movie.slug}/poster` : null
+		pageUrl: withKey(`${url.origin}/movies/${movie.slug}`),
+		posterUrl: movie.poster ? withKey(`${url.origin}/movies/${movie.slug}/poster`) : null
 	};
 }

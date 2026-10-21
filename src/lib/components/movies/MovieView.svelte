@@ -1,6 +1,8 @@
 <script>
 	import { resolve } from '$app/paths';
+	import ActionIcon from './ActionIcon.svelte';
 	import CastButton from './CastButton.svelte';
+	import CastRemote from './CastRemote.svelte';
 
 	/** @type {Extract<import('../../../routes/movies/[slug]/$types').PageData, { kind: 'movie' }>} */
 	export let data;
@@ -37,13 +39,28 @@
 </svelte:head>
 
 <article class="movie">
-	{#if data.collection}
-		<a href={resolve('/movies/[slug]', { slug: data.collection.slug })} class="back-link"
-			>&larr; {data.collection.name}</a
-		>
-	{:else}
-		<a href={resolve('/movies')} class="back-link">&larr; home movies</a>
-	{/if}
+	<div class="movie-top">
+		{#if data.collection}
+			<a href={resolve('/movies/[slug]', { slug: data.collection.slug })} class="back-link"
+				>&larr; {data.collection.name}</a
+			>
+		{:else}
+			<a href={resolve('/movies')} class="back-link">&larr; home movies</a>
+		{/if}
+
+		<div class="actions">
+			<CastButton src={data.videoUrl} title={data.title} poster={data.posterUrl} {video} />
+			<button type="button" class="action" on:click={share}>
+				<ActionIcon name={copied ? 'check' : 'link'} />
+				{copied ? 'Copied!' : 'Share link'}
+			</button>
+			<!-- A file download from the video endpoint, not a page navigation. -->
+			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+			<a class="action" href={`${resolve('/movies/[slug]/video', { slug: data.slug })}?download`}>
+				<ActionIcon name="download" /> Download
+			</a>
+		</div>
+	</div>
 	<h1 class="movie-title">{data.title}</h1>
 
 	<!-- svelte-ignore a11y_media_has_caption -->
@@ -56,17 +73,7 @@
 		poster={data.hasPoster ? `/movies/${data.slug}/poster` : undefined}
 	></video>
 
-	<div class="actions">
-		<CastButton src={data.videoUrl} title={data.title} poster={data.posterUrl} {video} />
-		<button type="button" class="action" on:click={share}
-			>{copied ? 'Copied!' : 'Share link'}</button
-		>
-		<!-- A file download from the video endpoint, not a page navigation. -->
-		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-		<a class="action" href={`${resolve('/movies/[slug]/video', { slug: data.slug })}?download`}
-			>Download</a
-		>
-	</div>
+	<CastRemote src={data.videoUrl} {video} />
 </article>
 
 <style>
@@ -93,14 +100,25 @@
 		box-shadow: 5px 5px 0 var(--shadow);
 	}
 
+	.movie-top {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		gap: var(--spacing-sm) var(--spacing-md);
+	}
+
 	.actions {
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--spacing-sm);
-		margin-top: var(--spacing-lg);
 	}
 
-	.action {
+	/* :global reaches the Play on TV button inside CastButton */
+	.actions :global(.action) {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
 		font: inherit;
 		font-size: 1rem;
 		color: var(--link);
@@ -112,7 +130,7 @@
 		transition: border-color var(--transition-fast);
 	}
 
-	.action:hover {
+	.actions :global(.action:hover) {
 		border-color: var(--border);
 		text-decoration: none;
 	}

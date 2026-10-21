@@ -3,15 +3,25 @@ import { encodePath, presignUrl } from './sigv4';
 
 // Home movies live in a private Cloudflare R2 bucket. Drop `Christmas 2024.mp4` in it and it
 // shows up at /movies/christmas-2024; an image with the same name (`Christmas 2024.jpg`) is
-// its poster. Every play gets a freshly signed link, so shared page links never go stale.
+// its poster. A folder (`Holland/`) is a collection with its own page at /movies/holland,
+// ordered by the number in each title ("First Birthday", "3rd Birthday"). Every play gets a
+// freshly signed link, so shared page links never go stale.
 
 export type Movie = {
 	slug: string;
 	title: string;
 	key: string;
 	poster: string | null;
+	collection: string | null;
+	order: number;
 	size: number;
 	updated: string;
+};
+
+export type Collection = {
+	slug: string;
+	name: string;
+	movies: Movie[];
 };
 
 const VIDEO = /\.(mp4|m4v|mov)$/i;
@@ -52,11 +62,47 @@ function sign(
 }
 
 export function slugify(name: string): string {
+	return legacySlugify(name.replace(/['’]/g, ''));
+}
+
+// Slugs before apostrophes were dropped (`holland-s-3rd-birthday`); links like that were
+// already shared, so they still resolve.
+function legacySlugify(name: string): string {
 	return name
 		.toLowerCase()
-		.replace(/['’]/g, '')
 		.replace(/[^a-z0-9]+/g, '-')
 		.replace(/^-|-$/g, '');
+}
+
+const ORDINALS = [
+	'zeroth',
+	'first',
+	'second',
+	'third',
+	'fourth',
+	'fifth',
+	'sixth',
+	'seventh',
+	'eighth',
+	'ninth',
+	'tenth',
+	'eleventh',
+	'twelfth',
+	'thirteenth',
+	'fourteenth',
+	'fifteenth',
+	'sixteenth',
+	'seventeenth',
+	'eighteenth',
+	'nineteenth',
+	'twentieth'
+];
+
+// The first number in a title, written as digits ("3rd", "2024") or a word ("First").
+export function orderFromTitle(title: string): number {
+	const m = title.toLowerCase().match(new RegExp(`\\b(\\d+|${ORDINALS.join('|')})`));
+	if (!m) return Number.POSITIVE_INFINITY;
+	return /^\d/.test(m[1]) ? Number(m[1]) : ORDINALS.indexOf(m[1]);
 }
 
 export function titleFromName(name: string): string {
@@ -111,14 +157,18 @@ export function moviesFromObjects(objects: BucketObject[]): Movie[] {
 	const movies = new Map<string, Movie>();
 	for (const o of objects) {
 		if (!VIDEO.test(o.key)) continue;
-		const name = stem(o.key).split('/').pop()!;
+		const parts = stem(o.key).split('/');
+		const name = parts.pop()!;
 		const slug = slugify(name);
 		if (!slug || movies.has(slug)) continue;
+		const title = titleFromName(name);
 		movies.set(slug, {
 			slug,
-			title: titleFromName(name),
+			title,
 			key: o.key,
 			poster: posters.get(stem(o.key)) ?? null,
+			collection: parts[0] ?? null,
+			order: orderFromTitle(title),
 			size: o.size,
 			updated: o.updated
 		});
@@ -126,12 +176,40 @@ export function moviesFromObjects(objects: BucketObject[]): Movie[] {
 	return [...movies.values()].sort((a, b) => b.updated.localeCompare(a.updated));
 }
 
+export function collectionsFromMovies(movies: Movie[]): Collection[] {
+	const byName = new Map<string, Movie[]>();
+	for (const m of movies) {
+		if (m.collection) byName.set(m.collection, [...(byName.get(m.collection) ?? []), m]);
+	}
+	return (
+		[...byName]
+			.map(([name, list]) => ({
+				slug: slugify(name),
+				name,
+				movies: list.sort((a, b) => a.order - b.order || a.updated.localeCompare(b.updated))
+			}))
+			// The collection with the most movies first: for one birthday video a year, oldest kid first.
+			.sort((a, b) => b.movies.length - a.movies.length || a.name.localeCompare(b.name))
+	);
+}
+
 export async function listMovies(): Promise<Movie[]> {
 	return moviesFromObjects(await listObjects());
 }
 
+export function matchMovie(movies: Movie[], slug: string): Movie | undefined {
+	const legacy = (m: Movie) =>
+		legacySlugify(
+			m.key
+				.replace(/\.[^./]+$/, '')
+				.split('/')
+				.pop()!
+		);
+	return movies.find((m) => m.slug === slug) ?? movies.find((m) => legacy(m) === slug);
+}
+
 export async function findMovie(slug: string): Promise<Movie | undefined> {
-	return (await listMovies()).find((m) => m.slug === slug);
+	return matchMovie(await listMovies(), slug);
 }
 
 export function videoUrl(movie: Movie, download = false): Promise<string> {

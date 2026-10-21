@@ -1,9 +1,12 @@
 <script>
 	import { resolve } from '$app/paths';
+	import CastButton from './CastButton.svelte';
 
 	/** @type {Extract<import('../../../routes/movies/[slug]/$types').PageData, { kind: 'movie' }>} */
 	export let data;
 
+	/** @type {HTMLVideoElement | undefined} */
+	let video;
 	let copied = false;
 
 	async function share() {
@@ -45,6 +48,7 @@
 
 	<!-- svelte-ignore a11y_media_has_caption -->
 	<video
+		bind:this={video}
 		controls
 		playsinline
 		preload="metadata"
@@ -53,6 +57,7 @@
 	></video>
 
 	<div class="actions">
+		<CastButton src={data.videoUrl} title={data.title} poster={data.posterUrl} {video} />
 		<button type="button" class="action" on:click={share}
 			>{copied ? 'Copied!' : 'Share link'}</button
 		>
@@ -90,6 +95,7 @@
 
 	.actions {
 		display: flex;
+		flex-wrap: wrap;
 		gap: var(--spacing-sm);
 		margin-top: var(--spacing-lg);
 	}

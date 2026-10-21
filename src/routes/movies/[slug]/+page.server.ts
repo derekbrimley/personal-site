@@ -43,6 +43,7 @@ export async function load({ params, url, locals }) {
 			? { slug: slugify(movie.collection), name: movie.collection }
 			: null,
 		pageUrl: withKey(`${url.origin}/movies/${movie.slug}`),
+		videoUrl: withKey(`${url.origin}/movies/${movie.slug}/video`),
 		posterUrl: movie.poster ? withKey(`${url.origin}/movies/${movie.slug}/poster`) : null
 	};
 }

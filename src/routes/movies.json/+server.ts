@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { listMovies } from '$lib/server/movies';
+import { withKey } from '$lib/server/movieAccess';
 
 // The movie list for other apps (the kitchen tablet casts `video` to the TV).
 export async function GET({ url }) {
@@ -9,11 +10,11 @@ export async function GET({ url }) {
 			slug: m.slug,
 			title: m.title,
 			collection: m.collection,
-			page: `${url.origin}/movies/${m.slug}`,
-			video: `${url.origin}/movies/${m.slug}/video`,
-			poster: m.poster ? `${url.origin}/movies/${m.slug}/poster` : null,
+			page: withKey(`${url.origin}/movies/${m.slug}`),
+			video: withKey(`${url.origin}/movies/${m.slug}/video`),
+			poster: m.poster ? withKey(`${url.origin}/movies/${m.slug}/poster`) : null,
 			updated: m.updated
 		})),
-		{ headers: { 'cache-control': 'public, max-age=300', 'x-robots-tag': 'noindex' } }
+		{ headers: { 'cache-control': 'private, max-age=300', 'x-robots-tag': 'noindex' } }
 	);
 }

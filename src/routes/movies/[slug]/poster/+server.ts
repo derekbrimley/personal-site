@@ -8,6 +8,6 @@ export async function GET({ params, setHeaders }) {
 		throw error(404, 'No poster');
 	}
 	// The signed link lasts a day, so the redirect can be cached for an hour.
-	setHeaders({ 'cache-control': 'public, max-age=3600' });
+	setHeaders({ 'cache-control': 'private, max-age=3600' });
 	throw redirect(302, signed);
 }

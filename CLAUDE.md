@@ -23,6 +23,7 @@ This is a personal portfolio site built with **SvelteKit 2** and **Svelte 5**, u
 - `/projects` - Project showcase grid (`src/routes/projects/+page.svelte`)
 - `/logbook` - Blog/logbook section (`src/routes/logbook/`)
 - `/favorites` and `/contact-me` exist but are commented out of the nav
+- `/movies` - Home movies, unlisted (not in the nav, `noindex`). Lists a private Cloudflare R2 bucket: each `.mp4`/`.mov`/`.m4v` is a movie at `/movies/<slug>`, and an image with the same name is its poster. `/movies/<slug>/video` and `/poster` redirect to freshly signed R2 links (`src/lib/server/movies.ts`, SigV4 in `sigv4.ts`, no SDK), so the video streams from R2, not Vercel. `/movies.json` lists them for the kitchen tablet. Needs `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET` (see `.env.example`).
 
 Each page imports its own `Header` component from `src/routes/Header.svelte` rather than using the layout. The root layout (`src/routes/+layout.svelte`) only provides global CSS and the app wrapper.
 

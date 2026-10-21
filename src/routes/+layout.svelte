@@ -8,10 +8,12 @@
     '/': 'Home / Resume',
     '/projects': 'Projects',
     '/notes': 'Notes',
+    '/movies': 'Home Movies',
   };
 
   $: sideLabel = sideLabels[$page.url.pathname]
-    ?? ($page.url.pathname.startsWith('/notes') ? 'Notes' : 'Derek Brimley');
+    ?? ($page.url.pathname.startsWith('/notes') ? 'Notes'
+      : $page.url.pathname.startsWith('/movies') ? 'Home Movies' : 'Derek Brimley');
 </script>
 
 <div class="page-outer">

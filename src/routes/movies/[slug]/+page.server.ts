@@ -1,22 +1,45 @@
-import { error } from '@sveltejs/kit';
-import { findMovie } from '$lib/server/movies';
+import { error, redirect } from '@sveltejs/kit';
+import { collectionsFromMovies, listMovies, matchMovie, slugify } from '$lib/server/movies';
+import { movieCard } from '$lib/server/movieCards';
 
 export async function load({ params, url }) {
-	let movie;
+	let movies;
 	try {
-		movie = await findMovie(params.slug);
+		movies = await listMovies();
 	} catch (e) {
 		console.error(e);
 		throw error(503, 'The movies are not available right now');
 	}
+
+	const collections = collectionsFromMovies(movies);
+	const collection = collections.find((c) => c.slug === params.slug);
+	if (collection) {
+		const latest = [...collection.movies].reverse().find((m) => m.poster);
+		return {
+			kind: 'collection' as const,
+			name: collection.name,
+			movies: collection.movies.map(movieCard),
+			pageUrl: `${url.origin}/movies/${collection.slug}`,
+			posterUrl: latest ? `${url.origin}/movies/${latest.slug}/poster` : null
+		};
+	}
+
+	const movie = matchMovie(movies, params.slug);
 	if (!movie) {
 		throw error(404, 'Movie not found');
 	}
+	if (movie.slug !== params.slug) {
+		throw redirect(301, `/movies/${movie.slug}`);
+	}
 
 	return {
+		kind: 'movie' as const,
 		slug: movie.slug,
 		title: movie.title,
 		hasPoster: movie.poster !== null,
+		collection: movie.collection
+			? { slug: slugify(movie.collection), name: movie.collection }
+			: null,
 		pageUrl: `${url.origin}/movies/${movie.slug}`,
 		posterUrl: movie.poster ? `${url.origin}/movies/${movie.slug}/poster` : null
 	};

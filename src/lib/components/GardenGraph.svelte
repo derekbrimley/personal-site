@@ -1,12 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import {
-		forceSimulation,
-		forceLink,
-		forceManyBody,
-		forceCenter,
-		forceCollide
-	} from 'd3-force';
+	import { forceSimulation, forceLink, forceManyBody, forceCenter, forceCollide } from 'd3-force';
 
 	export let graph;
 

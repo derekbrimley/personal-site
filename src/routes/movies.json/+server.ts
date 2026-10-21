@@ -8,6 +8,7 @@ export async function GET({ url }) {
 		movies.map((m) => ({
 			slug: m.slug,
 			title: m.title,
+			collection: m.collection,
 			page: `${url.origin}/movies/${m.slug}`,
 			video: `${url.origin}/movies/${m.slug}/video`,
 			poster: m.poster ? `${url.origin}/movies/${m.slug}/poster` : null,

@@ -1,11 +1,13 @@
 import { error } from '@sveltejs/kit';
-import { listMovies } from '$lib/server/movies';
+import { collectionsFromMovies, listMovies } from '$lib/server/movies';
+import { collectionCard, movieCard } from '$lib/server/movieCards';
 
 export async function load() {
 	try {
 		const movies = await listMovies();
 		return {
-			movies: movies.map((m) => ({ slug: m.slug, title: m.title, hasPoster: m.poster !== null }))
+			collections: collectionsFromMovies(movies).map(collectionCard),
+			movies: movies.filter((m) => !m.collection).map(movieCard)
 		};
 	} catch (e) {
 		console.error(e);

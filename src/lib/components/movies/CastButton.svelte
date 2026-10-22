@@ -3,8 +3,9 @@
 	import { castStatus, initCast, playOnTv } from '$lib/cast';
 	import ActionIcon from './ActionIcon.svelte';
 
-	// Shown only in Chrome with a Cast device on the network, and hidden while this movie is
-	// already on the TV (CastRemote takes over under the video).
+	// Shown in Chrome whether or not it has found a TV yet: Chrome only searches now and then,
+	// and the click opens its device picker, which searches. Hidden while this movie is already
+	// on the TV (CastRemote takes over under the video).
 
 	export let src: string; // absolute, with the family key
 	export let title: string;
@@ -20,7 +21,7 @@
 	}
 </script>
 
-{#if $castStatus.available && $castStatus.contentId !== src}
+{#if $castStatus.ready && $castStatus.contentId !== src}
 	<button type="button" class="action" on:click={start}>
 		<ActionIcon name="cast" /> Play on TV
 	</button>

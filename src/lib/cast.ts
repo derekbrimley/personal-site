@@ -12,6 +12,7 @@ export type CastStatus = {
 	paused: boolean;
 	current: number;
 	duration: number;
+	error: string | null; // why the last Play on TV didn't start
 };
 
 export const castStatus = writable<CastStatus>({
@@ -20,7 +21,8 @@ export const castStatus = writable<CastStatus>({
 	device: '',
 	paused: false,
 	current: 0,
-	duration: 0
+	duration: 0,
+	error: null
 });
 
 const SDK = 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1';
@@ -56,14 +58,15 @@ function setup() {
 	const remote = new RemotePlayer();
 	const remoteController = new RemotePlayerController(remote);
 	const update = () =>
-		castStatus.set({
+		castStatus.update((status) => ({
+			...status,
 			available: context.getCastState() !== CastState.NO_DEVICES_AVAILABLE,
 			contentId: remote.isConnected ? (remote.mediaInfo?.contentId ?? null) : null,
 			device: context.getCurrentSession()?.getCastDevice().friendlyName ?? 'the TV',
 			paused: remote.isPaused,
 			current: remote.currentTime,
 			duration: remote.duration
-		});
+		}));
 	context.addEventListener(CastContextEventType.CAST_STATE_CHANGED, update);
 	remoteController.addEventListener(cast.framework.RemotePlayerEventType.ANY_CHANGE, update);
 	update();
@@ -91,7 +94,13 @@ export async function playOnTv(src: string, title: string, poster: string | null
 
 	const request = new chrome.cast.media.LoadRequest(info);
 	request.currentTime = startAt;
-	await session.loadMedia(request);
+	castStatus.update((status) => ({ ...status, error: null }));
+	try {
+		await session.loadMedia(request);
+	} catch (code) {
+		// The TV couldn't open the video (e.g. LOAD_FAILED when the link doesn't work for it).
+		castStatus.update((status) => ({ ...status, error: `The TV couldn't play this (${code}).` }));
+	}
 }
 
 export function playOrPause() {

@@ -24,4 +24,15 @@
 	<button type="button" class="action" on:click={start}>
 		<ActionIcon name="cast" /> Play on TV
 	</button>
+	{#if $castStatus.error}
+		<span class="cast-error" role="alert">{$castStatus.error}</span>
+	{/if}
 {/if}
+
+<style>
+	.cast-error {
+		flex-basis: 100%;
+		text-align: right;
+		color: var(--coral);
+	}
+</style>

@@ -63,14 +63,15 @@
 	</div>
 	<h1 class="movie-title">{data.title}</h1>
 
+	<!-- Keyed URLs: Chrome's own Cast button hands `src` to the TV, which has no cookie. -->
 	<!-- svelte-ignore a11y_media_has_caption -->
 	<video
 		bind:this={video}
 		controls
 		playsinline
 		preload="metadata"
-		src="/movies/{data.slug}/video"
-		poster={data.hasPoster ? `/movies/${data.slug}/poster` : undefined}
+		src={data.videoUrl}
+		poster={data.posterUrl ?? undefined}
 	></video>
 
 	<CastRemote src={data.videoUrl} {video} />

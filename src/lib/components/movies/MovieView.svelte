@@ -11,15 +11,7 @@
 	let video;
 	let copied = false;
 
-	async function share() {
-		if (navigator.share) {
-			try {
-				await navigator.share({ title: data.title, url: data.pageUrl });
-			} catch {
-				// closed the share sheet
-			}
-			return;
-		}
+	async function copyLink() {
 		await navigator.clipboard.writeText(data.pageUrl);
 		copied = true;
 		setTimeout(() => (copied = false), 2000);
@@ -50,9 +42,9 @@
 
 		<div class="actions">
 			<CastButton src={data.videoUrl} title={data.title} poster={data.posterUrl} {video} />
-			<button type="button" class="action" on:click={share}>
+			<button type="button" class="action" on:click={copyLink}>
 				<ActionIcon name={copied ? 'check' : 'link'} />
-				{copied ? 'Copied!' : 'Share link'}
+				{copied ? 'Copied!' : 'Copy link'}
 			</button>
 			<!-- A file download from the video endpoint, not a page navigation. -->
 			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->

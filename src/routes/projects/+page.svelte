@@ -9,13 +9,14 @@
   import standards_journey from '$lib/images/standards_journey.png';
   import piano_coach from '$lib/images/piano-coach.png';
   import crates from '$lib/images/crates.png';
+  import curious from '$lib/images/curious.png';
 
   const projects = [
     {
-      img: undefined,
-      url: 'https://summer-school.derek-brimley.com',
-      name: 'WonderPath',
-      desc: 'AI-powered summer learning app for kids — generates personalized lessons based on their curiosity, with a wonder book to capture discoveries.'
+      img: curious,
+      url: 'https://curious-app-xi.vercel.app/',
+      name: 'Curious',
+      desc: 'AI-powered summer learning app for kids — generates personalized lessons based on their curiosity.'
     },
     {
       img: crates,

@@ -6,7 +6,7 @@ import { writable } from 'svelte/store';
 // phone is only a remote.
 
 export type CastStatus = {
-	available: boolean; // a Cast device is on the network
+	ready: boolean; // the Cast library is loaded (Chrome only)
 	contentId: string | null; // what the TV is playing, while connected
 	device: string;
 	paused: boolean;
@@ -16,7 +16,7 @@ export type CastStatus = {
 };
 
 export const castStatus = writable<CastStatus>({
-	available: false,
+	ready: false,
 	contentId: null,
 	device: '',
 	paused: false,
@@ -47,7 +47,7 @@ export function initCast() {
 }
 
 function setup() {
-	const { CastContext, CastContextEventType, CastState, RemotePlayer, RemotePlayerController } =
+	const { CastContext, CastContextEventType, RemotePlayer, RemotePlayerController } =
 		cast.framework;
 	const context = CastContext.getInstance();
 	context.setOptions({
@@ -60,7 +60,7 @@ function setup() {
 	const update = () =>
 		castStatus.update((status) => ({
 			...status,
-			available: context.getCastState() !== CastState.NO_DEVICES_AVAILABLE,
+			ready: true,
 			contentId: remote.isConnected ? (remote.mediaInfo?.contentId ?? null) : null,
 			device: context.getCurrentSession()?.getCastDevice().friendlyName ?? 'the TV',
 			paused: remote.isPaused,
@@ -76,11 +76,21 @@ function setup() {
 
 export async function playOnTv(src: string, title: string, poster: string | null, startAt = 0) {
 	const context = cast.framework.CastContext.getInstance();
+	castStatus.update((status) => ({ ...status, error: null }));
 	if (!context.getCurrentSession()) {
 		try {
 			await context.requestSession(); // Chrome's device picker
-		} catch {
-			return; // picker closed
+		} catch (code) {
+			// 'cancel' is the picker being closed. Otherwise Chrome may not have searched for TVs
+			// yet, and won't open the picker until it has.
+			if (code !== chrome.cast.ErrorCode.CANCEL) {
+				castStatus.update((status) => ({
+					...status,
+					error:
+						"Chrome hasn't found the TV yet. Open Chrome's ⋮ menu → Cast… once, then try again."
+				}));
+			}
+			return;
 		}
 	}
 	const session = context.getCurrentSession();
@@ -94,7 +104,6 @@ export async function playOnTv(src: string, title: string, poster: string | null
 
 	const request = new chrome.cast.media.LoadRequest(info);
 	request.currentTime = startAt;
-	castStatus.update((status) => ({ ...status, error: null }));
 	try {
 		await session.loadMedia(request);
 	} catch (code) {
